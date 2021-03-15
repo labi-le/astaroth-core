@@ -25,7 +25,7 @@ ___
 
 ## 1. Установка
 
-> composer require labile/vk-bot-constructor
+> composer create-project labile/bot-constructor
 
 ### 1.1 Настройка конфига
 
