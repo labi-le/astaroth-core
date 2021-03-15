@@ -65,11 +65,11 @@ class Utils
      * @param int $similarPercent
      * @return bool
      */
-    public static function formatText(string $textFromArray, string $original, $similarPercent = 80): bool
+    public static function formatText(string $textFromArray, string $original): bool
     {
         if (mb_substr($textFromArray, 0, 1) === '|') {
             $textFromArray = mb_substr($textFromArray, 1);
-            return self::similarTo($textFromArray, $original) >= $similarPercent;
+            return self::similarTo($textFromArray, $original) >= SIMILAR_PERCENT;
         }
 
         if (mb_substr($textFromArray, 0, 2) === "[|") {

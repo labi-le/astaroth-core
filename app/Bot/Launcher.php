@@ -13,6 +13,7 @@ use Manager\Models\SimpleVKExtend;
 
 class Launcher
 {
+    public const SIMILAR_PERCENT = 80;
     private array $file;
 
     private function __construct(string $path)
