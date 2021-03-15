@@ -3,6 +3,7 @@
     "description": "manager vk",
     "type": "project",
     "require": {
+        "php": ">=8",
         "rakibtg/sleekdb": "^2.1",
         "adbario/php-dot-notation": "^2.2",
         "digitalstars/simplevk": "dev-testing",
@@ -22,7 +23,7 @@
     "autoload": {
         "psr-4": {
             "DigitalStars\\SimpleVK\\": "vendor/digitalstars/simplevk/src/",
-            "Manager\\": "app/Manager"
+            "Manager\\": "app/Bot"
         }
     }
 }
