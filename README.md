@@ -104,7 +104,7 @@ protected function payload()
 
 ```php
 Payload соответствующий команде выше:
-['chat' => 'registration]
+['chat' => 'registration']
 
 type - тип кнопки, callback или default
 ```
