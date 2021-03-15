@@ -31,7 +31,7 @@ final class Commands
     }
 
     /**
-     * Является ли чатом
+     * Это личное сообщение?
      * @throws Exception
      */
     public function isPrivateMessage(): bool
@@ -40,7 +40,7 @@ final class Commands
     }
 
     /**
-     * Является ли чатом
+     * Это чат?
      * @throws Exception
      */
     public function isChat(): bool
@@ -82,7 +82,7 @@ final class Commands
     }
 
     /**
-     * Является ли тот кто нажал на каллбек кнопку админом
+     * Чувак нажавший на каллбек кнопку - админ?
      * @throws Exception
      */
     public function eventNoAccess(): bool
@@ -96,7 +96,7 @@ final class Commands
     }
 
     /**
-     * Является ли админом
+     * Это админ?
      * @throws Exception
      */
     public function isAdmin(): bool
@@ -107,7 +107,7 @@ final class Commands
     }
 
     /**
-     * Является или руководителем в группе
+     * Это руководитель группы?
      * @return bool
      * @throws Exception
      */

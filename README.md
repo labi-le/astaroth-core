@@ -9,14 +9,16 @@ ___
 1. [Установка](#1-установка)
     + [Настройка конфига](#11-настройка-конфгиа)
 2. [Обработка команд](#2-обработка-команд)
-   + [Варианты реагирования бота на сообщения](#211-реакция-не-предложения-или-другие-слова)
-   + [Варианты реагирования бота на нажатие по кнопке](#212-реакция-на-нажатие-по-кнопке)
-   - [Похоже на](#2211-похоже-на)
-   - [Начинается с](#2212-начинается-с)
-   - [Заканчивается на](#2213-заканчивается-на)
-   - [Содержит](#2214-содержит)
-   - [Дополнение](#2215-дополнение)
-   + [Исполнение нескольких методов](#23-исполнение-нескольких-методов)
+    + [Варианты реагирования бота на сообщения](#211-реакция-не-предложения-или-другие-слова)
+    + [Варианты реагирования бота на нажатие по кнопке](#212-реакция-на-нажатие-по-кнопке)
+
+    - [Похоже на](#2211-похоже-на)
+    - [Начинается с](#2212-начинается-с)
+    - [Заканчивается на](#2213-заканчивается-на)
+    - [Содержит](#2214-содержит)
+    - [Дополнение](#2215-дополнение)
+
+    + [Исполнение нескольких методов](#23-исполнение-нескольких-методов)
 3. [Методы](#4-методы)
 
 ___
@@ -107,7 +109,6 @@ Payload соответствующий команде выше:
 type - тип кнопки, callback или default
 ```
 
-
 ### 2.2. Вариативность вызова команды
 
 Если указать ключ **text** как массив, то бот будет реагировать на несколько фраз
@@ -177,20 +178,125 @@ type - тип кнопки, callback или default
 \
 Если метод возвращает `булево` значение - `false`, то выполнение стека методов заканчивается
 
-
 ```php
 'method' => ['hello', 'goodbye']
 ```
 
 ## 4. Методы
+**Методы из [SimpleVK](https://simplevk.scripthub.ru/v3/classes/simplevk.html)**
 
-#### Используются методы из SimpleVK
-
+**Методы-проверки:**
 ```php
-protected function hello()  
-{  
-   $this->vk->msg('Привет, ~!fn~')->send();
-}
+    /**
+     * Это личное сообщение?
+     * return bool
+     */
+    public function isPrivateMessage(): bool
+
+    /**
+     * Это чат?
+     * return bool
+     */
+    public function isChat(): bool
+    
+    /**
+     * Чувак нажавший на каллбек кнопку - админ?
+     * return bool
+     */
+    public function eventNoAccess(): bool
+
+    /**
+     * Это админ?
+     */
+    public function isAdmin(): bool
+
+    /**
+     * Это руководитель группы?
+     * @return bool
+     */
+    public function isManagerGroup(): bool
+```
+\
+**Методы ***статического класа*** `Utils`:**
+```php
+    /**
+    * Транслитерация строк
+    * @param string
+    * @return string
+    */
+    public static function translit(string $str): string
+    
+    /**
+     * Удаляет из строки самую первую подстроку
+     * @param $text
+     * @return string|bool
+     */
+    public static function removeFirstWord($text): string|bool
+
+    /**
+     * Выборка необходимой строки по ключу
+     * @param string $string
+     * @param int $substring
+     * @return string|bool
+     */
+    public static function getWord(string $string, int $substring): string|bool
+    
+    /**
+     * explode с возможностью использовать несколько символов
+     * @param $delimiters
+     * @param $string
+     * @return array|bool
+     */
+    public static function multiExplode($delimiters, $string): array|bool
+
+    /**
+     * Является ли массив ассоциативным
+     * @param array $arr
+     * @return bool
+     */
+    public static function isAssoc(array $arr): bool
+
+    /**
+     * Является ли массив последовательным
+     * @param array $arr
+     * @return bool
+     */
+    public static function isSeq(array $arr): bool
+
+    /**
+     * Является ли массив многомерным
+     * @param array $array
+     * @return bool
+     */
+    public static function isMulti(array $array): bool
+
+    /**
+     * Регулярка, выбирает все айдишники из текста
+     * @param string $string
+     * @return array|bool
+     */
+    public static function regexId(string $string): array|bool
+
+    /**
+     * Простой дебаг в stdout
+     * @param $data
+     */
+    public static function var_dumpToStdout($data)
+
+    /**
+     * Булев в смайлы
+     * @param $bool
+     * @return string
+     */
+    public static function boolToSmile($bool): string
+
+    /**
+     * Строка в unixtime
+     * 1 час
+     * unixtime + 3600
+     * @param string $string
+     * @return int|false
+     */
+    public static function strTime(string $string): int|false
 ```
 
-[Примеры можно глянуть здесь](https://simplevk.scripthub.ru/v3/classes/simplevk.html)
