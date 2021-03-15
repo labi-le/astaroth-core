@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "token": "",
+    "v": "5.130",
+    "confirmation": "",
+    "secret": false
+  },
+  "logging_error": false,
+  "type": "callback"
+}

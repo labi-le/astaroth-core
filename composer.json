@@ -1,0 +1,28 @@
+{
+    "name": "labile/manager",
+    "description": "manager vk",
+    "type": "project",
+    "require": {
+        "rakibtg/sleekdb": "^2.1",
+        "adbario/php-dot-notation": "^2.2",
+        "digitalstars/simplevk": "dev-testing",
+        "ext-mbstring": "*"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "labile",
+            "email": "1a6i1e@gmail.com"
+        }
+    ],
+
+    "autoload": {
+        "psr-4": {
+            "DigitalStars\\SimpleVK\\": "vendor/digitalstars/simplevk/src/",
+            "Manager\\": "app/Manager"
+        }
+    }
+}
