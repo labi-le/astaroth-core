@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-use Manager\Launcher;
+use Bot\Launcher;
 
 require_once('vendor/autoload.php');
 
