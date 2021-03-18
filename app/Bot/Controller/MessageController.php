@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Manager\Controller;
+namespace Bot\Controller;
 
-use Manager\Commands\CommandList;
-use Manager\Models\Utils;
+use Bot\Commands\CommandList;
+use Bot\Models\Utils;
 
 final class MessageController extends Controller
 {

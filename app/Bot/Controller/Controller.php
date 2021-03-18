@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Manager\Controller;
+namespace Bot\Controller;
 
 use DigitalStars\SimpleVK\SimpleVK;
-use Manager\Commands\Commands;
-use Manager\Models\ChatsQuery;
-use Manager\Models\UserQuery;
+use Bot\Commands\Commands;
 
 class Controller
 {
     public static SimpleVK $vk;
-    public static ChatsQuery|UserQuery $db;
 
     /**
      * Вызов типа события и передача данных
@@ -37,12 +34,12 @@ class Controller
     {
         if (is_array($methods)) {
             foreach ($methods as $method) {
-                if (Commands::set(self::$vk, self::$db)->$method() === false) {
+                if (Commands::set(self::$vk)->$method() === false) {
                     break;
                 }
             }
         } else {
-            Commands::set(self::$vk, self::$db)->$methods();
+            Commands::set(self::$vk)->$methods();
         }
     }
 

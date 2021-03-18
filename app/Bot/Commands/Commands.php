@@ -2,32 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Manager\Commands;
+namespace Bot\Commands;
 
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
 use Exception;
 use Labile\SimpleVKExtend\SimpleVKExtend;
-use Manager\Models\ChatsQuery;
-use Manager\Models\UserQuery;
 
 /**
  * Фичи бота пишутся здесь, можно подключать трейты
  * Метод не должен возвращать значение false если он не является методом-проверкой по типу isAdmin, isChat
  * Class Commands
- * @package ChatManager\Commands
+ * @package Bot\Commands
  */
 final class Commands
 {
     use Debug;
 
-    private function __construct(private SimpleVK $vk, private ChatsQuery|UserQuery $db)
+    private function __construct(private SimpleVK $vk)
     {
     }
 
-    public static function set(SimpleVK $vk, ChatsQuery|UserQuery $db): Commands
+    public static function set(SimpleVK $vk): Commands
     {
-        return new Commands($vk, $db);
+        return new Commands($vk);
     }
 
     /**

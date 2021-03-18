@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Manager\Commands;
+namespace Bot\Commands;
 
 /**
  * Класс для получения списка команд и пэйлоадов
  * Class CommandList
- * @package ChatManager\Commands
+ * @package Bot\Commands
  */
 final class CommandList
 {

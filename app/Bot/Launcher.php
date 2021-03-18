@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Manager;
+namespace Bot;
 
 use DigitalStars\SimpleVK\LongPoll;
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
 use Labile\SimpleVKExtend\SimpleVKExtend;
-use Manager\Controller\Controller;
-use Manager\Models\ConfigFile;
+use Bot\Controller\Controller;
+use Bot\Models\ConfigFile;
 
 class Launcher
 {

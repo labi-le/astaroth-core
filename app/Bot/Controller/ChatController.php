@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 
-namespace Manager\Controller;
+namespace Bot\Controller;
 
-use Manager\Models\ChatsQuery;
 
 class ChatController extends Controller
 {
@@ -16,9 +15,5 @@ class ChatController extends Controller
      */
     public static function handler(array $data): void
     {
-        parent::$db = new ChatsQuery($data['chat_id']);
-        if (isset($data['action'])) {
-            ActionController::handler($data['action']);
-        }
     }
 }

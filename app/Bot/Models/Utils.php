@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Manager\Models;
+namespace Bot\Models;
 
-use Manager\Launcher;
+use Bot\Launcher;
 
 class Utils
 {

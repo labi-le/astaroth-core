@@ -4,8 +4,6 @@
     "type": "project",
     "require": {
         "php": ">=8",
-        "rakibtg/sleekdb": "^2.1",
-        "adbario/php-dot-notation": "^2.2",
         "digitalstars/simplevk": "dev-testing",
         "ext-mbstring": "*",
         "labile/simple-vk3-extend": "^1.0"
@@ -25,7 +23,7 @@
     "autoload": {
         "psr-4": {
             "DigitalStars\\SimpleVK\\": "vendor/digitalstars/simplevk/src/",
-            "Manager\\": "app/Bot"
+            "Bot\\": "app/Bot"
         }
     }
 }

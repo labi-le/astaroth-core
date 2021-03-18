@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Manager\Controller;
+namespace Bot\Controller;
 
 final class TypeController extends Controller
 {

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Manager\Commands;
+namespace Bot\Commands;
 
 
 /**
  * Trait Debug
- * @package Manager\Commands
+ * @package Bot\Commands
  */
 trait Debug
 {

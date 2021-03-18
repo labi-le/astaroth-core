@@ -3,15 +3,17 @@
 declare(strict_types=1);
 
 
-namespace Manager\Controller;
+namespace Bot\Controller;
 
-
-use Manager\Models\UserQuery;
 
 class PrivateMessageController extends Controller
 {
+    /**
+     * Обработчик для личных сообщений
+     * Ну там подключение к базе и тд...
+     * @param array $data
+     */
     public static function handler(array $data): void
     {
-        parent::$db = new UserQuery($data['user_id']);
     }
 }
