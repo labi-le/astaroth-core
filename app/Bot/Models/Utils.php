@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Manager\Models;
 
-use DateTime;
-use DateTimeZone;
-use Exception;
+use Manager\Launcher;
 
 class Utils
 {
@@ -62,23 +60,22 @@ class Utils
      * Проверка подстроки по шаблону
      * @param string $textFromArray
      * @param string $original
-     * @param int $similarPercent
      * @return bool
      */
     public static function formatText(string $textFromArray, string $original): bool
     {
         if (mb_substr($textFromArray, 0, 1) === '|') {
             $textFromArray = mb_substr($textFromArray, 1);
-            return self::similarTo($textFromArray, $original) >= SIMILAR_PERCENT;
+            return self::similarTo($textFromArray, $original) >= Launcher::SIMILAR_PERCENT;
         }
 
         if (mb_substr($textFromArray, 0, 2) === "[|") {
-            $textFromArray =  mb_substr($textFromArray, 2);
+            $textFromArray = mb_substr($textFromArray, 2);
             return self::startAs($textFromArray, $original);
         }
 
         if (mb_substr($textFromArray, -2, 2) === "|]") {
-            $textFromArray =  mb_substr($textFromArray, 0, 2);
+            $textFromArray = mb_substr($textFromArray, 0, 2);
             return self::endAs($textFromArray, $original);
         }
 
@@ -207,7 +204,7 @@ class Utils
      * Простой дебаг в stdout
      * @param $data
      */
-    public static function var_dumpToStdout($data)
+    public static function var_dumpToStdout($data): void
     {
         file_put_contents('php://stdout', var_export($data, true));
     }

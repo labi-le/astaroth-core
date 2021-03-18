@@ -7,9 +7,9 @@ namespace Manager;
 use DigitalStars\SimpleVK\LongPoll;
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
+use Labile\SimpleVKExtend\SimpleVKExtend;
 use Manager\Controller\Controller;
 use Manager\Models\ConfigFile;
-use Manager\Models\SimpleVKExtend;
 
 class Launcher
 {
@@ -20,10 +20,9 @@ class Launcher
     {
         $this->checkPhpVersion();
         $this->file = ConfigFile::open($path);
-
     }
 
-    private function checkPhpVersion()
+    private function checkPhpVersion(): void
     {
         PHP_MAJOR_VERSION >= 8 ?: die('Версия PHP ниже 8, обновляйся');
     }
@@ -37,22 +36,26 @@ class Launcher
     {
         $this->checkPhpVersion();
         $config = $this->file;
-        if ($config['logging_error'] === false) SimpleVkException::disableWriteError();
+        if ($config['logging_error'] === false) {
+            SimpleVkException::disableWriteError();
+        }
 
         $auth = $config['auth'];
         $type = $config['type'];
-        if ($type === 'callback')
+        if ($type === 'callback') {
             $this->callback($auth);
-        elseif ($type === 'longpoll')
+        } elseif ($type === 'longpoll') {
             $this->longpoll($auth);
+        }
 
     }
 
     private function callback(array $auth): void
     {
         $bot = SimpleVK::create($auth['token'], $auth['v'])->setConfirm($auth['confirmation']);
-        if ($auth['secret'] !== false)
+        if ($auth['secret'] !== false) {
             $bot->setSecret($auth['secret']);
+        }
 
         SimpleVKExtend::parse($bot);
         Controller::handle(SimpleVKExtend::getVars(), $bot);

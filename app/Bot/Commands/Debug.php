@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Manager\Commands;
 
-use Manager\Models\SimpleVKExtend;
 
 /**
  * Trait Debug
@@ -12,7 +11,7 @@ use Manager\Models\SimpleVKExtend;
 trait Debug
 {
 
-    private function print($data)
+    private function print($data): void
     {
         var_dump($data);
         $this->vk->msg(print_r($data, true))->send();

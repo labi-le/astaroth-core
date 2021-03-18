@@ -11,8 +11,8 @@ use Manager\Models\UserQuery;
 
 class Controller
 {
-    static SimpleVK $vk;
-    static ChatsQuery|UserQuery $db;
+    public static SimpleVK $vk;
+    public static ChatsQuery|UserQuery $db;
 
     /**
      * Вызов типа события и передача данных
@@ -37,9 +37,13 @@ class Controller
     {
         if (is_array($methods)) {
             foreach ($methods as $method) {
-                if (Commands::set(self::$vk, self::$db)->$method() === false) break;
+                if (Commands::set(self::$vk, self::$db)->$method() === false) {
+                    break;
+                }
             }
-        } else Commands::set(self::$vk, self::$db)->$methods();
+        } else {
+            Commands::set(self::$vk, self::$db)->$methods();
+        }
     }
 
 }

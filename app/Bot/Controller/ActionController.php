@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Manager\Controller;
 
-use DigitalStars\SimpleVK\SimpleVkException;
-use Jawira\EmojiCatalog\Emoji;
-use Manager\Models\ChatsQuery;
-use Manager\Models\SimpleVKExtend;
+use Labile\SimpleVKExtend\SimpleVKExtend;
 
 class ActionController extends ChatController
 {
@@ -54,7 +51,7 @@ class ActionController extends ChatController
      * @param $id
      * @return void
      */
-    private static function chat_kick_user(int $id)
+    private static function chat_kick_user(int $id): void
     {
     }
 
@@ -62,7 +59,7 @@ class ActionController extends ChatController
      * Обновлена аватарка
      * @param $id
      */
-    private static function chat_photo_update(int $id)
+    private static function chat_photo_update(int $id): void
     {
     }
 
@@ -70,7 +67,7 @@ class ActionController extends ChatController
      * Удалена аватарка
      * @param $id
      */
-    private static function chat_photo_remove(int $id)
+    private static function chat_photo_remove(int $id): void
     {
     }
 
@@ -78,7 +75,7 @@ class ActionController extends ChatController
      * Закреплено сообщение
      * @param $id
      */
-    private static function chat_pin_message(int $id)
+    private static function chat_pin_message(int $id): void
     {
     }
 
@@ -86,7 +83,7 @@ class ActionController extends ChatController
      * Откреплено сообщение
      * @param $id
      */
-    private static function chat_unpin_message(int $id)
+    private static function chat_unpin_message(int $id): void
     {
     }
 
@@ -94,7 +91,7 @@ class ActionController extends ChatController
      * Сделан скриншот
      * @param $id
      */
-    private static function chat_screenshot(int $id)
+    private static function chat_screenshot(int $id): void
     {
     }
 }

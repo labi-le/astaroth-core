@@ -14,9 +14,11 @@ class ChatController extends Controller
      * Ну там подключение к базе и тд...
      * @param array $data
      */
-    public static function handler(array $data)
+    public static function handler(array $data): void
     {
         parent::$db = new ChatsQuery($data['chat_id']);
-        if (isset($data['action'])) ActionController::handler($data['action']);
+        if (isset($data['action'])) {
+            ActionController::handler($data['action']);
+        }
     }
 }

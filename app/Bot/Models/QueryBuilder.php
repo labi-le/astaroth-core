@@ -58,7 +58,9 @@ abstract class QueryBuilder
         $this->db = new Store($this->store_name, self::DATA_DIR, self::CONFIGURATION_DB);
 
         $data = $this->loadRecord();
-        if ($data === null) $data = $this->createRecord($this->_generateTable($id));
+        if ($data === null) {
+            $data = $this->createRecord($this->_generateTable($id));
+        }
         $this->data = new Dot($data);
     }
 
@@ -95,7 +97,7 @@ abstract class QueryBuilder
 
     /**
      * Удалить json файл
-     * @throws IOException
+     * @throws InvalidArgumentException
      */
     public function deleteRecord(): bool
     {
@@ -151,8 +153,8 @@ abstract class QueryBuilder
         if ($this->data->get($string) !== null) {
             $this->data->clear($string);
             return $this->update($this->data);
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

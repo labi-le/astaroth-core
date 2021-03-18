@@ -21,7 +21,9 @@ final class MessageController extends Controller
         /**
          * Поиск и выполнение команд по тексту сообщения
          */
-        if (isset($data['text_lower'])) self::commandHandler($data['text_lower']);
+        if (isset($data['text_lower'])) {
+            self::commandHandler($data['text_lower']);
+        }
 
         /**
          * Поиск и выполнение команд по кнопке

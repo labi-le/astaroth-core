@@ -7,8 +7,8 @@ namespace Manager\Commands;
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
 use Exception;
+use Labile\SimpleVKExtend\SimpleVKExtend;
 use Manager\Models\ChatsQuery;
-use Manager\Models\SimpleVKExtend;
 use Manager\Models\UserQuery;
 
 /**
@@ -52,7 +52,7 @@ final class Commands
      * Триггер на слово Блин\Капец...
      * @throws SimpleVkException
      */
-    public function blin()
+    public function blin(): void
     {
         $img =
             [
@@ -87,12 +87,12 @@ final class Commands
      */
     public function eventNoAccess(): bool
     {
-        if ($this->isAdmin())
+        if ($this->isAdmin()) {
             return true;
-        else {
-            $this->vk->eventAnswerSnackbar('Нет доступа к каллбек кнопке');
-            return false;
         }
+
+        $this->vk->eventAnswerSnackbar('Нет доступа к каллбек кнопке');
+        return false;
     }
 
     /**
@@ -113,7 +113,7 @@ final class Commands
      */
     public function isManagerGroup(): bool
     {
-        $admins = SimpleVKExtend::getManagerGroup($this->vk, SimpleVKExtend::getVars('group_id'));
+        $admins = SimpleVKExtend::getManagersGroup($this->vk, SimpleVKExtend::getVars('group_id'));
         return in_array(SimpleVKExtend::getVars('user_id'), $admins, true);
     }
 }
