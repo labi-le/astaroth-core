@@ -1,6 +1,7 @@
 {
     "name": "labile/bot-constructor",
-    "description": "manager vk",
+    "description": "bot constructor vk",
+    "homepage": "https://github.com/labi-le/vk-bot-constructor",
     "type": "project",
     "require": {
         "php": ">=8",
