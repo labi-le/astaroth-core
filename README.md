@@ -25,7 +25,7 @@ ___
 
 ## 1. Установка
 
-> composer create-project labile/bot-constructor
+> composer create-project labile/bot-constructor mybot
 
 ### 1.1 Настройка конфига
 
