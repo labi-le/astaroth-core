@@ -113,7 +113,7 @@ final class Commands
      */
     public function isManagerGroup(): bool
     {
-        $admins = SimpleVKExtend::isManagerGroup($this->vk, SimpleVKExtend::getVars('group_id'));
+        $admins = SimpleVKExtend::getManagerGroup($this->vk, SimpleVKExtend::getVars('group_id'));
         return in_array(SimpleVKExtend::getVars('user_id'), $admins, true);
     }
 }

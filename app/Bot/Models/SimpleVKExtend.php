@@ -87,7 +87,7 @@ class SimpleVKExtend
      * @return array|false
      * @throws Exception
      */
-    public static function isManagerGroup(SimpleVK $vk, int $group_id): array|false
+    public static function getManagerGroup(SimpleVK $vk, int $group_id): array|false
     {
         try {
             $response = $vk->request('groups.getMembers',
