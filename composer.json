@@ -1,7 +1,9 @@
 {
     "name": "labile/bot-constructor",
     "description": "bot constructor vk",
+    "license": "MIT",
     "homepage": "https://github.com/labi-le/vk-bot-constructor",
+    "minimum-stability": "stable",
     "type": "project",
     "require": {
         "php": ">=8",
