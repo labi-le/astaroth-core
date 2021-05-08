@@ -13,7 +13,7 @@ class PrivateMessageController extends Controller
      * Ну там подключение к базе и тд...
      * @param array $data
      */
-    public static function handler(array $data): void
+    public function __construct(array $data)
     {
     }
 }

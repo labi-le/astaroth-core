@@ -13,7 +13,14 @@ class ChatController extends Controller
      * Ну там подключение к базе и тд...
      * @param array $data
      */
-    public static function handler(array $data): void
+    public function __construct(array $data)
     {
+        if(isset($data['action']['type'])){
+            $this->actionHandler($data['action']['type'], $data);
+        }
+    }
+
+    private function actionHandler(string $action, array $data){
+
     }
 }

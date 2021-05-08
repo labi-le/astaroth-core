@@ -11,7 +11,7 @@ class Utils
 
     /**
      * Транслитерация кириллицы в латиницу
-     * @param $str
+     * @param string $str
      * @return string
      */
     public static function translit(string $str): string
@@ -50,7 +50,7 @@ class Utils
      * @param int $substring
      * @return string|bool
      */
-    public static function getWord(string $string, int $substring): string|bool
+    public static function getWord(string $string, int $substring): string|false
     {
         $substrings = explode(' ', $string);
         return $substrings[$substring] ?? false;
@@ -69,7 +69,7 @@ class Utils
             return self::similarTo($textFromArray, $original) >= Launcher::SIMILAR_PERCENT;
         }
 
-        if (mb_substr($textFromArray, 0, 2) === "[|") {
+        if (mb_strpos($textFromArray , "[|") === 0) {
             $textFromArray = mb_substr($textFromArray, 2);
             return self::startAs($textFromArray, $original);
         }

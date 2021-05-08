@@ -19,13 +19,11 @@ final class Commands
 {
     use Debug;
 
-    private function __construct(private SimpleVK $vk)
-    {
-    }
+    private static SimpleVK $vk;
 
-    public static function set(SimpleVK $vk): Commands
+    public static function setAuth(SimpleVK $vk): void
     {
-        return new Commands($vk);
+        self::$vk = $vk;
     }
 
     /**

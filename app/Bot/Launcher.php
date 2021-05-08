@@ -16,6 +16,9 @@ class Launcher
     public const SIMILAR_PERCENT = 80;
     private array $file;
 
+    /**
+     * @throws \Exception
+     */
     private function __construct(string $path)
     {
         $this->checkPhpVersion();
@@ -58,7 +61,7 @@ class Launcher
         }
 
         SimpleVKExtend::parse($bot);
-        Controller::handle(SimpleVKExtend::getVars(), $bot);
+        (new Controller)->handle(SimpleVKExtend::getVars(), $bot);
     }
 
     private function longpoll(array $auth): void
@@ -66,7 +69,7 @@ class Launcher
         $bot = LongPoll::create($auth['token'], $auth['v']);
         $bot->listen(function () use ($bot) {
             SimpleVKExtend::parse($bot);
-            Controller::handle(SimpleVKExtend::getVars(), $bot);
+            (new Controller)->handle(SimpleVKExtend::getVars(), $bot);
         });
     }
 }

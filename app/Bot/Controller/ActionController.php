@@ -4,94 +4,17 @@ declare(strict_types=1);
 
 namespace Bot\Controller;
 
-use Labile\SimpleVKExtend\SimpleVKExtend;
+use Bot\Commands\Events;
 
-class ActionController extends ChatController
+class ActionController extends Controller
 {
     /**
      * обработка action (message\\action)
+     * @param string $action
      * @param array $data
-     * @return void
      */
-    public static function handler(array $data): void
+    public function __construct(string $action, array $data)
     {
-        $type = $data['type'];
-        $member_id = $data['member_id'];
-        if (method_exists(self::class, $type)) {
-            self::$type($member_id);
-        }
-    }
-
-    /**
-     * Пользователь присоединился к беседе по инвайт-ссылке
-     * @param $id
-     * @return void
-     */
-    private static function chat_invite_user_by_link(int $id): void
-    {
-        self::chat_invite_user($id);
-    }
-
-    /**
-     * Пользователь присоединился к беседе
-     * @param $id
-     */
-    private static function chat_invite_user(int $id): void
-    {
-        /**
-         * Если добавили бота
-         */
-        if ($id === -SimpleVKExtend::getVars('group_id')) {
-        }
-
-    }
-
-    /**
-     * Пользователь покинул беседу, либо был исключён кикнули
-     * @param $id
-     * @return void
-     */
-    private static function chat_kick_user(int $id): void
-    {
-    }
-
-    /**
-     * Обновлена аватарка
-     * @param $id
-     */
-    private static function chat_photo_update(int $id): void
-    {
-    }
-
-    /**
-     * Удалена аватарка
-     * @param $id
-     */
-    private static function chat_photo_remove(int $id): void
-    {
-    }
-
-    /**
-     * Закреплено сообщение
-     * @param $id
-     */
-    private static function chat_pin_message(int $id): void
-    {
-    }
-
-    /**
-     * Откреплено сообщение
-     * @param $id
-     */
-    private static function chat_unpin_message(int $id): void
-    {
-    }
-
-    /**
-     * Сделан скриншот
-     * @param $id
-     */
-    private static function chat_screenshot(int $id): void
-    {
+        new Events($action, $data);
     }
 }
