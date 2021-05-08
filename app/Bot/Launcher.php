@@ -61,7 +61,9 @@ class Launcher
         }
 
         SimpleVKExtend::parse($bot);
-        (new Controller)->handle(SimpleVKExtend::getVars(), $bot);
+        (new Controller)
+            ->setVK($bot)
+            ->handle(SimpleVKExtend::getVars());
     }
 
     private function longpoll(array $auth): void
@@ -69,7 +71,9 @@ class Launcher
         $bot = LongPoll::create($auth['token'], $auth['v']);
         $bot->listen(function () use ($bot) {
             SimpleVKExtend::parse($bot);
-            (new Controller)->handle(SimpleVKExtend::getVars(), $bot);
+            (new Controller)
+                ->setVK($bot)
+                ->handle(SimpleVKExtend::getVars());
         });
     }
 }

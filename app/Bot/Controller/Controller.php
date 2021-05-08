@@ -9,16 +9,21 @@ use Bot\Commands\Commands;
 
 class Controller
 {
+    protected SimpleVK $vk;
+
+    public function setVK(SimpleVK $vk): static
+    {
+        $this->vk = $vk;
+        return $this;
+    }
+
     /**
      * Вызов типа события и передача данных
      * @param array $data
-     * @param SimpleVK $bot
      */
-    public function handle(array $data, SimpleVK $bot): void
+    public function handle(array $data): void
     {
         $type = $data['type'];
-        Commands::setAuth($bot);
-
         new TypeController($type, $data);
     }
 

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Bot\Controller;
 
-use Bot\Models\TypeHandler;
 
 final class TypeController extends Controller
 {
 
     public function __construct(string $type, array $data)
     {
-        if(method_exists(TypeHandler::class, $type)){
+        if(method_exists(__CLASS__ , $type)){
             $this->$type($data);
         }
     }

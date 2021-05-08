@@ -15,12 +15,13 @@ class ChatController extends Controller
      */
     public function __construct(array $data)
     {
-        if(isset($data['action']['type'])){
+        if(isset($data['action']['type'])) {
             $this->actionHandler($data['action']['type'], $data);
         }
     }
 
-    private function actionHandler(string $action, array $data){
+    private function actionHandler(string $action, array $data): void
+    {
 
     }
 }
