@@ -10,11 +10,15 @@ class ActionController extends Controller
 {
     /**
      * обработка action (message\\action)
-     * @param string $action
      * @param array $data
      */
-    public function __construct(string $action, array $data)
+    public function __construct(array $data)
     {
-        new Events($action, $data);
+        if (isset($data['action'])) {
+            $event = $data['action']['type'];
+            $member_id = $data['action']['member_id'];
+
+            new Events(parent::$vk, $event, $member_id);
+        }
     }
 }

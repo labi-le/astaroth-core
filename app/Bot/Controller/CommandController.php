@@ -15,6 +15,7 @@ class CommandController extends Controller
     {
         $list = CommandList::text();
         $commands = new Commands(parent::$vk);
+
         if (is_array($list)) {
 
             foreach ($list as $cmd) {

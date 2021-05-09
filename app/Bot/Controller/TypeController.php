@@ -32,6 +32,7 @@ final class TypeController extends Controller
     private function message_new(array $data): void
     {
         new MessageController($data);
+        new ActionController($data);
     }
 
 }

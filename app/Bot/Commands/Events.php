@@ -4,14 +4,20 @@
 namespace Bot\Commands;
 
 
+use Bot\Controller\CommandController;
+use DigitalStars\SimpleVK\SimpleVK;
 use Labile\SimpleVKExtend\SimpleVKExtend;
 
 class Events
 {
-    public function __construct(string $event, array $data)
+    private SimpleVK $vk;
+
+    public function __construct(SimpleVK $vk, string $event, int|null $member_id)
     {
-        $member_id = $data['member_id'] ?? SimpleVKExtend::getVars('user_id');
+        $member_id = $member_id ?? SimpleVKExtend::getVars('user_id');
         if ($member_id !== null && method_exists($this, $event)) {
+            $this->vk = $vk;
+
             $this->$event($member_id);
         }
     }
@@ -29,7 +35,7 @@ class Events
 
     /**
      * Пользователь присоединился к беседе
-     * @param $id
+     * @param int $id
      */
     private function chat_invite_user(int $id): void
     {
@@ -37,6 +43,11 @@ class Events
          * Если добавили бота
          */
         if ($id === -SimpleVKExtend::getVars('group_id')) {
+            /**
+             * commands
+             */
+        } else {
+            $this->vk->msg('hi')->send();
         }
 
     }

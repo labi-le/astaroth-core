@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bot\Commands;
 
-use Bot\Controller\Controller;
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
 use Exception;
@@ -98,7 +97,7 @@ final class Commands
      */
     public function isAdmin(): bool
     {
-        return (bool) $this->vk
+        return (bool)$this->vk
             ->isAdmin(SimpleVKExtend::getVars('user_id'), SimpleVKExtend::getVars('peer_id'));
     }
 

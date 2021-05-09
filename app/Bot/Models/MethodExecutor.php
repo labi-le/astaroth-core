@@ -4,8 +4,6 @@
 namespace Bot\Models;
 
 
-use Bot\Commands\Commands;
-
 class MethodExecutor
 {
     /**
