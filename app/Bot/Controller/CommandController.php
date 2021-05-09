@@ -1,19 +1,20 @@
 <?php
 
 
-namespace Bot\Models;
+namespace Bot\Controller;
 
 
 use Bot\Commands\CommandList;
 use Bot\Commands\Commands;
-use Bot\Controller\Controller;
+use Bot\Models\MethodExecutor;
+use Bot\Models\Utils;
 
 class CommandController extends Controller
 {
     public function __construct(string $originalText)
     {
         $list = CommandList::text();
-        $commands = new Commands($this->vk);
+        $commands = new Commands(parent::$vk);
         if (is_array($list)) {
 
             foreach ($list as $cmd) {

@@ -11,6 +11,10 @@ namespace Bot\Commands;
 trait Debug
 {
 
+    public function pr()
+    {
+        $this->print(2121212121);
+    }
     private function print($data): void
     {
         var_dump($data);

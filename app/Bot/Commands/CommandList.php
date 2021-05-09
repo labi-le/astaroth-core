@@ -23,7 +23,7 @@ final class CommandList
 
             [
                 'text' => ['pr', 'print'],
-                'method' => ['print']
+                'method' => ['pr']
             ],
 
             [

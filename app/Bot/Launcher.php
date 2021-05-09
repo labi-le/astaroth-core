@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bot;
 
+use Bot\Controller\CommandController;
 use DigitalStars\SimpleVK\LongPoll;
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
@@ -61,8 +62,9 @@ class Launcher
         }
 
         SimpleVKExtend::parse($bot);
+
+        Controller::setVK($bot);
         (new Controller)
-            ->setVK($bot)
             ->handle(SimpleVKExtend::getVars());
     }
 
@@ -71,8 +73,9 @@ class Launcher
         $bot = LongPoll::create($auth['token'], $auth['v']);
         $bot->listen(function () use ($bot) {
             SimpleVKExtend::parse($bot);
+
+            Controller::setVK($bot);
             (new Controller)
-                ->setVK($bot)
                 ->handle(SimpleVKExtend::getVars());
         });
     }

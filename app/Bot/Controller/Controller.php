@@ -9,12 +9,11 @@ use Bot\Commands\Commands;
 
 class Controller
 {
-    protected SimpleVK $vk;
+    protected static SimpleVK $vk;
 
-    public function setVK(SimpleVK $vk): static
+    public static function setVK(SimpleVK $vk): void
     {
-        $this->vk = $vk;
-        return $this;
+        static::$vk = $vk;
     }
 
     /**
