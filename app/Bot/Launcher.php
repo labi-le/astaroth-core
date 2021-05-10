@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bot;
 
-use Bot\Controller\CommandController;
 use DigitalStars\SimpleVK\LongPoll;
 use DigitalStars\SimpleVK\SimpleVK;
 use DigitalStars\SimpleVK\SimpleVkException;
+use Exception;
 use Labile\SimpleVKExtend\SimpleVKExtend;
 use Bot\Controller\Controller;
 use Bot\Models\ConfigFile;
@@ -18,7 +18,7 @@ class Launcher
     private array $file;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function __construct(string $path)
     {
@@ -36,6 +36,9 @@ class Launcher
         return new self($path);
     }
 
+    /**
+     * Запустить бота
+     */
     public function run(): void
     {
         $this->checkPhpVersion();
@@ -54,6 +57,10 @@ class Launcher
 
     }
 
+    /**
+     * Запустить бота в режиме коллбэк
+     * @param array $auth
+     */
     private function callback(array $auth): void
     {
         $bot = SimpleVK::create($auth['token'], $auth['v'])->setConfirm($auth['confirmation']);
@@ -68,6 +75,10 @@ class Launcher
             ->handle(SimpleVKExtend::getVars());
     }
 
+    /**
+     * Запустить бота в режиме лонгпулл
+     * @param array $auth
+     */
     private function longpoll(array $auth): void
     {
         $bot = LongPoll::create($auth['token'], $auth['v']);
