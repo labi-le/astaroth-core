@@ -5,34 +5,25 @@ namespace Bot\Controller;
 
 
 use Bot\Commands\CommandList;
-use Bot\Commands\Commands;
 use Bot\Models\MethodExecutor;
 use Bot\Models\Utils;
 
-class CommandController extends Controller
+final class CommandController extends Controller
 {
-    public function __construct(string $originalText)
+    public function __construct(string $originalText, string $namespace = 'Bot\\Commands\\')
     {
         $list = CommandList::text();
-        $commands = new Commands(parent::$vk);
 
-        if (is_array($list)) {
+        foreach ($list as $cmd) {
+            is_array($cmd['text']) ?: $cmd['text'] = [$cmd['text']];
+            is_array($cmd['method']) ?: $cmd['method'] = [$cmd['method']];
 
-            foreach ($list as $cmd) {
-                if (!is_array($cmd['text']) && Utils::formatText(( string)$cmd['text'], $originalText)) {
-                    new MethodExecutor($cmd['method'], $commands);
+            foreach ($cmd['text'] as $textFromArray) {
+                if (Utils::formatText($textFromArray, $originalText)) {
+                    new MethodExecutor($namespace, $cmd['method'], parent::$vk);
                     break;
                 }
 
-                if (is_array($cmd['text'])) {
-                    foreach ($cmd['text'] as $textFromArray) {
-                        if (Utils::formatText($textFromArray, $originalText)) {
-                            new MethodExecutor($cmd['method'], $commands);
-                            break;
-                        }
-
-                    }
-                }
             }
         }
     }

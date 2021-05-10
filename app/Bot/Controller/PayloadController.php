@@ -1,13 +1,14 @@
 <?php
 
 
-namespace Bot\Models;
+namespace Bot\Controller;
 
 
 use Bot\Commands\CommandList;
-use Bot\Commands\Commands;
+use Bot\Models\MethodExecutor;
+use Exception;
 
-class PayloadHandler
+final class PayloadController extends Controller
 {
     /**
      * Обработчик нажатий по клавиатуре
@@ -15,8 +16,10 @@ class PayloadHandler
      * type == 'callback' - калбек кнопки
      * @param array $payload
      * @param string $type
+     * @param string $namespace
+     * @throws Exception
      */
-    public function __construct(array $payload, string $type = 'default')
+    public function __construct(array $payload, string $type = 'default', string $namespace = 'Bot\\Commands\\')
     {
         $payloads = CommandList::payload();
         $key = key($payload);
@@ -24,7 +27,7 @@ class PayloadHandler
 
         foreach ($payloads[$key] as $array) {
             if ($value === $array['payload'] && $array['type'] === $type) {
-                new MethodExecutor($array['method'], new Commands());
+                new MethodExecutor($namespace, $array['method'], parent::$vk);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace Bot\Controller;
 
 use Bot\Commands\Events;
 
-class ActionController extends Controller
+final class ActionController extends Controller
 {
     /**
      * обработка action (message\\action)

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bot\Controller;
 
 
+use Exception;
+
 final class TypeController extends Controller
 {
 
@@ -19,6 +21,7 @@ final class TypeController extends Controller
      * Ивент: нажатие калбек кнопки
      * Event message_event
      * @param array $data
+     * @throws Exception
      */
     private function message_event(array $data): void
     {
@@ -28,6 +31,7 @@ final class TypeController extends Controller
     /**
      * Ивент: Новое сообщение
      * @param array $data
+     * @throws Exception
      */
     private function message_new(array $data): void
     {

@@ -4,23 +4,36 @@
 namespace Bot\Models;
 
 
+use Exception;
+
 class MethodExecutor
 {
     /**
      * Выполнить метод\методы
-     * @param array|string $methods
+     * @param string $namespace
+     * @param array $methods
      * @param object $object
+     * @throws Exception
      */
-    public function __construct(array|string $methods, object $object)
+    public function __construct(string $namespace, array $methods, object $object)
     {
-        if (is_array($methods)) {
-            foreach ($methods as $method) {
-                if ($object->$method() === false) {
-                    break;
-                }
+        foreach ($methods as $method) {
+            preg_match('/^([^\s@]+)@([^\s@]+)$/m', $method, $matches);
+            [, $class, $method] = $matches;
+
+            $class = $namespace . $class;
+
+            if ($matches === []) {
+                throw new Exception("Неправильно указан Class@Method в CommandList");
             }
-        } else {
-            $object->$methods();
+
+            if (!method_exists($class, $method)) {
+                throw new Exception("Метод $method отсутствует в классе $class\n namespace: $namespace");
+            }
+
+            if ((new $class($object))->$method() === false) {
+                break;
+            }
         }
     }
 }

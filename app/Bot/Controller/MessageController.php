@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Bot\Controller;
 
-use Bot\Models\PayloadHandler;
+use Exception;
 
 final class MessageController extends Controller
 {
+    /**
+     * @throws Exception
+     */
     public function __construct(array $data)
     {
         if (isset($data['chat_id'])) {
@@ -28,8 +31,8 @@ final class MessageController extends Controller
          */
         if (isset($data['payload'])) {
             $data['type'] === 'message_event'
-                ? new PayloadHandler($data['payload'], 'callback')
-                : new PayloadHandler($data['payload']);
+                ? new PayloadController($data['payload'], 'callback')
+                : new PayloadController($data['payload']);
         }
     }
 

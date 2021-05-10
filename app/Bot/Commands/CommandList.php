@@ -16,6 +16,8 @@ final class CommandList
      * | - похоже на
      * {} - содержит
      * |] - заканчивается на
+     *
+     * method должен содержать имя класса в функцию которую необходимо выполнить
      */
     public static function text(): array
     {
@@ -23,17 +25,12 @@ final class CommandList
 
             [
                 'text' => ['pr', 'print'],
-                'method' => ['pr']
+                'method' => ['Debug@pr']
             ],
 
             [
-                'text' => ['блин', 'капец', 'блять', 'ебать', 'ого'],
-                'method' => ['blin']
-            ],
-
-            [
-                'text' => ['/chat_reg'],
-                'method' => ['isChat', 'chatRegistration']
+                'text' => ['привет', '[|здравствуйте'],
+                'method' => ['Sample@hi']
             ],
 
         ];
@@ -49,7 +46,6 @@ final class CommandList
     public static function payload(): array
     {
         return [
-
 
             'chat' =>
                 [

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Bot\Controller;
 
 
-class ChatController extends Controller
+final class ChatController extends Controller
 {
     /**
      * Обработчик для бесед

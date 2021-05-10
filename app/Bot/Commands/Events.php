@@ -4,11 +4,11 @@
 namespace Bot\Commands;
 
 
-use Bot\Controller\CommandController;
 use DigitalStars\SimpleVK\SimpleVK;
+use DigitalStars\SimpleVK\SimpleVkException;
 use Labile\SimpleVKExtend\SimpleVKExtend;
 
-class Events
+final class Events
 {
     private SimpleVK $vk;
 
@@ -27,6 +27,7 @@ class Events
      * Пользователь присоединился к беседе по инвайт-ссылке
      * @param int $id
      * @return void
+     * @throws SimpleVkException
      */
     private function chat_invite_user_by_link(int $id): void
     {
@@ -36,6 +37,7 @@ class Events
     /**
      * Пользователь присоединился к беседе
      * @param int $id
+     * @throws SimpleVkException
      */
     private function chat_invite_user(int $id): void
     {
