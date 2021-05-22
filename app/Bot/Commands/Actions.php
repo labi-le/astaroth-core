@@ -4,20 +4,18 @@
 namespace Bot\Commands;
 
 
-use DigitalStars\SimpleVK\SimpleVK;
-use DigitalStars\SimpleVK\SimpleVkException;
-use Labile\SimpleVKExtend\SimpleVKExtend;
+use Bot\Models\DataParser;
 
-final class Events
+final class Actions extends Commands
 {
-    private SimpleVK $vk;
 
-    public function __construct(SimpleVK $vk, string $event, int|null $member_id)
+    public function __construct(array $auth, DataParser $data)
     {
-        $member_id = $member_id ?? SimpleVKExtend::getVars('user_id');
-        if ($member_id !== null && method_exists($this, $event)) {
-            $this->vk = $vk;
+        parent::__construct($auth, $data);
 
+        $member_id = $data->getAction()['member_id']?? $data->getFromId();
+        $event = $data->getAction()['type'];
+        if ($member_id !== null && method_exists($this, $event)) {
             $this->$event($member_id);
         }
     }
@@ -27,7 +25,6 @@ final class Events
      * Пользователь присоединился к беседе по инвайт-ссылке
      * @param int $id
      * @return void
-     * @throws SimpleVkException
      */
     private function chat_invite_user_by_link(int $id): void
     {
@@ -37,21 +34,9 @@ final class Events
     /**
      * Пользователь присоединился к беседе
      * @param int $id
-     * @throws SimpleVkException
      */
     private function chat_invite_user(int $id): void
     {
-        /**
-         * Если добавили бота
-         */
-        if ($id === -SimpleVKExtend::getVars('group_id')) {
-            /**
-             * commands
-             */
-        } else {
-            $this->vk->msg('hi')->send();
-        }
-
     }
 
     /**

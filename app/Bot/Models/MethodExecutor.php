@@ -12,10 +12,11 @@ class MethodExecutor
      * Выполнить метод\методы
      * @param string $namespace
      * @param array $methods
-     * @param object $object
+     * @param array $object $object
+     * @param DataParser $data
      * @throws Exception
      */
-    public function __construct(string $namespace, array $methods, object $object)
+    public function __construct(string $namespace, array $methods, array $object, DataParser $data)
     {
         foreach ($methods as $method) {
             preg_match('/^([^\s@]+)@([^\s@]+)$/m', $method, $matches);
@@ -31,7 +32,7 @@ class MethodExecutor
                 throw new Exception("Метод $method отсутствует в классе $class\n namespace: $namespace");
             }
 
-            if ((new $class($object))->$method() === false) {
+            if ((new $class($object, $data))->$method($data) === false) {
                 break;
             }
         }

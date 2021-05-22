@@ -83,7 +83,7 @@ class ConfigFile
 
         if ($file['type'] === 'callback') {
             !empty($auth['confirmation']) ?: throw new Exception('Не указан confirmation');
-            !is_bool($auth['secret']) and !empty(['auth']['secret']) ?: throw new Exception('Не указан secret, если не используется поставь false');
+            !is_bool($auth['secret']) && !empty(['auth']['secret']) ?: throw new Exception('Не указан secret, если не используется поставь false');
         }
 
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bot\Models;
 
-use Bot\Launcher;
+use Bot\bootstrap;
 
 class Utils
 {
@@ -56,89 +56,6 @@ class Utils
         return $substrings[$substring] ?? false;
     }
 
-    /**
-     * Проверка подстроки по шаблону
-     * @param string $textFromArray
-     * @param string $original
-     * @return bool
-     */
-    public static function formatText(string $textFromArray, string $original): bool
-    {
-        if (mb_substr($textFromArray, 0, 1) === '|') {
-            $textFromArray = mb_substr($textFromArray, 1);
-            return self::similarTo($textFromArray, $original) >= Launcher::SIMILAR_PERCENT;
-        }
-
-        if (mb_strpos($textFromArray , "[|") === 0) {
-            $textFromArray = mb_substr($textFromArray, 2);
-            return self::startAs($textFromArray, $original);
-        }
-
-        if (mb_substr($textFromArray, -2, 2) === "|]") {
-            $textFromArray = mb_substr($textFromArray, 0, 2);
-            return self::endAs($textFromArray, $original);
-        }
-
-        if (mb_substr($textFromArray, 0, 1) === "{" && mb_substr($textFromArray, -1, 1) === "}") {
-            $textFromArray = mb_substr($textFromArray, 1, -1);
-            return self::contains($textFromArray, $original);
-        }
-
-        return $textFromArray === $original;
-    }
-
-    /**
-     * Похоже на
-     * @param string $text
-     * @param $original
-     * @return int
-     */
-    public static function similarTo(string $text, $original): int
-    {
-        similar_text($text, $original, $percent);
-        return (int)$percent;
-    }
-
-    /**
-     * Начинается с
-     * @param string $text
-     * @param $original
-     * @return bool
-     */
-    private static function startAs(string $text, $original): bool
-    {
-        $word = explode(' ', $text)[0];
-        $wordFromBot = explode(' ', $original)[0];
-        return $word === $wordFromBot;
-    }
-
-    /**
-     * Заканчивается на
-     * @param string $text
-     * @param string $original
-     * @return bool
-     */
-    private static function endAs(string $text, string $original): bool
-    {
-        $word = explode(' ', $text);
-        $end_word = end($word);
-
-        $wordFromBot = explode(' ', $original);
-        $end_wordFromBot = end($wordFromBot);
-
-        return $end_word === $end_wordFromBot;
-    }
-
-    /**
-     * Содержит
-     * @param string $text
-     * @param string $original
-     * @return bool
-     */
-    private static function contains(string $text, string $original): bool
-    {
-        return str_contains($original, $text);
-    }
 
     /**
      * Православный explode с возможностью использовать несколько символов

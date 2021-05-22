@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-use Bot\Launcher;
+use Bot\bootstrap;
 
 require_once('vendor/autoload.php');
 
@@ -12,4 +12,4 @@ require_once('vendor/autoload.php');
  * Если его нет, просто укажи необходимый путь и файл будет создан
  */
 $config = __DIR__ . '/config.json';
-Launcher::setConfigFile($config)->run();
+bootstrap::setConfigFile($config)->run();

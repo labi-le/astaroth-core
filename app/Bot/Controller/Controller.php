@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace Bot\Controller;
 
-use DigitalStars\SimpleVK\SimpleVK;
-use Bot\Commands\Commands;
+use Astaroth\VkUtils\Client;
+use Bot\Models\DataParser;
 
 class Controller
 {
-    protected static SimpleVK $vk;
+    protected static array $vk;
 
-    public static function setVK(SimpleVK $vk): void
+    public static function setClient(Client ...$client): void
     {
-        static::$vk = $vk;
+        static::$vk = $client;
     }
 
     /**
      * Вызов типа события и передача данных
-     * @param array $data
+     * @param DataParser $data
      */
-    public function handle(array $data): void
+    public function handle(DataParser $data): void
     {
-        $type = $data['type'];
-        new TypeController($type, $data);
+        new TypeController($data);
     }
 
 }

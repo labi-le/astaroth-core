@@ -6,22 +6,18 @@ declare(strict_types=1);
 namespace Bot\Controller;
 
 
+use Bot\Commands\Actions;
+use Bot\Models\DataParser;
+
 final class ChatController extends Controller
 {
     /**
-     * Обработчик для бесед
-     * Ну там подключение к базе и тд...
-     * @param array $data
+     * @param DataParser $data
      */
-    public function __construct(array $data)
+    public function __construct(DataParser $data)
     {
-        if(isset($data['action']['type'])) {
-            $this->actionHandler($data['action']['type'], $data);
+        if ($data->getAction()) {
+            new Actions(parent::$vk, $data);
         }
-    }
-
-    private function actionHandler(string $action, array $data): void
-    {
-
     }
 }

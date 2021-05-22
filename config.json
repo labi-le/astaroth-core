@@ -1,10 +1,10 @@
 {
   "auth": {
-    "token": "",
+    "token": "d123dfc5fb0ab595115c9826e3d84891ce4f26b8e95c7277fa077d85f621fcdf270a316dd8dc3d806d232",
     "v": "5.130",
     "confirmation": "",
     "secret": false
   },
-  "logging_error": false,
-  "type": "callback"
+  "handle_repeated_requests": false,
+  "type": "longpoll"
 }

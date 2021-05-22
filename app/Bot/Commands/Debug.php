@@ -10,11 +10,13 @@ class Debug extends Commands
 {
     public function pr()
     {
-//        $this->print(2121212121);
+        $this->print($this->data->getRawData());
     }
+
     private function print(...$data): void
     {
         var_dump($data);
-        $this->vk->msg(print_r($data, true))->send();
+
+        $this->reply(print_r($data,true));
     }
 }

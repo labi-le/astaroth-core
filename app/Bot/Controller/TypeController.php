@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Bot\Controller;
 
 
+use Bot\Models\DataParser;
 use Exception;
 
 final class TypeController extends Controller
 {
 
-    public function __construct(string $type, array $data)
+    public function __construct(DataParser $data)
     {
+        $type = $data->getType();
         if(method_exists(__CLASS__ , $type)){
             $this->$type($data);
         }
@@ -20,23 +22,24 @@ final class TypeController extends Controller
     /**
      * Ивент: нажатие калбек кнопки
      * Event message_event
-     * @param array $data
+     * @param DataParser $data
      * @throws Exception
      */
-    private function message_event(array $data): void
+    private function message_event(DataParser $data): void
     {
-        new MessageController($data);
+        if ($data->getPayload()) {
+            new PayloadController($data, 'callback');
+        }
     }
 
     /**
      * Ивент: Новое сообщение
-     * @param array $data
+     * @param DataParser $data
      * @throws Exception
      */
-    private function message_new(array $data): void
+    private function message_new(DataParser $data): void
     {
-        new MessageController($data);
-        new ActionController($data);
+        new MessageNewController($data);
     }
 
 }
