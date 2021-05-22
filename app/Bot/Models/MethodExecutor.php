@@ -22,18 +22,24 @@ class MethodExecutor
             preg_match('/^([^\s@]+)@([^\s@]+)$/m', $method, $matches);
             [, $class, $method] = $matches;
 
-            $class = $namespace . $class;
+            $full_class_name = $namespace . $class;
 
             if ($matches === []) {
                 throw new Exception("Неправильно указан Class@Method в CommandList");
             }
 
-            if (!method_exists($class, $method)) {
+            if (!method_exists($full_class_name, $method)) {
                 throw new Exception("Метод $method отсутствует в классе $class\n namespace: $namespace");
             }
 
-            if ((new $class($object, $data))->$method($data) === false) {
-                break;
+            if (class_exists($class)) {
+                if ($class->$method($data) === false) {
+                    break;
+                }
+            } else {
+                if ((new $full_class_name($object, $data))->$method($data) === false) {
+                    break;
+                }
             }
         }
     }
