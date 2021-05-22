@@ -67,12 +67,12 @@ protected function text()
 
             [
                 'text' => ['pr', 'print'],
-                'method' => ['print']
+                'method' => ['Debug@print']
             ],
 
             [
                 'text' => ['блин', 'капец'],
-                'method' => ['blin']
+                'method' => ['Fun@blin']
             ],
 
         ];
@@ -92,7 +92,7 @@ protected function payload()
                 [
                     [
                         'payload' => 'registration',
-                        'method' => ['chatRegistration'],
+                        'method' => ['Chat@chatRegistration'],
                         'type' => 'default'
                     ],
 
