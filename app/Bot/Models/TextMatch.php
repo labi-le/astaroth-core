@@ -10,7 +10,7 @@ use Bot\bootstrap;
 
 class TextMatch
 {
-    public function __construct(private string $haystack, private string $needle)
+    public function __construct(private string $needle, private string $haystack)
     {
 
     }
