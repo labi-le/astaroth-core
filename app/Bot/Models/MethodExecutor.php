@@ -18,28 +18,28 @@ class MethodExecutor
      */
     public function __construct(string $namespace, array $methods, array $object, DataParser $data)
     {
+        $instance = [];
         foreach ($methods as $method) {
             preg_match('/^([^\s@]+)@([^\s@]+)$/m', $method, $matches);
-            [, $class, $method] = $matches;
-
-            $full_class_name = $namespace . $class;
 
             if ($matches === []) {
                 throw new Exception("Неправильно указан Class@Method в CommandList");
             }
 
-            if (!method_exists($full_class_name, $method)) {
+            [, $class, $method] = $matches;
+
+            $full_class_name = $namespace . $class;
+
+            if (!isset($instance[$class])) {
+                $instance[$class] = new $full_class_name($object, $data);
+            }
+
+            if (!method_exists($instance[$class], $method)) {
                 throw new Exception("Метод $method отсутствует в классе $class\n namespace: $namespace");
             }
 
-            if (class_exists($class)) {
-                if ($class->$method($data) === false) {
-                    break;
-                }
-            } else {
-                if ((new $full_class_name($object, $data))->$method($data) === false) {
-                    break;
-                }
+            if ($instance[$class]->$method($data) === false) {
+                break;
             }
         }
     }
