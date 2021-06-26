@@ -44,8 +44,3 @@ LOGGING_ERROR=
 
     LOGGING_ERROR - логирование ошибок. При значении true все ошибки будут логироваться в папку error
     TYPE - тип работы бота. Возможны только два типа - CALLBACK, LONGPOLL
-
-## 2. Простой hello world
-```php
-
-```
