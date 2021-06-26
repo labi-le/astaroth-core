@@ -1,32 +1,39 @@
 {
-    "name": "labile/bot-constructor",
-    "description": "bot constructor vk",
-    "license": "MIT",
-    "homepage": "https://github.com/labi-le/vk-bot-constructor",
-    "minimum-stability": "stable",
-    "type": "project",
-    "require": {
-        "php": ">=8",
-        "ext-mbstring": "*",
-        "labile/vk-utils": "^1.3.1",
-        "labile/vk-longpoll": "^1.1",
-        "labile/vk-callback": "^1.0"
+  "name": "labile/astaroth-core",
+  "description": "astaroth framework core",
+  "authors": [
+    {
+      "name": "labile",
+      "email": "1a6i1e@gmail.com"
     }
-    ,
-    "require-dev": {
-        "roave/security-advisories": "dev-master",
-        "phpunit/phpunit": "^9.5"
-    },
-    "authors": [
-        {
-            "name": "labile",
-            "email": "1a6i1e@gmail.com"
-        }
-    ],
-
-    "autoload": {
-        "psr-4": {
-            "Bot\\": "app/Bot"
-        }
+  ],
+  "require": {
+    "labile/vk-data-fetcher": "dev-main",
+    "labile/vk-callback": "dev-main",
+    "labile/vk-longpoll": "dev-main",
+    "labile/vk-utils": "dev-main",
+    "labile/astaroth-attributes": "dev-main",
+    "vlucas/phpdotenv": "^5.3",
+    "symfony/dependency-injection": "^5.3",
+    "symfony/console": "^5.3",
+    "labile/text-matcher": "dev-main",
+    "haydenpierce/class-finder": "^0.4.3",
+    "sally/vk-keyboard": "^1.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": ">=9.5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Astaroth\\": "src/Astaroth",
+      "App\\": "App"
     }
+  },
+  "scripts": {
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "php -S 127.0.0.1:8000"
+    ]
+  }
 }
