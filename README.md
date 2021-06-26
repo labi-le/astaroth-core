@@ -7,7 +7,7 @@ ___
 ## Содержание
 
 1. [Установка](#1-установка)
-    + [Содержание env](#11-настройка-env)
+    + [Содержание env](#env)
 2. Примеры и документация
     + [Примеры](doc/example)
     + [Документация по аттрибутам](doc/attribute.md)
@@ -20,7 +20,7 @@ ___
 
 > composer create-project labile/astaroth-framework bot
 
-### 1.1 Содержание env
+### env
 
 ```dotenv
 APP_NAMESPACE = App\Command
