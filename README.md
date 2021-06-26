@@ -17,7 +17,7 @@ ___
 
 ___
 
-## 1. Installation
+### Installation
 
 > composer create-project labile/astaroth-framework bot
 
