@@ -6,7 +6,8 @@ ___
 
 ## Содержание
 
-1. [Установка](#1-установка)
+1. Конфигурация
+    + [Установка](#Installation)
     + [Содержание env](#env)
 2. Примеры и документация
     + [Примеры](doc/example)
@@ -16,7 +17,7 @@ ___
 
 ___
 
-## 1. Установка
+## 1. Installation
 
 > composer create-project labile/astaroth-framework bot
 
