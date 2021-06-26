@@ -7,16 +7,19 @@
       "email": "1a6i1e@gmail.com"
     }
   ],
+
+  "minimum-stability": "stable",
+
   "require": {
-    "labile/vk-data-fetcher": "dev-main",
-    "labile/vk-callback": "dev-main",
-    "labile/vk-longpoll": "dev-main",
-    "labile/vk-utils": "dev-main",
-    "labile/astaroth-attributes": "dev-main",
+    "labile/vk-data-fetcher": ">=1.2",
+    "labile/vk-callback": ">=1",
+    "labile/vk-longpoll": ">=1.1",
+    "labile/vk-utils": ">=1.5.1",
+    "labile/astaroth-attributes": ">=1",
     "vlucas/phpdotenv": "^5.3",
     "symfony/dependency-injection": "^5.3",
     "symfony/console": "^5.3",
-    "labile/text-matcher": "dev-main",
+    "labile/text-matcher": ">=1",
     "haydenpierce/class-finder": "^0.4.3",
     "sally/vk-keyboard": "^1.0"
   },
@@ -26,8 +29,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Astaroth\\": "src/Astaroth",
-      "App\\": "App"
+      "Astaroth\\": "src/Astaroth"
     }
   },
   "scripts": {
