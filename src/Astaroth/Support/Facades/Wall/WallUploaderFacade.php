@@ -4,6 +4,7 @@
 namespace Astaroth\Support\Facades\Wall;
 
 
+use Astaroth\Support\Facades\Message\MessageUploaderFacade;
 use Astaroth\VkUtils\Contracts\IDocsUpload;
 use Astaroth\VkUtils\Contracts\IPhoto;
 use Astaroth\VkUtils\Contracts\IStories;
@@ -25,9 +26,11 @@ class WallUploaderFacade extends \Astaroth\Support\Facades\Facade
 
         return $uploader->upload(...$object);
     }
-    
-    public static function changeToken(string $access_token): void
+
+    public static function changeToken(string $access_token): WallUploaderFacade
     {
-        self::$access_token = $access_token;
+        $singleton = new static();
+        $singleton::$access_token = $access_token;
+        return $singleton;
     }
 }

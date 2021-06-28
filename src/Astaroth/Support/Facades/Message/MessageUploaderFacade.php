@@ -25,8 +25,10 @@ class MessageUploaderFacade extends \Astaroth\Support\Facades\Facade
         return $uploader->upload(...$object);
     }
 
-    public static function changeToken(string $access_token): void
+    public static function changeToken(string $access_token): MessageUploaderFacade
     {
-        self::$access_token = $access_token;
+        $singleton = new static();
+        $singleton::$access_token = $access_token;
+        return $singleton;
     }
 }
