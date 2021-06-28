@@ -7,8 +7,7 @@
 
 ### Send Message
 
-Указывается вначале класса, является событием
-
+Фасад облегчающий отправку сообщений
 ```php
 use Astaroth\Support\Facades\Message\MessageConstructor;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
@@ -30,8 +29,7 @@ MessageConstructor::create(static function(IMessageBuilder $builder){
 
 ### Create post
 
-Указывается вначале класса, является событием
-
+Фасад облегчающий создание постов
 ```php
 use Astaroth\Support\Facades\Wall\PostConstructor;
 use Astaroth\VkUtils\Contracts\IPostBuilder;
@@ -44,4 +42,13 @@ PostConstructor::create(static function(IPostBuilder $builder){
         ->setAttachments(WallUploaderFacade::upload(new Photo("...path"), new Photo("...path")))
         
 });
+```
+
+### Request api
+
+Фасад облегчающий запросы к vk api
+```php
+use Astaroth\Support\Facades\RequestFacade;
+
+RequestFacade::request("users.get", ["user_ids" => 418618, "fields" => "sex"]);
 ```
