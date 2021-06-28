@@ -1,5 +1,10 @@
 # Astaroth
 
+[![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/labi-le/astaroth-core/blob/main/LICENSE)
+[![Packagist Stars](https://img.shields.io/packagist/stars/labile/astaroth-core)](https://packagist.org/packages/labile/astaroth-core/stats)
+[![Download Stats](https://img.shields.io/packagist/dt/labile/astaroth-core)](https://packagist.org/packages/labile/astaroth-core/stats)
+![Php requirement](https://img.shields.io/packagist/php-v/labile/astaroth-core)
+
 Личный фреймворк для создания ботов
 
 ___
@@ -25,13 +30,13 @@ composer create-project labile/astaroth-framework bot
 ```
 
 ### Requirement
+
 > Для работы необходим `сервер`, на бесплатных хостингах даже не запустится\
 > Платформа - `Linux`\
 > Версия `PHP` - `>=8`\
 > Расширения: `ext-pcntl`, `ext-posix`, `mbstring`\
 > Веб сервер (callback) - нативный php, поднимается командой `composer serve` (php -S x.x.x.x)\
-> Можно попробовать завести apache или nginx, но я не проверял 
-
+> Можно попробовать завести apache или nginx, но я не проверял
 
 ### Env
 
@@ -54,5 +59,6 @@ LOGGING_ERROR=
     SECRET_KEY - произвольная строка, которая будет передаваться с каждым запросом (необязательный параметр)
 
 ### Остальные параметры:
+
     LOGGING_ERROR - логирование ошибок. При значении true все ошибки будут логироваться в папку error (на данный момент отсутствует реализация)\
     TYPE - тип работы бота. Возможны только два типа - CALLBACK, LONGPOLL
