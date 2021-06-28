@@ -25,6 +25,7 @@ composer create-project labile/astaroth-framework bot
 ```
 
 ### Requirement
+> Для работы необходим `сервер`, на бесплатных хостингах даже не запустится\
 > Платформа - `Linux`\
 > Версия `PHP` - `>=8`\
 > Расширения: `ext-pcntl`, `ext-posix`, `mbstring`\
