@@ -21,6 +21,11 @@ class Attribute
         $this->attribute($executable, $data);
     }
 
+    /**
+     * Attribute check and routing
+     * @param array $classes
+     * @param DataFetcher $data
+     */
     private function attribute(array $classes, DataFetcher $data): void
     {
         foreach ($classes as $class) {
@@ -88,7 +93,7 @@ class Attribute
     private function payloadAttribute(object $attribute, object $instance, string $method, MessageNew|MessageEvent $data): void
     {
         if ($attribute instanceof \Astaroth\Attributes\Payload) {
-            $payload = json_decode($data->getPayload(), true);
+            $payload = @json_decode($data->getPayload(), true);
 
             if ($attribute->payload === $payload) {
                 $this->execute($instance, $method, $data);
