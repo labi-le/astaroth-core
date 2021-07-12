@@ -48,7 +48,6 @@ API_VERSION=5.130
 CONFIRMATION_KEY=2f21ed85
 SECRET_KEY=
 HANDLE_REPEATED_REQUESTS=
-LOGGING_ERROR=
 ```
 
 ### Auth:
@@ -60,5 +59,4 @@ LOGGING_ERROR=
 
 ### Остальные параметры:
 
-    LOGGING_ERROR - логирование ошибок. При значении true все ошибки будут логироваться в папку error (на данный момент отсутствует реализация)\
     TYPE - тип работы бота. Возможны только два типа - CALLBACK, LONGPOLL
