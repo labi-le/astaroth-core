@@ -7,6 +7,43 @@ namespace Astaroth\Foundation;
 class Utils
 {
 
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
+     */
+    public static function JsonOnline(array $data): ?string
+    {
+        $client = new \GuzzleHttp\Client(
+            [
+                "base_uri" => "https://jsoneditoronline.herokuapp.com/v1/",
+                "headers" =>
+                    [
+                        "Content-Type" => "application/json",
+                    ]
+            ]
+        );
+
+
+        $response = $client->post("docs",
+            [
+                \GuzzleHttp\RequestOptions::BODY =>
+                    json_encode([
+                        "name" => uniqid('', true),
+                        "data" => json_encode($data, JSON_THROW_ON_ERROR)
+                    ], JSON_THROW_ON_ERROR)
+            ]
+        );
+
+
+        $contents = json_decode($response->getBody()->getContents(), true);
+        if ($contents["ok"] === true) {
+            return "https://jsoneditoronline.org/?id=" . $contents["id"];
+        }
+
+        return null;
+    }
+
     /**
      * Транслитерация кириллицы в латиницу
      * @param string $str
