@@ -35,8 +35,8 @@ composer create-project labile/astaroth-framework bot
 > Платформа - `Linux`\
 > Версия `PHP` - `>=8`\
 > Расширения: `ext-pcntl`, `ext-posix`, `mbstring`\
-> Веб сервер (callback) - нативный php, поднимается командой `composer serve` (php -S x.x.x.x)\
-> Можно попробовать завести apache или nginx, но я не проверял
+> Веб сервер (callback) - для дебага - нативный php, поднимается командой `composer serve` (php -S x.x.x.x)\
+> Работает nginx, apache не проверял
 
 ### Env
 
