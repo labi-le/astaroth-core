@@ -28,17 +28,29 @@ abstract class BaseCommands
         return RequestFacade::request("utils.getShortLink", ["url" => $url, "private" => $private]);
     }
 
-    protected function logToMessage(int $id, string $error_level, \Exception $e): void
+    protected function logToMessage(int $id, string $error_level, \Exception|string $e): void
     {
         \Astaroth\Support\Facades\Message\MessageConstructor::create(static function (\Astaroth\VkUtils\Contracts\IMessageBuilder $message) use ($id, $e, $error_level) {
+
+            if ($e instanceof \Exception){
+                return $message->setMessage(
+                    sprintf(
+                        "Logger:\nError Level - %s\nError Code - %s\nMessage - %s",
+                        $error_level,
+                        $e->getCode(),
+                        $e->getMessage()
+                    ))
+                    ->setPeerId($id);
+            }
+
             return $message->setMessage(
                 sprintf(
-                    "Logger:\nError Level - %s\nError Code - %s\nMessage - %s",
+                    "Logger:\nError Level - %s\nMessage - %s",
                     $error_level,
-                    $e->getCode(),
-                    $e->getMessage()
+                    $e
                 ))
                 ->setPeerId($id);
+
         });
     }
 }
