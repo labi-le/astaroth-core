@@ -16,6 +16,11 @@ class LazyHandler implements \Astaroth\Interface\HandlerInterface
 
     }
 
+    /**
+     * Normalize output data from VKontakte
+     * @param object|array $data
+     * @return \Astaroth\DataFetcher\DataFetcher
+     */
     private function normalizeData(object|array $data): \Astaroth\DataFetcher\DataFetcher
     {
         if (is_array($data)) {
@@ -27,6 +32,11 @@ class LazyHandler implements \Astaroth\Interface\HandlerInterface
 
     }
 
+    /**
+     * Run instance longpoll\callback
+     * @param callable $func
+     * @throws \Throwable
+     */
     public function listen(callable $func): void
     {
         $this->botInstance->listen(

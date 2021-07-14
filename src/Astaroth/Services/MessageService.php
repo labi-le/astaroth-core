@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Astaroth\Services;
 
-
+/**
+ * Class MessageService
+ * @package Astaroth\Services
+ */
 class MessageService
 {
-
     public function __invoke(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $container

@@ -18,6 +18,7 @@ class Facade
     }
 
     /**
+     * Get an object by its name
      * @param string $object
      * @return mixed
      */

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Astaroth\Services;
 
-
+/**
+ * Class WallUploaderService
+ * @package Astaroth\Services
+ */
 class WallUploaderService
 {
-
     public function __invoke(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $container

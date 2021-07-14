@@ -17,12 +17,21 @@ class ReflectionParser
     {
     }
 
+    /**
+     * Parse the class that contains the attributes, etc...
+     * @param DataFetcher $data
+     */
     public function handle(DataFetcher $data): void
     {
         new Attribute($this->parseClass(), $data);
     }
 
 
+    /**
+     * Parse method params from class
+     * @param ReflectionParameter ...$parameters
+     * @return array
+     */
     private function parseMethodParameters(ReflectionParameter ...$parameters): array
     {
         $method_params = [];
@@ -36,6 +45,11 @@ class ReflectionParser
         return $method_params;
     }
 
+    /**
+     * Parse attributes from class\methods
+     * @param ReflectionAttribute ...$parameters
+     * @return array
+     */
     private function parseAttribute(ReflectionAttribute ...$parameters): array
     {
         $attribute = [];
@@ -46,6 +60,11 @@ class ReflectionParser
         return $attribute;
     }
 
+    /**
+     * Parse method from class
+     * @param ReflectionMethod ...$class
+     * @return array
+     */
     private function parseMethod(ReflectionMethod ...$class): array
     {
         $parameters = [];
@@ -63,6 +82,11 @@ class ReflectionParser
         return $parameters;
     }
 
+    /**
+     * Parse class method, attribute
+     * @return array
+     * @throws \ReflectionException
+     */
     private function parseClass(): array
     {
         $map = [];

@@ -3,7 +3,10 @@
 
 namespace Astaroth\Route;
 
+use Astaroth\Attributes\Attachment;
 use Astaroth\Attributes\Conversation;
+use Astaroth\Attributes\Message;
+use Astaroth\Attributes\Payload;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
@@ -32,7 +35,7 @@ class Attribute
 
             foreach ($class["attribute"] as $attribute) {
 
-                if ($this->chatAttribute($attribute, $data) === false) {
+                if ($this->conversationAttribute($attribute, $data) === false) {
                     break;
                 }
 
@@ -49,6 +52,13 @@ class Attribute
     }
 
 
+    /**
+     * Checks attributes for an event message_new
+     * @see \Astaroth\Attributes\Event\MessageNeww
+     * @param object $instance
+     * @param array $methods
+     * @param MessageNew $data
+     */
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
         foreach ($methods as $method) {
@@ -60,7 +70,14 @@ class Attribute
         }
     }
 
-    private function chatAttribute(object $attribute, DataFetcher $data): ?bool
+    /**
+     * Handling the Conversation Attribute
+     * @see Conversation
+     * @param object $attribute
+     * @param DataFetcher $data
+     * @return bool|null
+     */
+    private function conversationAttribute(object $attribute, DataFetcher $data): ?bool
     {
         if ($attribute instanceof \Astaroth\Attributes\Conversation) {
 
@@ -90,6 +107,14 @@ class Attribute
         return null;
     }
 
+    /**
+     * Search payload attribute
+     * @see Payload
+     * @param object $attribute
+     * @param object $instance
+     * @param string $method
+     * @param MessageNew|MessageEvent $data
+     */
     private function payloadAttribute(object $attribute, object $instance, string $method, MessageNew|MessageEvent $data): void
     {
         if ($attribute instanceof \Astaroth\Attributes\Payload) {
@@ -101,6 +126,14 @@ class Attribute
         }
     }
 
+    /**
+     * Search attribute Message
+     * @see Message
+     * @param object $attribute
+     * @param object $instance
+     * @param string $method
+     * @param MessageNew $data
+     */
     private function messageAttribute(object $attribute, object $instance, string $method, MessageNew $data): void
     {
         if ($attribute instanceof \Astaroth\Attributes\Message) {
@@ -111,6 +144,13 @@ class Attribute
         }
     }
 
+    /**
+     * Checks attributes for an event message_event
+     * @see \Astaroth\Attributes\Event\MessageEvent
+     * @param object $instance
+     * @param array $methods
+     * @param MessageEvent $data
+     */
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
     {
         foreach ($methods as $method) {
@@ -120,11 +160,25 @@ class Attribute
         }
     }
 
+    /**
+     * Execute methods with args...
+     * @param object $instance
+     * @param string $method
+     * @param ...$args
+     */
     private function execute(object $instance, string $method, ...$args): void
     {
         $instance->$method(...$args);
     }
 
+    /**
+     * Search attribute attachment
+     * @see Attachment
+     * @param object $attribute
+     * @param object $instance
+     * @param string $method
+     * @param MessageNew $data
+     */
     private function attachmentAttribute(object $attribute, object $instance, string $method, MessageNew $data): void
     {
         $attachments = [];

@@ -17,6 +17,7 @@ class Route
     }
 
     /**
+     * Get class map
      * @return array
      */
     private function getClassMap(): array
@@ -25,6 +26,7 @@ class Route
     }
 
     /**
+     * Set class map
      * @param string $class_map
      * @return Route
      * @throws \Exception
@@ -35,6 +37,11 @@ class Route
         return $this;
     }
 
+
+    /**
+     * Routing data from VK
+     * @throws \Throwable
+     */
     public function handle(): void
     {
         $this->handler->listen(function (\Astaroth\DataFetcher\DataFetcher $data) {
