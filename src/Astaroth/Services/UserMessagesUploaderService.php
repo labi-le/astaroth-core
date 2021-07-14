@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Astaroth\Services;
 
 /**
- * Class MessageService
+ * Class UserMessagesUploaderService
  * @package Astaroth\Services
  */
-class MessageService
+class UserMessagesUploaderService
 {
     public function __invoke(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
