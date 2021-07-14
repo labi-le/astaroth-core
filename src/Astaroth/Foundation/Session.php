@@ -85,8 +85,8 @@ class Session
      */
     private function getStorageData(): mixed
     {
-        $content = @file_get_contents($this->fullStoragePath);
-        return json_decode($content, true);
+        $content = (string)@file_get_contents($this->fullStoragePath);
+        return @json_decode($content, true);
     }
 
 
