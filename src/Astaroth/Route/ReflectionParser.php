@@ -20,6 +20,8 @@ class ReflectionParser
     /**
      * Parse the class that contains the attributes, etc...
      * @param DataFetcher $data
+     * @throws \ReflectionException
+     * @throws \ReflectionException
      */
     public function handle(DataFetcher $data): void
     {

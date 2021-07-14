@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Astaroth\Support\Facades\Message;
 
-
-use Astaroth\VkUtils\Builders\MessageBuilder;
 
 /**
  * Class MessageConstructor
@@ -14,7 +13,7 @@ class MessageConstructor extends \Astaroth\Support\Facades\Facade
 {
     public static function create(callable $func): array
     {
-        return static::getObject(\Astaroth\VkUtils\Message::class)->create($func(new MessageBuilder()));
+        return static::getObject("message")?->create($func(new \Astaroth\VkUtils\Builders\MessageBuilder()));
     }
 
 }

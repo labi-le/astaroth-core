@@ -31,6 +31,9 @@ class Configuration
     {
     }
 
+    /**
+     * @throws Exception
+     */
     public function get(): array
     {
         $dotenv = Dotenv::createImmutable($this->dir);
@@ -54,6 +57,7 @@ class Configuration
                 [
                     "TYPE",
                     "ACCESS_TOKEN",
+                    "USER_ACCESS_TOKEN",
                     "API_VERSION"
                 ])
                 ->notEmpty();

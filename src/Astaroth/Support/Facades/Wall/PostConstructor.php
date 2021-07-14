@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Astaroth\Support\Facades\Wall;
 
-use Astaroth\VkUtils\Builders\PostBuilder;
 
 /**
  * Class CreatePost
@@ -14,6 +14,8 @@ class PostConstructor extends \Astaroth\Support\Facades\Facade
 {
     public static function create(callable $post): array
     {
-        return static::getObject(\Astaroth\VkUtils\Post::class)->create($post(new PostBuilder()));
+        return static::getObject("post")
+            ?->setDefaultToken(self::$container->getParameter("USER_ACCESS_TOKEN"))
+            ->create($post(new \Astaroth\VkUtils\Builders\PostBuilder()));
     }
 }

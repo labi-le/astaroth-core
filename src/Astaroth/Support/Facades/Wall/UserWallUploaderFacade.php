@@ -11,13 +11,15 @@ use Astaroth\VkUtils\Contracts\IStories;
 use Astaroth\VkUtils\Contracts\IVideo;
 
 /**
- * Class WallUploaderFacade
+ * Class UserWallUploaderFacade
  * @package Astaroth\Support\Facades\Wall
  */
-class WallUploaderFacade extends \Astaroth\Support\Facades\Facade
+class UserWallUploaderFacade extends \Astaroth\Support\Facades\Facade
 {
     public static function upload(IDocsUpload|IVideo|IPhoto|IStories ...$object): array
     {
-        return static::getObject("wall.uploader")?->upload(...$object);
+        return static::getObject("wall.uploader")
+            ?->setDefaultToken(self::$container->getParameter("USER_ACCESS_TOKEN"))
+            ->upload(...$object);
     }
 }

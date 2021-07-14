@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
@@ -10,20 +11,24 @@ namespace Astaroth\Support\Facades;
  */
 class Facade
 {
-    protected static array $objects;
+    protected static \Symfony\Component\DependencyInjection\ContainerBuilder $container;
 
-    public function __construct(object ...$objects)
+    public function __construct(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
-        array_walk($objects, static fn($object) => self::$objects[$object::class] = $object);
+        self::$container = $container;
     }
 
     /**
      * Get an object by its name
      * @param string $object
-     * @return mixed
+     * @return object|null
      */
-    protected static function getObject(string $object): mixed
+    protected static function getObject(string $object): ?object
     {
-        return self::$objects[$object] ?? throw new \LogicException("The $object is missing from the facade");
+        try {
+            return self::$container->get($object);
+        } catch (\Exception) {
+            throw new \LogicException("The $object is missing from the facade");
+        }
     }
 }
