@@ -56,7 +56,7 @@ class Session
      */
     private function saveToFile(array $data): bool
     {
-        return @file_put_contents(
+        return (bool)@file_put_contents(
             $this->fullStoragePath,
             json_encode($data, JSON_PRETTY_PRINT),
             LOCK_EX
