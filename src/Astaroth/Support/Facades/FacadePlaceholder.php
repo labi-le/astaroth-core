@@ -15,7 +15,7 @@ final class FacadePlaceholder
 {
     protected static ContainerInterface $container;
 
-    private static ?FacadePlaceholder $instance;
+    private static ?FacadePlaceholder $instance = null;
 
     /**
      * @param ContainerInterface|null $container
