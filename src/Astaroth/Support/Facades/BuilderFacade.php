@@ -18,7 +18,7 @@ final class BuilderFacade
 
     public static function create(IBuilder ...$func): array
     {
-        return Facade::getInstance()->getContainer()
+        return FacadePlaceholder::getInstance()->getContainer()
             ?->get(self::SERVICE_ID)
             ?->create(...$func);
     }
@@ -33,7 +33,7 @@ final class BuilderFacade
         /**
          * @var $instance Builder
          */
-        $instance = clone Facade::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
         return $instance->setDefaultToken($access_token);
     }
 

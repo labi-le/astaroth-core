@@ -20,7 +20,7 @@ final class UploaderFacade
         /**
          * @var $instance Uploader
          */
-        $instance = Facade::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $instance = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
         return $instance->upload(...$CompatibilityInstances);
     }
 
@@ -33,7 +33,7 @@ final class UploaderFacade
         /**
          * @var $instance Uploader
          */
-        $instance = Facade::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $instance = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
 
         return clone $instance->setDefaultToken($access_token);
     }

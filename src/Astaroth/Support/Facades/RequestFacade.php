@@ -19,7 +19,7 @@ final class RequestFacade
         /**
          * @var $instance Client
          */
-        $instance = Facade::getInstance()?->getContainer()->get(self::SERVICE_ID);
+        $instance = FacadePlaceholder::getInstance()?->getContainer()->get(self::SERVICE_ID);
         return $instance->request($method, $parameters, $token);
     }
 }

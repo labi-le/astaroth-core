@@ -11,17 +11,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class Facade
  * @package Astaroth\Support\Facades
  */
-final class Facade
+final class FacadePlaceholder
 {
     protected static ContainerInterface $container;
 
-    private static $instance;
+    private static ?FacadePlaceholder $instance;
 
     /**
      * @param ContainerInterface|null $container
-     * @return Facade
+     * @return FacadePlaceholder
      */
-    public static function getInstance(ContainerInterface $container = null): Facade
+    public static function getInstance(ContainerInterface $container = null): FacadePlaceholder
     {
         if (self::$instance === null) {
             self::$instance = new self($container);

@@ -8,7 +8,7 @@ use Astaroth\Auth\Configuration;
 use Astaroth\Bootstrap\BotInstance;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
-use Astaroth\Support\Facades\Facade;
+use Astaroth\Support\Facades\FacadePlaceholder;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -42,7 +42,7 @@ class Application
             $service($container);
         }
 
-        Facade::getInstance($container);
+        FacadePlaceholder::getInstance($container);
 
         (new Route(
             new LazyHandler((new BotInstance($container))->bootstrap())))
