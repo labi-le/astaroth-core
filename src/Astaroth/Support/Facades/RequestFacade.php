@@ -5,10 +5,21 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
-class RequestFacade extends \Astaroth\Support\Facades\Facade
+use Astaroth\VkUtils\Client;
+
+final class RequestFacade
 {
+    private const SERVICE_ID = "builder";
+
+    /**
+     * @throws \Throwable
+     */
     public static function request(string $method, array $parameters = [], ?string $token = null): array
     {
-        return static::getObject("client")?->request($method, $parameters, $token);
+        /**
+         * @var $instance Client
+         */
+        $instance = Facade::getInstance()?->getContainer()->get(self::SERVICE_ID);
+        return $instance->request($method, $parameters, $token);
     }
 }

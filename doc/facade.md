@@ -4,26 +4,20 @@
 2. Нативные фасады
     + [Отправить сообщение](#send-message)
     + [Создать пост](#create-post)
+    + [Сделать запрос](#create-request)
 
 ### Send Message
 
 Фасад облегчающий отправку сообщений
-```php
-use Astaroth\Support\Facades\Message\MessageConstructor;
-use Astaroth\VkUtils\Contracts\IMessageBuilder;
-use Astaroth\Support\Facades\Message\MessageUploaderFacade;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
 
-MessageConstructor::create(static function(IMessageBuilder $builder){
-    return $builder
+```php
+use Astaroth\Support\Facades\Message\BuilderFacade;
+
+BuilderFacade::create(
+    (new \Astaroth\VkUtils\Builders\Message())
         ->setPeerId(418618)
-        ->setMessage("Привет")
-        ->setAttachment(
-            MessageUploaderFacade::upload(
-                new Photo("...path"), new Photo("...path")
-                ),
-        );
-});
+        ->setMessage("приветик")
+);
 
 ```
 
@@ -31,24 +25,23 @@ MessageConstructor::create(static function(IMessageBuilder $builder){
 
 Фасад облегчающий создание постов
 ```php
-use Astaroth\Support\Facades\Wall\PostConstructor;
-use Astaroth\VkUtils\Contracts\IPostBuilder;
-use Astaroth\Support\Facades\Wall\WallUploaderFacade;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\Support\Facades\Message\BuilderFacade;
 
-PostConstructor::create(static function(IPostBuilder $builder){
-    return $builder
+$photo = "https://sun9-56.userapi.com/impg/eWT80yOmtzyBYsYoWBRfK3uqcwqEQuYKRkEaBg/u2O02Ym1c6E.jpg?size=906x906&quality=96&sign=1dee09e1c58645b114dcb329817cf377&type=album";
+
+BuilderFacade::create(
+    (new \Astaroth\VkUtils\Builders\Post())
+        ->setPeerId(418618)
         ->setMessage("Привет папищек!")
-        ->setAttachments(WallUploaderFacade::upload(new Photo("...path"), new Photo("...path")))
-        
-});
+        ->setAttachments(...UploaderFacade::upload(new Photo($photo)))
+);
 ```
 
-### Request api
+### Create request
 
 Фасад облегчающий запросы к vk api
 ```php
 use Astaroth\Support\Facades\RequestFacade;
 
-RequestFacade::request("users.get", ["user_ids" => 418618, "fields" => "sex"]);
+RequestFacade::request("users.get", ["user_ids" => 418618, "fields" => "sex"], "token");
 ```

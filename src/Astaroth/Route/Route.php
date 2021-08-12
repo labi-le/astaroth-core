@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 
+use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Handler\LazyHandler;
+use HaydenPierce\ClassFinder\ClassFinder;
+
 /**
  * Class Route
  * @package Astaroth\Route
@@ -13,7 +17,7 @@ class Route
 {
     private array $class_map;
 
-    public function __construct(private \Astaroth\Handler\LazyHandler $handler)
+    public function __construct(private LazyHandler $handler)
     {
     }
 
@@ -34,7 +38,7 @@ class Route
      */
     public function setClassMap(string $class_map): static
     {
-        $this->class_map = \HaydenPierce\ClassFinder\ClassFinder::getClassesInNamespace($class_map);
+        $this->class_map = ClassFinder::getClassesInNamespace($class_map);
         return $this;
     }
 
@@ -45,9 +49,8 @@ class Route
      */
     public function handle(): void
     {
-        $this->handler->listen(function (\Astaroth\DataFetcher\DataFetcher $data) {
+        $this->handler->listen(function (DataFetcher $data) {
             (new ReflectionParser($this->getClassMap()))->handle($data);
-
         });
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Command;
 
@@ -7,10 +8,9 @@ use Astaroth\Attributes\Conversation;
 use Astaroth\Attributes\Event\MessageNew;
 use Astaroth\Attributes\Message;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
-use Astaroth\Support\Facades\Message\MessageConstructor;
-use Astaroth\Support\Facades\Message\MessageUploaderFacade;
-use Astaroth\VkUtils\Builders\MessageBuilder;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\Support\Facades\BuilderFacade;
+use Astaroth\Support\Facades\UploaderFacade;
+use Astaroth\VkUtils\Builders\Attachments\Photo;
 
 /**
  * Class ClassForConcreteUser
@@ -22,35 +22,37 @@ use Astaroth\VkUtils\Uploading\Objects\Photo;
 class ClassForConcreteUser
 {
     #[Message("привет")]
-    public function method(Data $data)
+    public function method(Data $data): void
     {
-        MessageConstructor::create(function (MessageBuilder $builder) use ($data) {
-            return $builder
+        BuilderFacade::create(
+            (new \Astaroth\VkUtils\Builders\Message())
                 ->setPeerId($data->getPeerId())
-                ->setMessage("Ого! Привет давно не виделись!");
-        });
+                ->setMessage("Ого! Привет давно не виделись!")
+        );
     }
 
     #[Attachment(Attachment::PHOTO)]
-    public function photoAction(Data $data)
+    public function photoAction(Data $data): void
     {
-        MessageConstructor::create(function (MessageBuilder $builder) use ($data) {
-            return $builder
+        BuilderFacade::create(
+            (new \Astaroth\VkUtils\Builders\Message())
                 ->setPeerId($data->getPeerId())
-                ->setMessage("Красотища!");
-        });
-
+                ->setMessage("Красотища!")
+        );
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Message("картинку")]
-    public function uploadAttachment(Data $data)
+    public function uploadAttachment(Data $data): void
     {
         $photo = "https://sun9-56.userapi.com/impg/eWT80yOmtzyBYsYoWBRfK3uqcwqEQuYKRkEaBg/u2O02Ym1c6E.jpg?size=906x906&quality=96&sign=1dee09e1c58645b114dcb329817cf377&type=album";
-        MessageConstructor::create(function (MessageBuilder $builder) use ($photo, $data) {
-            return $builder
+        BuilderFacade::create(
+            (new \Astaroth\VkUtils\Builders\Message())
                 ->setPeerId($data->getPeerId())
                 ->setMessage("мяу")
-                ->setAttachment(MessageUploaderFacade::upload(new Photo($photo)));
-        });
+                ->setAttachment(...UploaderFacade::upload(new Photo($photo)))
+        );
     }
 }

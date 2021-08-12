@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Astaroth\Services;
 
+use Astaroth\VkUtils\Uploader;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 /**
- * Class MessageService
+ * Class UploaderService
  * @package Astaroth\Services
  */
-class MessageService
+class UploaderService
 {
-    public function __invoke(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function __invoke(ContainerBuilder $container)
     {
         $container
-            ->register("message",\Astaroth\VkUtils\Message::class)
+            ->register("uploader",Uploader::class)
             ->setLazy(true)
             ->addArgument($container->getParameter("API_VERSION"))
             ->addMethodCall("setDefaultToken", [$container->getParameter("ACCESS_TOKEN")]);

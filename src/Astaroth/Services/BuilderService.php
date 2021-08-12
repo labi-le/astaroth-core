@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Astaroth\Services;
 
+use Astaroth\VkUtils\Builder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 /**
- * Class WallUploaderService
+ * Class BuilderService
  * @package Astaroth\Services
  */
-class WallUploaderService
+class BuilderService
 {
-    public function __invoke(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function __invoke(ContainerBuilder $container)
     {
         $container
-            ->register("wall.uploader", \Astaroth\VkUtils\Uploading\WallUploader::class)
+            ->register("builder", Builder::class)
             ->setLazy(true)
             ->addArgument($container->getParameter("API_VERSION"))
             ->addMethodCall("setDefaultToken", [$container->getParameter("ACCESS_TOKEN")]);

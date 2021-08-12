@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Command;
 
@@ -6,24 +7,30 @@ use Astaroth\Attributes\Conversation;
 use Astaroth\Attributes\Event\MessageNew;
 use Astaroth\Attributes\Message;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
-use Astaroth\Support\Facades\Message\MessageConstructor;
-use Astaroth\Support\Facades\Message\MessageUploaderFacade;
-use Astaroth\VkUtils\Builders\MessageBuilder;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\Support\Facades\BuilderFacade;
+use Astaroth\Support\Facades\UploaderFacade;
+use Astaroth\VkUtils\Builders\Attachments\Photo;
 
 #[Conversation(Conversation::ALL)]
 #[MessageNew]
 class Attachments
 {
+    /**
+     * @throws \Exception
+     */
     #[Message("котика")]
     public function cat(Data $data): void
     {
-        $cat = json_decode(file_get_contents("https://aws.random.cat/meow"), true);
+        $cat = static fn() => json_decode(file_get_contents("https://aws.random.cat/meow"), true)["file"];
 
-        MessageConstructor::create(function (MessageBuilder $builder) use ($cat, $data) {
-            return $builder
+        BuilderFacade::create(
+            (new \Astaroth\VkUtils\Builders\Message())
                 ->setPeerId($data->getPeerId())
-                ->setAttachment(MessageUploaderFacade::upload(new Photo($cat), new Photo("")));
-        });
+                ->setAttachment(
+                    ...UploaderFacade::upload(
+                        new Photo($cat()), new Photo($cat())
+                    )
+                )
+        );
     }
 }

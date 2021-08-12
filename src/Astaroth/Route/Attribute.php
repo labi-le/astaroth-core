@@ -12,6 +12,7 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\TextMatcher;
 
 
 /**
@@ -80,7 +81,7 @@ class Attribute
      */
     private function conversationAttribute(object $attribute, DataFetcher $data): ?bool
     {
-        if ($attribute instanceof \Astaroth\Attributes\Conversation) {
+        if ($attribute instanceof Conversation) {
 
             $concreteData = match ($data->getType()) {
                 Events::MESSAGE_NEW => $data->messageNew(),
@@ -118,7 +119,7 @@ class Attribute
      */
     private function payloadAttribute(object $attribute, object $instance, string $method, MessageNew|MessageEvent $data): void
     {
-        if ($attribute instanceof \Astaroth\Attributes\Payload) {
+        if ($attribute instanceof Payload) {
             $payload = @json_decode((string)$data->getPayload(), true);
 
             if ($attribute->payload === $payload) {
@@ -137,8 +138,8 @@ class Attribute
      */
     private function messageAttribute(object $attribute, object $instance, string $method, MessageNew $data): void
     {
-        if ($attribute instanceof \Astaroth\Attributes\Message) {
-            $matcher = new \Astaroth\TextMatcher($attribute->message, mb_strtolower($data->getText()), $attribute->validation);
+        if ($attribute instanceof Message) {
+            $matcher = new TextMatcher($attribute->message, mb_strtolower($data->getText()), $attribute->validation);
             if ($matcher->compare()) {
                 $this->execute($instance, $method, $data);
             }
@@ -183,7 +184,7 @@ class Attribute
     private function attachmentAttribute(object $attribute, object $instance, string $method, MessageNew $data): void
     {
         $attachments = [];
-        if ($attribute instanceof \Astaroth\Attributes\Attachment && count($data->getAttachments()) > 0) {
+        if ($attribute instanceof Attachment && count($data->getAttachments()) > 0) {
             foreach ($data->getAttachments() as $attachment) {
                 if ($attachment->type === $attribute->type) {
                     $attachments[] = $attachment;

@@ -4,44 +4,39 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use Astaroth\Support\Facades\BuilderFacade;
+use Astaroth\VkUtils\Builders\Message;
+
 class Utils
 {
 
-
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param array $param
+     * @return string|null
      * @throws \JsonException
      */
-    public static function JsonOnline(array $data): ?string
+    function JsonOnline(array $param): ?string
     {
-        $client = new \GuzzleHttp\Client(
+        $ch = curl_init("https://jsoneditoronline.herokuapp.com/v1/docs/");
+        curl_setopt_array($ch,
             [
-                "base_uri" => "https://jsoneditoronline.herokuapp.com/v1/",
-                "headers" =>
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER =>
                     [
-                        "Content-Type" => "application/json",
-                    ]
-            ]
-        );
-
-
-        $response = $client->post("docs",
-            [
-                \GuzzleHttp\RequestOptions::BODY =>
+                        "Content-Type:application/json"
+                    ],
+                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_POSTFIELDS =>
                     json_encode([
                         "name" => uniqid('', true),
-                        "data" => json_encode($data, JSON_THROW_ON_ERROR)
-                    ], JSON_THROW_ON_ERROR)
-            ]
-        );
+                        "data" => json_encode($param, JSON_THROW_ON_ERROR)
+                    ])
+            ]);
 
+        $data = @json_decode(curl_exec($ch), true);
+        curl_close($ch);
 
-        $contents = json_decode($response->getBody()->getContents(), true);
-        if ($contents["ok"] === true) {
-            return "https://jsoneditoronline.org/?id=" . $contents["id"];
-        }
-
-        return null;
+        return $data["ok"] === true ? "https://jsoneditoronline.org/?id=" . $data["id"] : null;
     }
 
     /**
@@ -80,7 +75,7 @@ class Utils
     }
 
     /**
-     * Православный explode с возможностью использовать несколько символов
+     * explode с возможностью использовать несколько символов
      * @param $delimiters
      * @param $string
      * @return array|bool
@@ -137,27 +132,26 @@ class Utils
 
     public static function logToMessage(int $id, string $error_level, \Exception|string $e): void
     {
-        \Astaroth\Support\Facades\Message\MessageConstructor::create(static function (\Astaroth\VkUtils\Contracts\IMessageBuilder $message) use ($id, $e, $error_level) {
+        $message = new Message();
+        $message->setPeerId($id);
 
-            if ($e instanceof \Exception) {
-                return $message->setMessage(
-                    sprintf(
-                        "Logger:\nError Level - %s\nError Code - %s\nMessage - %s",
-                        $error_level,
-                        $e->getCode(),
-                        $e->getMessage()
-                    ))
-                    ->setPeerId($id);
-            }
-
-            return $message->setMessage(
+        if ($e instanceof \Exception) {
+            $message->setMessage(
+                sprintf(
+                    "Logger:\nError Level - %s\nError Code - %s\nMessage - %s",
+                    $error_level,
+                    $e->getCode(),
+                    $e->getMessage()
+                ));
+        } else {
+            $message->setMessage(
                 sprintf(
                     "Logger:\nError Level - %s\nMessage - %s",
                     $error_level,
                     $e
-                ))
-                ->setPeerId($id);
+                ));
+        }
 
-        });
+        BuilderFacade::create($message);
     }
 }

@@ -23,7 +23,8 @@
     "symfony/console": "^5.3",
     "labile/text-matcher": ">=1",
     "haydenpierce/class-finder": "^0.4.3",
-    "sally/vk-keyboard": "^1.0"
+    "sally/vk-keyboard": "^1.0",
+    "ext-curl": "*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
