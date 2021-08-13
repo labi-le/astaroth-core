@@ -70,8 +70,7 @@ class Configuration
         $auth = $dotenv->load();
 
         try {
-            $dotenv->required(self::ENV_STRUCTURE)
-                ->notEmpty();
+            $dotenv->required(self::ENV_STRUCTURE);
         } catch (ValidationException $e) {
             throw new ParameterMissingException($e->getMessage());
         }
