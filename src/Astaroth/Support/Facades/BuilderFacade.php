@@ -39,15 +39,15 @@ final class BuilderFacade
 
     /**
      * BuilderFacade create instance
-     * @param IBuilder ...$func
+     * @param IBuilder ...$instance
      * @return array
      */
-    public static function create(IBuilder ...$func): array
+    public static function create(IBuilder ...$instance): array
     {
-        $new_func = self::messagePlaceholder(...$func);
+        $new_instance = self::messagePlaceholder(...$instance);
         return FacadePlaceholder::getInstance()->getContainer()
             ?->get(self::SERVICE_ID)
-            ?->create(...$new_func);
+            ?->create(...$new_instance);
     }
 
     /**

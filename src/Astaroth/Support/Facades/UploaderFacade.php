@@ -11,17 +11,17 @@ final class UploaderFacade
     private const SERVICE_ID = "builder";
 
     /**
-     * @param ICanBeSaved ...$CompatibilityInstances
+     * @param ICanBeSaved ...$instance
      * @return array
      * @throws \Exception
      */
-    public static function upload(ICanBeSaved ...$CompatibilityInstances): array
+    public static function upload(ICanBeSaved ...$instance): array
     {
         /**
-         * @var $instance Uploader
+         * @var $facade Uploader
          */
-        $instance = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
-        return $instance->upload(...$CompatibilityInstances);
+        $facade = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
+        return $facade->upload(...$instance);
     }
 
     /**
