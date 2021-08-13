@@ -18,6 +18,11 @@ final class FacadePlaceholder
 
     private static ?FacadePlaceholder $instance = null;
 
+    private function __construct(ContainerInterface $container)
+    {
+        self::$container = $container;
+    }
+
     /**
      * @param ContainerInterface|null $container
      * @return FacadePlaceholder
@@ -34,10 +39,5 @@ final class FacadePlaceholder
     public function getContainer(): ContainerInterface
     {
         return self::$container;
-    }
-
-    private function __construct(ContainerInterface $container)
-    {
-        self::$container = $container;
     }
 }

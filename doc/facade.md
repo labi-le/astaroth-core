@@ -9,6 +9,17 @@
 ### Send Message
 
 Фасад облегчающий отправку сообщений
+Можно использовать плейсхолдеры для динамики сообщений
+
+````
+Имя - %name
+Имя с упоминанием "%@name"
+Имя Фамилия "%full-name"
+Имя Фамилия с упоминанием "%@full-name"
+Фамилия "%last-name"
+Фамилия с упоминанием "%@last-name"
+````
+
 
 ```php
 use Astaroth\Support\Facades\Message\BuilderFacade;
@@ -16,7 +27,7 @@ use Astaroth\Support\Facades\Message\BuilderFacade;
 BuilderFacade::create(
     (new \Astaroth\VkUtils\Builders\Message())
         ->setPeerId(418618)
-        ->setMessage("приветик")
+        ->setMessage("приветик %@name")
 );
 
 ```

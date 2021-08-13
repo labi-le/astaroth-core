@@ -35,18 +35,18 @@ composer create-project labile/astaroth-framework bot
 > Версия `PHP` - `>=8`\
 > Расширения: `ext-pcntl`, `ext-posix`, `mbstring`\
 > Веб сервер (callback) - для дебага - нативный php, поднимается командой `composer serve` (php -S x.x.x.x)\
-> Работает nginx, apache не проверял
+> Работает nginx, apache не проверен
 
 ### Env
 
 ```dotenv
-APP_NAMESPACE = App\Command
+APP_NAMESPACE =App\Command
 ACCESS_TOKEN=slkaojdwiwajdowadjwa
 TYPE=CALLBACK
-API_VERSION=5.130
+API_VERSION=5.131
 CONFIRMATION_KEY=2f21ed85
-SECRET_KEY=
-HANDLE_REPEATED_REQUESTS=
+SECRET_KEY=judoadwdiwa
+HANDLE_REPEATED_REQUESTS=no
 ```
 
 ### Auth:
@@ -58,4 +58,5 @@ HANDLE_REPEATED_REQUESTS=
 
 ### Остальные параметры:
 
+    HANDLE_REPEATED_REQUESTS - обрабатывать ли повторные запросы от вк (callback). yes or no
     TYPE - тип работы бота. Возможны только два типа - CALLBACK, LONGPOLL

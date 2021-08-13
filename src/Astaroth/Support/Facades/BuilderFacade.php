@@ -19,7 +19,7 @@ final class BuilderFacade
     private const SERVICE_ID = "builder";
 
     /**
-     * Проверяем сообщение на плейсхолдеры и если надо добавляем
+     * We check the message for placeholders and, if necessary, add
      * @param IBuilder ...$instances
      * @return array
      */
@@ -37,6 +37,11 @@ final class BuilderFacade
         }, $instances);
     }
 
+    /**
+     * BuilderFacade create instance
+     * @param IBuilder ...$func
+     * @return array
+     */
     public static function create(IBuilder ...$func): array
     {
         $new_func = self::messagePlaceholder(...$func);
