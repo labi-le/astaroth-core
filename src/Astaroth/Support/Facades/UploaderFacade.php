@@ -8,7 +8,7 @@ use Astaroth\VkUtils\Uploader;
 
 final class UploaderFacade
 {
-    private const SERVICE_ID = "builder";
+    private const SERVICE_ID = "uploader";
 
     /**
      * @param ICanBeSaved ...$instance

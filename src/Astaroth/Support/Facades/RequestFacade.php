@@ -9,7 +9,7 @@ use Astaroth\VkUtils\Client;
 
 final class RequestFacade
 {
-    private const SERVICE_ID = "builder";
+    private const SERVICE_ID = "client";
 
     /**
      * @throws \Throwable
