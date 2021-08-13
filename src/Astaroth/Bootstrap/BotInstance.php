@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Astaroth\Bootstrap;
 
 
+use Astaroth\Auth\Configuration;
+use Astaroth\Auth\InvalidParameterException;
 use Astaroth\CallBack\CallBack;
 use Astaroth\LongPoll\LongPoll;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,35 +24,38 @@ class BotInstance
 
     private function selectStartupType(ContainerBuilder $container): CallBack|LongPoll
     {
-        return $container->getParameter("TYPE") === "CALLBACK"
+        return $container->getParameter(Configuration::TYPE) === Configuration::CALLBACK
             ? $this->callback($container)
             : $this->longpoll($container);
     }
 
+    /**
+     * @throws InvalidParameterException
+     */
     private function callback(ContainerBuilder $container): CallBack
     {
-        $SECRET_KEY = $container->getParameter("SECRET_KEY");
+        $SECRET_KEY = $container->getParameter(Configuration::SECRET_KEY);
 
-        $_RAW_HANDLE_REPEATED_REQUESTS = $container->getParameter("HANDLE_REPEATED_REQUESTS");
+        $HANDLE_REPEATED_REQUESTS = $container->getParameter(Configuration::HANDLE_REPEATED_REQUESTS);
 
-        if (empty($_RAW_HANDLE_REPEATED_REQUESTS) || $_RAW_HANDLE_REPEATED_REQUESTS === "true") {
-            $HANDLE_REPEATED_REQUESTS = true;
+        if ($HANDLE_REPEATED_REQUESTS === Configuration::YES) {
+            $callbackHandlerRepeatedRequests = true;
+        } elseif ($HANDLE_REPEATED_REQUESTS === Configuration::NO) {
+            $callbackHandlerRepeatedRequests = false;
         } else {
-            $HANDLE_REPEATED_REQUESTS = false;
+            throw new InvalidParameterException("The processing of repeated requests for Callback is specified incorrectly");
         }
 
         return new CallBack(
-            $container->getParameter("CONFIRMATION_KEY"),
+            $container->getParameter(Configuration::CONFIRMATION_KEY),
             $SECRET_KEY !== "" ? $SECRET_KEY : null,
-            $HANDLE_REPEATED_REQUESTS,
+            $callbackHandlerRepeatedRequests,
         );
     }
 
     private function longpoll(ContainerBuilder $container): Longpoll
     {
-        $lp = new LongPoll(version: $container->getParameter("API_VERSION"));
-        $lp->setDefaultToken($container->getParameter("ACCESS_TOKEN"));
-
-        return $lp;
+        return (new LongPoll(version: $container->getParameter(Configuration::API_VERSION)
+        ))->setDefaultToken($container->getParameter(Configuration::ACCESS_TOKEN));
     }
 }

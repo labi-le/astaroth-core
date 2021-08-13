@@ -99,6 +99,7 @@ class Utils
 
     /**
      * Простой дебаг в stdout
+     * Будет полезно для callback
      * @param $data
      */
     public static function var_dumpToStdout($data): void

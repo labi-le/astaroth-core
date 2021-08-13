@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace Astaroth\Handler;
 
 
+use Astaroth\CallBack\CallBack;
+use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Interface\HandlerInterface;
+use Astaroth\LongPoll\LongPoll;
+
 /**
  * Class LazyHandler
  * @package Astaroth\Handler
  */
-class LazyHandler implements \Astaroth\Interface\HandlerInterface
+class LazyHandler implements HandlerInterface
 {
 
-    public function __construct(private \Astaroth\CallBack\CallBack|\Astaroth\LongPoll\LongPoll $botInstance)
+    public function __construct(private CallBack|LongPoll $botInstance)
     {
 
     }
@@ -20,16 +25,16 @@ class LazyHandler implements \Astaroth\Interface\HandlerInterface
     /**
      * Normalize output data from VKontakte
      * @param object|array $data
-     * @return \Astaroth\DataFetcher\DataFetcher
+     * @return DataFetcher
      */
-    private function normalizeData(object|array $data): \Astaroth\DataFetcher\DataFetcher
+    private function normalizeData(object|array $data): DataFetcher
     {
         if (is_array($data)) {
             $toJson = json_encode($data);
             $toObject = json_decode($toJson, false);
-            return new \Astaroth\DataFetcher\DataFetcher($toObject);
+            return new DataFetcher($toObject);
         }
-        return new \Astaroth\DataFetcher\DataFetcher($data);
+        return new DataFetcher($data);
 
     }
 

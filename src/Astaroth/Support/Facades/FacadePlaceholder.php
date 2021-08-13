@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Facade
+ * Singleton
  * @package Astaroth\Support\Facades
  */
 final class FacadePlaceholder

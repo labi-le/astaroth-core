@@ -15,7 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Application
 {
     private const VERSION = 2;
-    private const SERVICE_NAMESPACE = "Astaroth\Services";
 
     /**
      * Checks if the application is running in the console
@@ -37,7 +36,7 @@ class Application
 
         array_walk($configuration, static fn($value, $key) => $container->setParameter($key, $value));
 
-        foreach (ClassFinder::getClassesInNamespace(self::SERVICE_NAMESPACE) as $service) {
+        foreach (ClassFinder::getClassesInNamespace(Configuration::SERVICE_NAMESPACE) as $service) {
             $service = new $service;
             $service($container);
         }
@@ -46,7 +45,7 @@ class Application
 
         (new Route(
             new LazyHandler((new BotInstance($container))->bootstrap())))
-            ->setClassMap($container->getParameter("APP_NAMESPACE"))
+            ->setClassMap($container->getParameter(Configuration::APP_NAMESPACE))
             ->handle();
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Services;
 
+use Astaroth\Auth\Configuration;
 use Astaroth\VkUtils\Uploader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -18,7 +19,7 @@ class UploaderService
         $container
             ->register("uploader",Uploader::class)
             ->setLazy(true)
-            ->addArgument($container->getParameter("API_VERSION"))
-            ->addMethodCall("setDefaultToken", [$container->getParameter("ACCESS_TOKEN")]);
+            ->addArgument($container->getParameter(Configuration::API_VERSION))
+            ->addMethodCall("setDefaultToken", [$container->getParameter(Configuration::ACCESS_TOKEN)]);
     }
 }

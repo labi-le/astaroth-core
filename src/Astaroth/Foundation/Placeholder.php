@@ -45,7 +45,6 @@ final class Placeholder extends BaseCommands
         $member_full_name = trim("$member_name $member_last_name");
 
         return preg_replace_callback(self::PATTERN, static function ($match) use ($id, $member_id, $member_name, $member_last_name, $member_full_name) {
-            Utils::var_dumpToStdout($match);
             return match (current($match)) {
                 self::$tag[self::NAME] => $member_name,
                 self::$tag[self::MENTION_NAME] => $id > 0 ? "*id$member_id($member_name)" : "*club$member_id($member_name)",
@@ -59,6 +58,9 @@ final class Placeholder extends BaseCommands
         }, $this->subject);
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function iterateId(int $id): array|false
     {
         if ($id > 0) {

@@ -42,7 +42,6 @@ class Route
         return $this;
     }
 
-
     /**
      * Routing data from VK
      * @throws \Throwable

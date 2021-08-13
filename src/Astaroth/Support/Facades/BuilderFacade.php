@@ -6,7 +6,6 @@ namespace Astaroth\Support\Facades;
 
 
 use Astaroth\Foundation\Placeholder;
-use Astaroth\TextMatcher;
 use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
@@ -22,7 +21,7 @@ final class BuilderFacade
     /**
      * Проверяем сообщение на плейсхолдеры и если надо добавляем
      * @param IBuilder ...$instances
-     * @return IMessageBuilder[]
+     * @return array
      */
     private static function messagePlaceholder(IBuilder ...$instances): array
     {
@@ -34,7 +33,6 @@ final class BuilderFacade
                     return $instance->setMessage((new Placeholder($message))->replace((int)$id));
                 }
             }
-
             return $instance;
         }, $instances);
     }
