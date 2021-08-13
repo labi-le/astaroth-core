@@ -22,7 +22,7 @@ class Configuration
     public const ACCESS_TOKEN = "ACCESS_TOKEN";
     public const API_VERSION = "API_VERSION";
     public const CONFIRMATION_KEY = "CONFIRMATION_KEY";
-    public const SECRET_KEY = "CONFIRMATION_KEY";
+    public const SECRET_KEY = "SECRET_KEY";
     public const HANDLE_REPEATED_REQUESTS = "HANDLE_REPEATED_REQUESTS";
 
     public const APP_NAMESPACE = "APP_NAMESPACE";
