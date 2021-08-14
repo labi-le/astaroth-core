@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Astaroth\Route;
 
-use Astaroth\Attributes\Attachment;
-use Astaroth\Attributes\Conversation;
-use Astaroth\Attributes\Message;
-use Astaroth\Attributes\Payload;
+use Astaroth\Attribute\Attachment;
+use Astaroth\Attribute\Conversation;
+use Astaroth\Attribute\Message;
+use Astaroth\Attribute\Payload;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
@@ -41,11 +41,11 @@ class Attribute
                     break;
                 }
 
-                if ($attribute instanceof \Astaroth\Attributes\Event\MessageNew) {
+                if ($attribute instanceof \Astaroth\Attribute\Event\MessageNew) {
                     $this->messageNew($class["instance"], $class["methods"], $data->messageNew());
                 }
 
-                if ($attribute instanceof \Astaroth\Attributes\Event\MessageEvent) {
+                if ($attribute instanceof \Astaroth\Attribute\Event\MessageEvent) {
                     $this->messageEvent($class["instance"], $class["methods"], $data->messageEvent());
                 }
 
@@ -56,10 +56,10 @@ class Attribute
 
     /**
      * Checks attributes for an event message_new
-     * @see \Astaroth\Attributes\Event\MessageNeww
      * @param object $instance
      * @param array $methods
      * @param MessageNew $data
+     *@see \Astaroth\Attribute\Event\MessageNeww
      */
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
@@ -148,10 +148,10 @@ class Attribute
 
     /**
      * Checks attributes for an event message_event
-     * @see \Astaroth\Attributes\Event\MessageEvent
      * @param object $instance
      * @param array $methods
      * @param MessageEvent $data
+     *@see \Astaroth\Attribute\Event\MessageEvent
      */
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
     {

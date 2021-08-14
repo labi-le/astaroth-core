@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Astaroth\Attributes\Conversation;
-use Astaroth\Attributes\Event\MessageNew;
-use Astaroth\Attributes\Message;
+use Astaroth\Attribute\Conversation;
+use Astaroth\Attribute\Event\MessageNew;
+use Astaroth\Attribute\Message;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
 use Astaroth\Support\Facades\BuilderFacade;
 use Astaroth\TextMatcher;

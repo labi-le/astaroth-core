@@ -19,7 +19,7 @@ ___
 Указывается вначале класса, является событием
 
 ```php
-use Astaroth\Attributes\Event\MessageNew;
+use Astaroth\Attribute\Event\MessageNew;
 
 #[MessageNew]
 class HelloWorld
@@ -33,7 +33,7 @@ class HelloWorld
 Указывается вначале класса, является событием
 
 ```php
-use Astaroth\Attributes\Event\MessageEvent;
+use Astaroth\Attribute\Event\MessageEvent;
 
 #[MessageEvent]
 class Event
@@ -49,8 +49,8 @@ class Event
 Можно указать id объектов для которых будут доступны методы
 
 ```php
-use Astaroth\Attributes\Conversation;
-use Astaroth\Attributes\Event\MessageNew;
+use Astaroth\Attribute\Conversation;
+use Astaroth\Attribute\Event\MessageNew;
 
 #[Conversation(Conversation::PERSONAL_DIALOG, 418618, 1234)]
 #[MessageNew]
@@ -67,9 +67,9 @@ class Foo
 Можно указать тип валидации
 
 ```php
-use Astaroth\Attributes\Conversation;
-use Astaroth\Attributes\Message;
-use Astaroth\Attributes\Event\MessageNew;
+use Astaroth\Attribute\Conversation;
+use Astaroth\Attribute\Message;
+use Astaroth\Attribute\Event\MessageNew;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
 use Astaroth\TextMatcher as Validation;
 
@@ -93,10 +93,10 @@ class Bar
 Можно указать количество вложений для определённого аттрибута
 
 ```php
-use Astaroth\Attributes\Conversation;
+use Astaroth\Attribute\Conversation;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
-use Astaroth\Attributes\Attachment;
-use Astaroth\Attributes\Event\MessageNew;
+use Astaroth\Attribute\Attachment;
+use Astaroth\Attribute\Event\MessageNew;
 
 #[Conversation(Conversation::ALL)]
 #[MessageNew]
@@ -120,10 +120,10 @@ class Foo
 Указывается массив
 
 ```php
-use Astaroth\Attributes\Conversation;
-use Astaroth\Attributes\Payload;
+use Astaroth\Attribute\Conversation;
+use Astaroth\Attribute\Payload;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
-use Astaroth\Attributes\Event\MessageNew;
+use Astaroth\Attribute\Event\MessageNew;
 
 #[Conversation(Conversation::ALL)]
 #[MessageNew]
