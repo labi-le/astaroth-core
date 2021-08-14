@@ -18,11 +18,10 @@ class Payload implements AttributeValidatorInterface
     public const KEY_EXISTS = 0;
     public const STRICT = 1;
     public const CONTAINS = 2;
-    public const CONTAINS_STRICT_TYPES = 3;
 
     private mixed $haystack;
 
-    public function __construct(private array $payload, private int $validation = Payload::STRICT)
+    public function __construct(private array|string $payload_or_key, private int $validation = Payload::STRICT)
     {
     }
 
@@ -37,10 +36,9 @@ class Payload implements AttributeValidatorInterface
         $casted_payload = @json_decode($casted_haystack, true);
         if ($casted_payload) {
             return match ($this->validation) {
-                static::STRICT => $this->payload === $casted_payload,
-                static::KEY_EXISTS => array_key_exists(key($casted_payload), $this->payload),
-                static::CONTAINS => in_array($this->payload, $casted_payload, false),
-                static::CONTAINS_STRICT_TYPES => in_array($this->payload, $casted_payload, true),
+                static::STRICT => $this->payload_or_key === $casted_payload,
+                static::KEY_EXISTS => array_key_exists($this->payload_or_key, $casted_payload),
+                static::CONTAINS => count(array_intersect($this->payload_or_key, $casted_payload)) > 0,
             };
         }
 
