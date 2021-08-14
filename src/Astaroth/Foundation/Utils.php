@@ -15,7 +15,7 @@ class Utils
      * @return string|null
      * @throws \JsonException
      */
-    function JsonOnline(array $param): ?string
+    public static function JsonOnline(array $param): ?string
     {
         $ch = curl_init("https://jsoneditoronline.herokuapp.com/v1/docs/");
         curl_setopt_array($ch,
@@ -90,6 +90,7 @@ class Utils
      * Регулярка чтоб выбрать все айдишники из текста
      * @param string $string
      * @return array|bool
+     * @noinspection NotOptimalRegularExpressionsInspection
      */
     public static function regexId(string $string): array|bool
     {
@@ -131,6 +132,9 @@ class Utils
         };
     }
 
+    /**
+     * @throws \Throwable
+     */
     public static function logToMessage(int $id, string $error_level, \Exception|string $e): void
     {
         $message = new Message();

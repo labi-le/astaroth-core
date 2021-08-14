@@ -7,12 +7,12 @@ namespace Astaroth\Route;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Message;
+use Astaroth\Attribute\NotImplementedHaystackException;
 use Astaroth\Attribute\Payload;
+use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\TextMatcher;
 
 
 /**
@@ -21,30 +21,47 @@ use Astaroth\TextMatcher;
  */
 class Attribute
 {
+    /**
+     * @param array $executable An array of classes, methods and attributes
+     * @param DataFetcher $data
+     * @throws NotImplementedHaystackException
+     */
     public function __construct(array $executable, DataFetcher $data)
     {
-        $this->attribute($executable, $data);
+        $this->process($executable, $data);
     }
 
     /**
      * Attribute check and routing
      * @param array $classes
      * @param DataFetcher $data
+     * @throws NotImplementedHaystackException
      */
-    private function attribute(array $classes, DataFetcher $data): void
+    private function process(array $classes, DataFetcher $data): void
     {
         foreach ($classes as $class) {
-
             foreach ($class["attribute"] as $attribute) {
 
-                if ($this->conversationAttribute($attribute, $data) === false) {
+                /**
+                 * If the attribute is a Conversation object and the validation data is negative
+                 * @see Conversation
+                 */
+                if (($attribute instanceof Conversation) && $attribute->setHaystack($data)->validate() === false) {
                     break;
                 }
 
+                /**
+                 * If the attribute is a MessageNew object
+                 * @see \Astaroth\Attribute\Event\MessageNew
+                 */
                 if ($attribute instanceof \Astaroth\Attribute\Event\MessageNew) {
                     $this->messageNew($class["instance"], $class["methods"], $data->messageNew());
                 }
 
+                /**
+                 * If the attribute is a MessageEvent object
+                 * @see \Astaroth\Attribute\Event\MessageEvent
+                 */
                 if ($attribute instanceof \Astaroth\Attribute\Event\MessageEvent) {
                     $this->messageEvent($class["instance"], $class["methods"], $data->messageEvent());
                 }
@@ -53,95 +70,33 @@ class Attribute
         }
     }
 
-
     /**
      * Checks attributes for an event message_new
      * @param object $instance
      * @param array $methods
      * @param MessageNew $data
-     *@see \Astaroth\Attribute\Event\MessageNeww
+     * @throws NotImplementedHaystackException
+     * @see \Astaroth\Attribute\Event\MessageNeww
      */
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
         foreach ($methods as $method) {
             foreach ($method["attribute"] as $attribute) {
-                $this->messageAttribute($attribute, $instance, $method["name"], $data);
-                $this->payloadAttribute($attribute, $instance, $method["name"], $data);
-                $this->attachmentAttribute($attribute, $instance, $method["name"], $data);
-            }
-        }
-    }
+                /**
+                 * @var $attribute AttributeValidatorInterface
+                 */
+                $validate = match ($attribute::class) {
+                    Message::class => $attribute->setHaystack($data->getText())
+                        ->validate(),
+                    Payload::class => $attribute->setHaystack($data->getPayload())
+                        ->validate(),
+                    Attachment::class => $attribute->setHaystack($data->getAttachments())
+                        ->validate(),
+                };
 
-    /**
-     * Handling the Conversation Attribute
-     * @see Conversation
-     * @param object $attribute
-     * @param DataFetcher $data
-     * @return bool|null
-     */
-    private function conversationAttribute(object $attribute, DataFetcher $data): ?bool
-    {
-        if ($attribute instanceof Conversation) {
-
-            $concreteData = match ($data->getType()) {
-                Events::MESSAGE_NEW => $data->messageNew(),
-                Events::MESSAGE_EVENT => $data->messageEvent()
-            };
-
-            $type = match ($attribute->type) {
-                Conversation::PERSONAL_DIALOG => $concreteData->getChatId() === null,
-                Conversation::ALL => (bool)$concreteData->getPeerId(),
-                Conversation::CHAT => (bool)$concreteData->getChatId()
-            };
-
-            $concreteId = match ($attribute->type) {
-                Conversation::PERSONAL_DIALOG => $concreteData->getFromId(),
-                Conversation::ALL => $concreteData->getPeerId(),
-                Conversation::CHAT => $concreteData->getChatId()
-            };
-
-            if ($attribute->id === []) {
-                return $type;
-            }
-            return in_array($concreteId, $attribute->id, true) && $type;
-
-        }
-        return null;
-    }
-
-    /**
-     * Search payload attribute
-     * @see Payload
-     * @param object $attribute
-     * @param object $instance
-     * @param string $method
-     * @param MessageNew|MessageEvent $data
-     */
-    private function payloadAttribute(object $attribute, object $instance, string $method, MessageNew|MessageEvent $data): void
-    {
-        if ($attribute instanceof Payload) {
-            $payload = @json_decode((string)$data->getPayload(), true);
-
-            if ($attribute->payload === $payload) {
-                $this->execute($instance, $method, $data);
-            }
-        }
-    }
-
-    /**
-     * Search attribute Message
-     * @see Message
-     * @param object $attribute
-     * @param object $instance
-     * @param string $method
-     * @param MessageNew $data
-     */
-    private function messageAttribute(object $attribute, object $instance, string $method, MessageNew $data): void
-    {
-        if ($attribute instanceof Message) {
-            $matcher = new TextMatcher($attribute->message, mb_strtolower($data->getText()), $attribute->validation);
-            if ($matcher->compare()) {
-                $this->execute($instance, $method, $data);
+                if ($validate) {
+                    $this->execute($instance, $method["name"], $data);
+                }
             }
         }
     }
@@ -151,19 +106,32 @@ class Attribute
      * @param object $instance
      * @param array $methods
      * @param MessageEvent $data
-     *@see \Astaroth\Attribute\Event\MessageEvent
+     * @throws NotImplementedHaystackException
+     * @see \Astaroth\Attribute\Event\MessageEvent
      */
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
     {
         foreach ($methods as $method) {
             foreach ($method["attribute"] as $attribute) {
-                $this->payloadAttribute($attribute, $instance, $method["name"], $data);
+                /**
+                 * @var $attribute AttributeValidatorInterface
+                 */
+                $validate = match ($attribute::class) {
+                    Payload::class => $attribute->setHaystack($data->getPayload())
+                        ->validate(),
+                };
+
+                if ($validate) {
+                    $this->execute($instance, $method["name"], $data);
+                }
             }
         }
     }
 
     /**
-     * Execute methods with args...
+     * We call methods from the class on which the correct route is set
+     * And add arguments
+     * method_exist is not needed since method 100% exists
      * @param object $instance
      * @param string $method
      * @param ...$args
@@ -171,29 +139,5 @@ class Attribute
     private function execute(object $instance, string $method, ...$args): void
     {
         $instance->$method(...$args);
-    }
-
-    /**
-     * Search attribute attachment
-     * @see Attachment
-     * @param object $attribute
-     * @param object $instance
-     * @param string $method
-     * @param MessageNew $data
-     */
-    private function attachmentAttribute(object $attribute, object $instance, string $method, MessageNew $data): void
-    {
-        $attachments = [];
-        if ($attribute instanceof Attachment && count($data->getAttachments()) > 0) {
-            foreach ($data->getAttachments() as $attachment) {
-                if ($attachment->type === $attribute->type) {
-                    $attachments[] = $attachment;
-                }
-            }
-
-            if (count($attachments) === $attribute->count) {
-                $this->execute($instance, $method, $data);
-            }
-        }
     }
 }

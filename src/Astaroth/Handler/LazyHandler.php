@@ -7,7 +7,7 @@ namespace Astaroth\Handler;
 
 use Astaroth\CallBack\CallBack;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\Interface\HandlerInterface;
+use Astaroth\Contracts\HandlerInterface;
 use Astaroth\LongPoll\LongPoll;
 
 /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Astaroth\Foundation;
 
 use Astaroth\Commands\BaseCommands;
-use Astaroth\Support\Facades\RequestFacade;
 
 /**
  * Херня с помощью которой можно добавить динамики в сообщениях
@@ -34,6 +33,9 @@ final class Placeholder extends BaseCommands
     {
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function replace(int $id): string
     {
         $member = $this->iterateId($id);

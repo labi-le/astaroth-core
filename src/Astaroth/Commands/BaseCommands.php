@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Commands;
 
 
+use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\RequestFacade;
 
 /**
@@ -62,8 +63,11 @@ abstract class BaseCommands
         return RequestFacade::request("utils.getShortLink", ["url" => $url, "private" => $private]);
     }
 
+    /**
+     * @throws \Throwable
+     */
     protected function logToMessage(int $id, string $error_level, \Exception|string $e): void
     {
-        \Astaroth\Foundation\Utils::logToMessage($id, $error_level, $e);
+        Utils::logToMessage($id, $error_level, $e);
     }
 }

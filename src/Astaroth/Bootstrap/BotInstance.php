@@ -17,11 +17,17 @@ class BotInstance
     {
     }
 
+    /**
+     * @throws InvalidParameterException
+     */
     public function bootstrap(): CallBack|LongPoll
     {
         return $this->selectStartupType($this->container);
     }
 
+    /**
+     * @throws InvalidParameterException
+     */
     private function selectStartupType(ContainerBuilder $container): CallBack|LongPoll
     {
         return $container->getParameter(Configuration::TYPE) === Configuration::CALLBACK

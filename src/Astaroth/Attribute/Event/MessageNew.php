@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 
 namespace Astaroth\Attribute\Event;
@@ -9,6 +10,4 @@ use Attribute;
 /**
  * Attribute defining new message
  */
-class MessageNew
-{
-}
+class MessageNew{}

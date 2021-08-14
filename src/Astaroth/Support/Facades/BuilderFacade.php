@@ -22,6 +22,7 @@ final class BuilderFacade
      * We check the message for placeholders and, if necessary, add
      * @param IBuilder ...$instances
      * @return array
+     * @throws \Throwable
      */
     private static function messagePlaceholder(IBuilder ...$instances): array
     {
@@ -41,6 +42,7 @@ final class BuilderFacade
      * BuilderFacade create instance
      * @param IBuilder ...$instance
      * @return array
+     * @throws \Throwable
      */
     public static function create(IBuilder ...$instance): array
     {

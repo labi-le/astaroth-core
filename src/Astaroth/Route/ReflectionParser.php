@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 
+use Astaroth\Attribute\NotImplementedHaystackException;
 use Astaroth\DataFetcher\DataFetcher;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -20,8 +21,7 @@ class ReflectionParser
     /**
      * Parse the class that contains the attributes, etc...
      * @param DataFetcher $data
-     * @throws \ReflectionException
-     * @throws \ReflectionException
+     * @throws \ReflectionException|NotImplementedHaystackException
      */
     public function handle(DataFetcher $data): void
     {

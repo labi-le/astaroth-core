@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Interface;
+namespace Astaroth\Contracts;
 
 /**
- * Interface HandlerInterface
- * @package Astaroth\Interface
+ * Contracts HandlerInterface
+ * @package Astaroth\Contracts
  */
 interface HandlerInterface
 {
