@@ -32,13 +32,11 @@ class Payload implements AttributeValidatorInterface
     {
         isset($this->haystack) ?: throw new NotImplementedHaystackException("No haystack specified for " . __CLASS__ . " Attribute");
 
-        $casted_haystack = is_string($this->haystack) ? $this->haystack : "";
-        $casted_payload = @json_decode($casted_haystack, true);
-        if ($casted_payload) {
+        if ($this->haystack) {
             return match ($this->validation) {
-                static::STRICT => $this->payload_or_key === $casted_payload,
-                static::KEY_EXISTS => array_key_exists($this->payload_or_key, $casted_payload),
-                static::CONTAINS => count(array_intersect($this->payload_or_key, $casted_payload)) > 0,
+                static::STRICT => $this->payload_or_key === $this->haystack,
+                static::KEY_EXISTS => array_key_exists($this->payload_or_key, $this->haystack),
+                static::CONTAINS => count(array_intersect($this->payload_or_key, $this->haystack)) > 0,
             };
         }
 
