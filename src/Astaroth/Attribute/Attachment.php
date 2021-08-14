@@ -12,7 +12,6 @@ use Attribute;
  */
 class Attachment implements AttributeValidatorInterface
 {
-
     private array $haystack;
 
     public function __construct(public string $type = Attachment::ALL, public int $count = 1)
@@ -29,13 +28,8 @@ class Attachment implements AttributeValidatorInterface
     public const AUDIO = "audio";
     public const STICKER = "sticker";
 
-    /**
-     * @throws NotImplementedHaystackException
-     */
     public function validate(): bool
     {
-        isset($this->haystack) ?: throw new NotImplementedHaystackException("No haystack specified for " . __CLASS__ . " Attribute");
-
         $attachments = [];
         foreach ($this->haystack as $attachment) {
             if ($attachment->type === $this->type) {

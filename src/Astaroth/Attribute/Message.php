@@ -20,13 +20,8 @@ class Message implements AttributeValidatorInterface
     {
     }
 
-    /**
-     * @throws NotImplementedHaystackException
-     */
     public function validate(): bool
     {
-        isset($this->haystack) ?: throw new NotImplementedHaystackException("No haystack specified for " . __CLASS__ . " Attribute");
-
         return (new TextMatcher(
             $this->message,
             mb_strtolower($this->haystack),

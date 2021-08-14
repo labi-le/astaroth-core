@@ -25,13 +25,8 @@ class Payload implements AttributeValidatorInterface
     {
     }
 
-    /**
-     * @throws NotImplementedHaystackException
-     */
     public function validate(): bool
     {
-        isset($this->haystack) ?: throw new NotImplementedHaystackException("No haystack specified for " . __CLASS__ . " Attribute");
-
         if ($this->haystack) {
             return match ($this->validation) {
                 static::STRICT => $this->payload_or_key === $this->haystack,

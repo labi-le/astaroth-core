@@ -38,14 +38,8 @@ class Conversation implements AttributeValidatorInterface
         $this->member_id = $member_id;
     }
 
-    /**
-     * @throws NotImplementedHaystackException
-     */
     public function validate(): bool
     {
-        isset($this->haystack) ?: throw new NotImplementedHaystackException("No haystack specified for " . __CLASS__ . " Attribute");
-
-
         $type = match ($this->type) {
             static::PERSONAL_DIALOG => $this->haystack->getChatId() === null,
             static::ALL => (bool)$this->haystack->getPeerId(),
