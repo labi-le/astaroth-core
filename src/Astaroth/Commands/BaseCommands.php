@@ -26,12 +26,12 @@ abstract class BaseCommands
      */
     protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null)
     {
-        return RequestFacade::request("messages.edit", $message->getParams() +
-            [
-                "conversation_message_id" => $conversation_message_id,
-                "message_id" => $message_id
-            ]
-        );
+        $params = $message->getParams();
+        $params["peer_id"] = $params["peer_ids"];
+        $params["conversation_message_id"] = $conversation_message_id;
+        $params["message_id"] = $message_id;
+
+        return RequestFacade::request("messages.edit", $params);
     }
 
     /**
