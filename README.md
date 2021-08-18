@@ -1,9 +1,10 @@
 # Astaroth
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/labi-le/astaroth-core/blob/main/LICENSE)
 [![Packagist Stars](https://img.shields.io/packagist/stars/labile/astaroth-core)](https://packagist.org/packages/labile/astaroth-core/stats)
+[![PHP](https://img.shields.io/packagist/php-v/labile/astaroth-core)](https://github.com/labi-le/astaroth-core)
 [![Download Stats](https://img.shields.io/packagist/dt/labile/astaroth-core)](https://packagist.org/packages/labile/astaroth-core/stats)
-![Php requirement](https://img.shields.io/packagist/php-v/labile/astaroth-core)
+[![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/labi-le/astaroth-core/blob/main/LICENSE)
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/labi-le/astaroth-core)](https://github.com/labi-le/astaroth-core)
 
 Личный фреймворк для создания ботов
 
