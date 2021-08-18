@@ -7,7 +7,6 @@ namespace Astaroth\Route;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Message;
-use Astaroth\Attribute\NotImplementedHaystackException;
 use Astaroth\Attribute\Payload;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
@@ -24,7 +23,6 @@ class Attribute
     /**
      * @param array $executable An array of classes, methods and attributes
      * @param DataFetcher $data
-     * @throws NotImplementedHaystackException
      */
     public function __construct(array $executable, DataFetcher $data)
     {
@@ -35,7 +33,6 @@ class Attribute
      * Attribute check and routing
      * @param array $classes
      * @param DataFetcher $data
-     * @throws NotImplementedHaystackException
      */
     private function process(array $classes, DataFetcher $data): void
     {
@@ -54,7 +51,10 @@ class Attribute
                  * If the attribute is a MessageNew object
                  * @see \Astaroth\Attribute\Event\MessageNew
                  */
-                if ($attribute instanceof \Astaroth\Attribute\Event\MessageNew) {
+                if (
+                    $attribute instanceof \Astaroth\Attribute\Event\MessageNew &&
+                    $attribute->setHaystack($data->getType())->validate()
+                ) {
                     $this->messageNew($class["instance"], $class["methods"], $data->messageNew());
                 }
 
@@ -62,7 +62,10 @@ class Attribute
                  * If the attribute is a MessageEvent object
                  * @see \Astaroth\Attribute\Event\MessageEvent
                  */
-                if ($attribute instanceof \Astaroth\Attribute\Event\MessageEvent) {
+                if (
+                    $attribute instanceof \Astaroth\Attribute\Event\MessageEvent &&
+                    $attribute->setHaystack($data->getType())->validate()
+                ) {
                     $this->messageEvent($class["instance"], $class["methods"], $data->messageEvent());
                 }
 
@@ -75,7 +78,6 @@ class Attribute
      * @param object $instance
      * @param array $methods
      * @param MessageNew $data
-     * @throws NotImplementedHaystackException
      * @see \Astaroth\Attribute\Event\MessageNeww
      */
     private function messageNew(object $instance, array $methods, MessageNew $data): void
@@ -106,7 +108,6 @@ class Attribute
      * @param object $instance
      * @param array $methods
      * @param MessageEvent $data
-     * @throws NotImplementedHaystackException
      * @see \Astaroth\Attribute\Event\MessageEvent
      */
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
