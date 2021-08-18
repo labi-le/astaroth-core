@@ -65,12 +65,12 @@ class Session
 
     /**
      * Delete session file or parameter
-     * @param string|null $key
+     * @param bool $current_type
      * @return bool
      */
-    public function purge(string $key = null): bool
+    public function purge(bool $current_type = false): bool
     {
-        if ($key !== null) {
+        if ($current_type) {
             $storage = $this->getStorageData() ?: [];
             unset($storage[$this->type]);
 
@@ -88,6 +88,5 @@ class Session
         $content = (string)@file_get_contents($this->fullStoragePath);
         return @json_decode($content, true);
     }
-
 
 }
