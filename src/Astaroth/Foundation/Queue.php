@@ -34,7 +34,6 @@ class Queue
 
         $this->createSession();
         $this->run();
-
     }
 
     /**
@@ -44,7 +43,7 @@ class Queue
     {
         if ($this->getCurrentQueue() === null) {
             $this->session->put(static::COUNT, $this->queue->count());
-            $this->session->put(static::CURRENT, 0);
+            $this->session->put(static::CURRENT, 1);
         }
     }
 
@@ -98,7 +97,8 @@ class Queue
      */
     public function next(): void
     {
-        $this->changeCurrentQueue($this->getCurrentQueue() + 1);
+        $currentQueue = $this->getCurrentQueue();
+        $this->changeCurrentQueue(++$currentQueue);
     }
 
     /**
@@ -106,7 +106,8 @@ class Queue
      */
     public function prev(): void
     {
-        $this->changeCurrentQueue($this->getCurrentQueue() - 1);
+        $currentQueue = $this->getCurrentQueue();
+        $this->changeCurrentQueue(--$currentQueue);
         $this->queue->prev();
     }
 
@@ -115,7 +116,7 @@ class Queue
      */
     public function rewind(): void
     {
-        $this->changeCurrentQueue(0);
+        $this->changeCurrentQueue(1);
         $this->queue->rewind();
     }
 
