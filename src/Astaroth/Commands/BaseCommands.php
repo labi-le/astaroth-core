@@ -7,6 +7,7 @@ namespace Astaroth\Commands;
 
 use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\RequestFacade;
+use Astaroth\VkUtils\Contracts\IBuilder;
 
 /**
  * Class BaseCommands
@@ -14,6 +15,25 @@ use Astaroth\Support\Facades\RequestFacade;
  */
 abstract class BaseCommands
 {
+
+    /**
+     * @param IBuilder $message
+     * @param int|null $conversation_message_id
+     * @param int|null $message_id
+     * @return array
+     * @throws \Throwable
+     * @see https://vk.com/dev/messages.edit
+     */
+    protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null)
+    {
+        return RequestFacade::request("messages.edit", $message->getParams() +
+            [
+                "conversation_message_id" => $conversation_message_id,
+                "message_id" => $message_id
+            ]
+        );
+    }
+
     /**
      * @param int $chat_id
      * @param int $id
