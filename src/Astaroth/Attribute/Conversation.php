@@ -40,6 +40,11 @@ class Conversation implements AttributeValidatorInterface
 
     public function validate(): bool
     {
+        $concreteMethod = match ($this->haystack::class) {
+            MessageNew::class => "getFromId",
+            MessageEvent::class => "getUserId",
+        };
+
         $type = match ($this->type) {
             static::PERSONAL_DIALOG => $this->haystack->getChatId() === null,
             static::ALL => (bool)$this->haystack->getPeerId(),
@@ -47,7 +52,7 @@ class Conversation implements AttributeValidatorInterface
         };
 
         $concreteId = match ($this->type) {
-            static::PERSONAL_DIALOG => $this->haystack->getFromId(),
+            static::PERSONAL_DIALOG => $concreteMethod,
             static::ALL => $this->haystack->getPeerId(),
             static::CHAT => $this->haystack->getChatId()
         };
