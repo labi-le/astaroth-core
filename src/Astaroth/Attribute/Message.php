@@ -16,7 +16,13 @@ class Message implements AttributeValidatorInterface
 {
     private string $haystack;
 
-    public function __construct(private string $message, private int $validation = TextMatcher::STRICT)
+    public const STRICT = 0;
+    public const CONTAINS = 1;
+    public const START_AS = 2;
+    public const END_AS = 3;
+    public const SIMILAR_TO = 4;
+
+    public function __construct(private string $message, private int $validation = Message::STRICT)
     {
     }
 
