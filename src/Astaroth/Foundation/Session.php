@@ -23,6 +23,18 @@ class Session
         $this->fullStoragePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $storageName;
     }
 
+    /**
+     * Switch to another type
+     * @param string $type
+     * @return $this
+     */
+    public function changeType(string $type):static
+    {
+        $newThis = clone $this;
+        $newThis->type = $type;
+        return $newThis;
+    }
+
 
     /**
      * Get items from session
@@ -43,9 +55,7 @@ class Session
     public function put($key, $value): bool
     {
         $storage = $this->getStorageData() ?: [];
-
         $storage[$this->type][$key] = $value;
-
         return $this->saveToFile($storage);
     }
 
