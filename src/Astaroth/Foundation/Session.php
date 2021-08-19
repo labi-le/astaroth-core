@@ -28,11 +28,10 @@ class Session
      * @param string $type
      * @return $this
      */
-    public function changeType(string $type):static
+    public function changeType(string $type): static
     {
-        $newThis = clone $this;
-        $newThis->type = $type;
-        return $newThis;
+        $this->type = $type;
+        return $this;
     }
 
 
