@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Astaroth\Auth;
 
 
+use Astaroth\Foundation\Application;
 use Dotenv\Dotenv;
 use Dotenv\Exception\ValidationException;
 use Exception;
@@ -44,21 +45,27 @@ class Configuration
             self::HANDLE_REPEATED_REQUESTS
         ];
 
-    public function __construct(private string $dir)
+    public function __construct(private ?string $dir = null)
     {
     }
 
     /**
      * @throws Exception
      */
-    public function get(): array
+    public function get(string $type): array
     {
-        $dotenv = Dotenv::createImmutable($this->dir);
-        $config = $dotenv->load();
+        return match ($type) {
+            Application::DEV => function () {
+                $dotenv = Dotenv::createImmutable($this->dir);
+                $dotenv->load();
 
-        $this->validation($dotenv);
+                $this->validation($dotenv);
 
-        return $config;
+                return $_ENV;
+            },
+            Application::PRODUCTION => $_ENV
+
+        };
     }
 
     /**
@@ -67,8 +74,6 @@ class Configuration
      */
     private function validation(Dotenv $dotenv): void
     {
-        $auth = $dotenv->load();
-
         try {
             $dotenv->required(self::ENV_STRUCTURE);
         } catch (ValidationException $e) {
@@ -80,14 +85,14 @@ class Configuration
                 ->required(self::TYPE)
                 ->assert(static function ($type) {
                     return $type === self::CALLBACK || $type === self::LONGPOLL;
-                }, (string)$auth[self::TYPE]);
+                }, (string)getenv(self::TYPE));
 
         } catch (ValidationException) {
             throw new ParameterMissingException("Bot operation type is not specified");
         }
 
 
-        if (((string)$auth[self::TYPE] === self::CALLBACK) && empty($auth[self::CONFIRMATION_KEY])) {
+        if ((getenv(self::TYPE) === self::CALLBACK) && empty(getenv(self::CONFIRMATION_KEY))) {
             throw new ParameterMissingException("Not specified " . self::CONFIRMATION_KEY);
         }
     }

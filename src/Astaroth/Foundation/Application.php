@@ -14,7 +14,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class Application
 {
-    private const VERSION = 2;
+    public const VERSION = 2;
+
+    public const DEV = "DEV";
+    public const PRODUCTION = "PRODUCTION";
+
 
     /**
      * Checks if the application is running in the console
@@ -28,11 +32,11 @@ class Application
     /**
      * @throws \Throwable
      */
-    public function run(string $dir = __DIR__): void
+    public function run(string $dir = null, string $type = Application::DEV): void
     {
         $container = new ContainerBuilder();
-        $configuration = (new Configuration(dirname($dir)))
-            ->get();
+        $configuration = (new Configuration($dir))
+            ->get($type);
 
         array_walk($configuration, static fn($value, $key) => $container->setParameter($key, $value));
 
