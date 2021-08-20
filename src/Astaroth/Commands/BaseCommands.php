@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Astaroth\Commands;
 
 
+use Astaroth\DataFetcher\Events\MessageEvent;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\RequestFacade;
 use Astaroth\VkUtils\Contracts\IBuilder;
@@ -15,6 +17,25 @@ use Astaroth\VkUtils\Contracts\IBuilder;
  */
 abstract class BaseCommands
 {
+
+    /**
+     * @param MessageNew|MessageEvent $data
+     * @param array $event
+     * @return array
+     * @throws \Throwable
+     * @see https://vk.com/dev/messages.sendMessageEventAnswer
+     */
+    protected function sendMessageEventAnswer(MessageNew|MessageEvent $data, array $event): array
+    {
+        return RequestFacade::request("messages.sendMessageEventAnswer",
+            [
+                "event_id" => $data->getEventId(),
+                "user_id" => $data->getUserId(),
+                "peer_id" => $data->getPeerId(),
+                "event_data" => json_encode($event)
+            ]
+        );
+    }
 
     /**
      * @param IBuilder $message
