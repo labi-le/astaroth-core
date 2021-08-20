@@ -35,6 +35,7 @@ class Configuration
      */
     private const ENV_STRUCTURE =
         [
+            self::APP_NAMESPACE,
             self::ACCESS_TOKEN,
             self::TYPE,
 
