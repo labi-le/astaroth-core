@@ -55,17 +55,29 @@ class Configuration
     public function get(string $type): array
     {
         return match ($type) {
-            Application::DEV => function () {
-                $dotenv = Dotenv::createImmutable($this->dir);
-                $dotenv->load();
-
-                $this->validation($dotenv);
-
-                return $_ENV;
-            },
-            Application::PRODUCTION => $_ENV
-
+            Application::DEV => $this->parseDevEnv(),
+            Application::PRODUCTION => $this->parseProdEnv()
         };
+    }
+
+
+    private function parseProdEnv(): array
+    {
+        $env = [];
+        foreach (self::ENV_STRUCTURE as $key) {
+            $env[$key] = getenv($key);
+        }
+        return $env;
+    }
+
+    private function parseDevEnv(): array
+    {
+        $dotenv = Dotenv::createImmutable($this->dir);
+        $dotenv->load();
+
+        $this->validation($dotenv);
+
+        return $_ENV;
     }
 
     /**
