@@ -1,10 +1,11 @@
 # Astaroth
 
-1. [Генератор клавиатуры](https://github.com/Sally-Framework/vk-keyboard)
+1. [Генератор клавиатуры](https://github.com/labi-le/astaroth-core)
 2. Нативные фасады
     + [Отправить сообщение](#send-message)
     + [Создать пост](#create-post)
     + [Сделать запрос](#create-request)
+    + [Загрузить вложение](#create-attachments)
 
 ### Send Message
 
@@ -55,4 +56,24 @@ BuilderFacade::create(
 use Astaroth\Support\Facades\RequestFacade;
 
 RequestFacade::request("users.get", ["user_ids" => 418618, "fields" => "sex"], "token");
+```
+
+### Create attachments
+
+Фасад облегчающий загрузку вложений
+```php
+use Astaroth\Support\Facades\UploaderFacade;
+use Astaroth\VkUtils\Builders\Attachments\Message\PhotoMessages;
+
+UploaderFacade::upload(
+    new PhotoMessages("path"),
+    new PhotoMessages("path"),
+    new PhotoMessages("path"),
+    new PhotoMessages("path"),
+    new PhotoMessages("path"),
+    new PhotoMessages("path"),
+    new PhotoMessages("path"),
+);
+
+//string[]
 ```
