@@ -23,7 +23,7 @@ class Queue
      * @param int $id
      * @param string $queue_name
      * @param callable ...$queue
-     * @example function(Queue $q){];
+     * @example function(Queue $q){};
      */
     public function __construct(int $id, string $queue_name, callable ...$queue)
     {
