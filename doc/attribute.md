@@ -71,17 +71,18 @@ use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\Event\MessageNew;
 use Astaroth\DataFetcher\Events\MessageNew as Data;
+use Astaroth\TextMatcher as Validation;
 
 #[Conversation(Conversation::ALL)]
 #[MessageNew]
 class Bar
 {
-    #[Message("содержится ли подстрока в другой подстроке", Message::CONTAINS)]
-    #[Message("заканчивается на", Message::END_AS)]
-    #[Message("начинается с", Message::START_AS)]
-    #[Message("похоже на", Message::SIMILAR_TO)]
+    #[Message("содержится ли подстрока в другой подстроке", Validation::CONTAINS)]
+    #[Message("заканчивается на", Validation::END_AS)]
+    #[Message("начинается с", Validation::START_AS)]
+    #[Message("похоже на", Validation::SIMILAR_TO)]
     #[Message("без валидации, сравнивает точь в точь")]
-    public function method(Data $data){//...}
+    public function method(Data $data)
 }
 ```
 
@@ -118,14 +119,6 @@ class Foo
 Необходим для определения payload (нажатие на кнопку)\
 Указывается массив
 
-Можно указать тип сравнения
-
-```php
-Payload::STRICT //строгое сравнение "точь в точь"
-Payload::KEY_EXISTS // проверка на содержания ключей
-Payload::CONTAINS // проверка на схожесть массивов
-```
-
 ```php
 use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Payload;
@@ -138,7 +131,6 @@ class Foo
 {
     #[Payload(["button" => 12])]
     #[Payload(["button" => ["user_id" => 418618]])]
-    #[Payload(["button" => ["user_id" => 418618]], Payload::KEY_EXISTS)]
     public function method(Data $data)
 }
 ```
