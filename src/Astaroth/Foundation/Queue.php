@@ -25,7 +25,7 @@ class Queue
      * @param callable ...$queue
      * @example function(Queue $q){];
      */
-    public function __construct(int $id, private string $queue_name, callable ...$queue)
+    public function __construct(int $id, string $queue_name, callable ...$queue)
     {
         $this->queue = new \SplQueue();
         array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
@@ -125,16 +125,16 @@ class Queue
      */
     public function leave(): void
     {
-        $this->session->purge($this->queue_name);
+        $this->session->purge(true);
     }
 
     /**
      * Write the required data to the queue object
-     * @param $key
-     * @param $value
+     * @param string|array $key
+     * @param string|array $value
      * @return bool
      */
-    public function put($key, $value): bool
+    public function put(string|array $key, string|array $value): bool
     {
         return $this->session->put($key, $value);
     }
