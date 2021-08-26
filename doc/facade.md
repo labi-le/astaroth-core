@@ -2,10 +2,10 @@
 
 1. [Генератор клавиатуры](https://github.com/labi-le/astaroth-core)
 2. Нативные фасады
-    + [Отправить сообщение](#send-message)
-    + [Создать пост](#create-post)
-    + [Сделать запрос](#create-request)
-    + [Загрузить вложение](#create-attachments)
+   + [Отправить сообщение](#send-message)
+   + [Создать пост](#create-post)
+   + [Сделать запрос](#create-request)
+   + [Загрузить вложение](#create-attachments)
 
 ### Send Message
 
