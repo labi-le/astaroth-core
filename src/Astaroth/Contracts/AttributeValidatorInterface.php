@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Contracts;
 
-use Astaroth\Attribute\NotImplementedHaystackException;
 
 /**
  * Validation for Attributes - Methods
@@ -14,7 +13,6 @@ interface AttributeValidatorInterface
     /**
      * Валидация данных которую имплементит аттрибут
      * @return bool
-     * @throws NotImplementedHaystackException
      */
     public function validate(): bool;
 
