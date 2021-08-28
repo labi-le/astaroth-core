@@ -6,9 +6,9 @@ namespace Astaroth\Bootstrap;
 
 
 use Astaroth\Auth\Configuration;
-use Astaroth\CallBack\CallBack;
+use Astaroth\Callback\Callback;
 use Astaroth\Contracts\HandlerInterface;
-use Astaroth\LongPoll\LongPoll;
+use Astaroth\Longpoll\Longpoll;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class BotInstance
@@ -49,7 +49,7 @@ class BotInstance
                 $container->getParameter(Configuration::DEBUG) === Configuration::YES,
             ];
 
-        $callback = new CallBack(
+        $callback = new Callback(
             $confirmation,
             empty($secret_key) ?: $secret_key,
             $handle_repeated_requests
