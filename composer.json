@@ -14,6 +14,7 @@
   "require": {
     "php": ">=8.0",
     "labile/vk-data-fetcher": "^1.3",
+    "labile/astaroth-contracts": "^1.0",
     "labile/vk-callback": "^2",
     "labile/vk-utils": "^2",
     "labile/vk-keyboard": "^1.1",
