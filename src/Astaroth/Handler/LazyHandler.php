@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Astaroth\Handler;
 
 
-use Astaroth\CallBack\CallBack;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Contracts\HandlerInterface;
-use Astaroth\LongPoll\LongPoll;
 
 /**
  * Class LazyHandler
@@ -17,7 +15,7 @@ use Astaroth\LongPoll\LongPoll;
 class LazyHandler implements HandlerInterface
 {
 
-    public function __construct(private CallBack|LongPoll $botInstance)
+    public function __construct(private HandlerInterface $botInstance)
     {
 
     }
@@ -39,13 +37,15 @@ class LazyHandler implements HandlerInterface
     }
 
     /**
-     * Run instance longpoll\callback
+     * Run instance
+     * @implements HandlerInterface
      * @param callable $func
      * @throws \Throwable
      */
     public function listen(callable $func): void
     {
         $this->botInstance->listen(
-            fn($raw_data) => $func($this->normalizeData($raw_data)));
+            fn($raw_data) => $func($this->normalizeData($raw_data))
+        );
     }
 }

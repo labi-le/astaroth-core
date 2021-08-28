@@ -16,6 +16,8 @@ class Configuration
     public const YES = "yes";
     public const NO = "no";
 
+    public const DEBUG = "DEBUG";
+
     public const CALLBACK = "CALLBACK";
     public const LONGPOLL = "LONGPOLL";
 
@@ -35,6 +37,8 @@ class Configuration
      */
     private const ENV_STRUCTURE =
         [
+            self::DEBUG,
+
             self::APP_NAMESPACE,
             self::ACCESS_TOKEN,
             self::TYPE,
@@ -71,6 +75,9 @@ class Configuration
         return $env;
     }
 
+    /**
+     * @throws Exception
+     */
     private function parseDevEnv(): array
     {
         $dotenv = Dotenv::createImmutable($this->dir);

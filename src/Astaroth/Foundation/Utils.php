@@ -28,7 +28,7 @@ class Utils
                 CURLOPT_CUSTOMREQUEST => "PUT",
                 CURLOPT_POSTFIELDS =>
                     json_encode([
-                        "name" => uniqid('', true),
+                        "name" => uniqid("", true),
                         "data" => json_encode($param, JSON_THROW_ON_ERROR)
                     ])
             ]);
@@ -44,7 +44,7 @@ class Utils
      * @param string $str
      * @return string
      */
-    public static function translit(string $str): string
+    public static function transliteration(string $str): string
     {
         $tr = array(
             "А" => "A", "Б" => "B", "В" => "V", "Г" => "G",
@@ -75,7 +75,7 @@ class Utils
     }
 
     /**
-     * explode с возможностью использовать несколько символов
+     * Explode с возможностью использовать несколько символов
      * @param $delimiters
      * @param $string
      * @return array|bool
@@ -87,7 +87,7 @@ class Utils
     }
 
     /**
-     * Регулярка чтоб выбрать все айдишники из текста
+     * Регулярка, чтоб выбрать все айдишники из текста
      * @param string $string
      * @return array|bool
      * @noinspection NotOptimalRegularExpressionsInspection
@@ -147,14 +147,16 @@ class Utils
                     $error_level,
                     $e->getCode(),
                     $e->getMessage()
-                ));
+                )
+            );
         } else {
             $message->setMessage(
                 sprintf(
                     "Logger:\nError Level - %s\nMessage - %s",
                     $error_level,
                     $e
-                ));
+                )
+            );
         }
 
         BuilderFacade::create($message);
