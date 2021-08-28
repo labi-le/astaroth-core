@@ -24,7 +24,7 @@ final class Placeholder extends BaseCommands
 
     public const PERCENT = "%";
     public const STAR = "*";
-    public const MENTION = self::PERCENT . "%";
+    public const MENTION = self::PERCENT . "@";
 
     public const ID = "id";
     public const CLUB = "club";
