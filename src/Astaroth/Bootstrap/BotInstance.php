@@ -51,7 +51,7 @@ class BotInstance
 
         $callback = new Callback(
             $confirmation,
-            empty($secret_key) ?: $secret_key,
+            $secret_key ?: null,
             $handle_repeated_requests
         );
 
