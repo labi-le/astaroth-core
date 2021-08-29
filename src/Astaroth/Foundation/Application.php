@@ -19,6 +19,8 @@ class Application
     public const DEV = "DEV";
     public const PRODUCTION = "PRODUCTION";
 
+    private static ?ContainerBuilder $container = null;
+
 
     /**
      * Checks if the application is running in the console
@@ -30,11 +32,22 @@ class Application
     }
 
     /**
+     * @return ContainerBuilder
+     */
+    public static function getContainer(): ContainerBuilder
+    {
+        if (self::$container === null) {
+            self::$container = new ContainerBuilder();
+        }
+        return self::$container;
+    }
+
+    /**
      * @throws \Throwable
      */
     public function run(string $dir = null, string $type = Application::DEV): void
     {
-        $container = new ContainerBuilder();
+        $container = self::getContainer();
         $configuration = (new Configuration($dir))
             ->get($type);
 

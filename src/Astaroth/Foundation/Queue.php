@@ -11,8 +11,8 @@ namespace Astaroth\Foundation;
  */
 class Queue
 {
-    private const CURRENT = "current_queue";
-    private const COUNT = "count_queue";
+    public const CURRENT = "current_queue";
+    public const COUNT = "count_queue";
 
     public \SplQueue $queue;
     private Session $session;
@@ -107,6 +107,7 @@ class Queue
     public function prev(): void
     {
         $currentQueue = $this->getCurrentQueue();
+        echo 21212121;
         $this->changeCurrentQueue(--$currentQueue);
         $this->queue->prev();
     }

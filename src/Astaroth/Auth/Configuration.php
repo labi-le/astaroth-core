@@ -17,6 +17,7 @@ class Configuration
     public const NO = "no";
 
     public const DEBUG = "DEBUG";
+    public const CACHE_PATH = "CACHE_PATH";
 
     public const CALLBACK = "CALLBACK";
     public const LONGPOLL = "LONGPOLL";
@@ -38,6 +39,7 @@ class Configuration
     private const ENV_STRUCTURE =
         [
             self::DEBUG,
+            self::CACHE_PATH,
 
             self::APP_NAMESPACE,
             self::ACCESS_TOKEN,
@@ -57,7 +59,7 @@ class Configuration
     /**
      * @throws Exception
      */
-    public function get(string $type): array
+    public function get(string $type = Application::DEV): array
     {
         return match ($type) {
             Application::DEV => $this->parseDevEnv(),

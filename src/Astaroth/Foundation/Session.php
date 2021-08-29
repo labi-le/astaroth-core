@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use Astaroth\Auth\Configuration;
+
 /**
  * Class Session
  * Simple database for recording states
@@ -11,6 +13,7 @@ namespace Astaroth\Foundation;
  */
 class Session
 {
+    public const FILE_EXTENSION = ".json";
     /**
      * Session file path
      * @var string
@@ -19,8 +22,12 @@ class Session
 
     public function __construct(int $id, private string $type)
     {
-        $storageName = $id . ".json";
-        $this->fullStoragePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $storageName;
+        $storageName = $id . self::FILE_EXTENSION;
+
+        $cache_path = Application::getContainer()->getParameter(Configuration::CACHE_PATH);
+
+        $tmp_path = $cache_path ?: sys_get_temp_dir();
+        $this->fullStoragePath = $tmp_path . DIRECTORY_SEPARATOR . $storageName;
     }
 
     /**
@@ -42,7 +49,7 @@ class Session
      */
     public function get(string $key): mixed
     {
-        return $this->getStorageData()[$this->type][$key] ?? null;
+        return $this->getStorageData()[$this->getType()][$key] ?? null;
     }
 
     /**
@@ -54,7 +61,7 @@ class Session
     public function put($key, $value): bool
     {
         $storage = $this->getStorageData() ?: [];
-        $storage[$this->type][$key] = $value;
+        $storage[$this->getType()][$key] = $value;
         return $this->saveToFile($storage);
     }
 
@@ -81,11 +88,12 @@ class Session
     {
         if ($current_type) {
             $storage = $this->getStorageData() ?: [];
-            unset($storage[$this->type]);
+            unset($storage[$this->getType()]);
 
             return $this->saveToFile($storage);
         }
-        return unlink($this->fullStoragePath);
+
+        return @unlink($this->fullStoragePath);
     }
 
     /**
@@ -96,6 +104,14 @@ class Session
     {
         $content = (string)@file_get_contents($this->fullStoragePath);
         return @json_decode($content, true);
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 
 }

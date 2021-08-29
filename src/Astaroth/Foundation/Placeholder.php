@@ -9,7 +9,7 @@ use Astaroth\Commands\BaseCommands;
  * Garbage with which you can add placeholders to messages
  * @example hi %@name
  */
-final class Placeholder extends BaseCommands
+class Placeholder extends BaseCommands
 {
     private const PATTERN = "/%(?:@?last-|(?:@?ful{2}-|@?))name/";
 
@@ -77,7 +77,7 @@ final class Placeholder extends BaseCommands
                     ? "$star_and_id_str$member_id($member_last_name)"
                     : "$star_and_club_str$member_id($member_name)",
             };
-        }, $this->subject);
+        }, $this->getSubject());
     }
 
     /**
@@ -89,5 +89,13 @@ final class Placeholder extends BaseCommands
             return current($this->usersGet($id));
         }
         return current($this->groupsGetById($id));
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubject(): string
+    {
+        return $this->subject;
     }
 }

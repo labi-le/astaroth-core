@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace Astaroth\Handler;
 
 
-use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Contracts\HandlerInterface;
+use Astaroth\DataFetcher\DataFetcher;
 
 /**
  * Class LazyHandler
@@ -16,10 +16,7 @@ use Astaroth\Contracts\HandlerInterface;
 class LazyHandler implements HandlerInterface
 {
 
-    public function __construct(private HandlerInterface $botInstance)
-    {
-
-    }
+    public function __construct(private HandlerInterface $botInstance){}
 
     /**
      * Normalize output data from VKontakte

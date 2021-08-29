@@ -15,7 +15,7 @@ class Utils
      * @return string|null
      * @throws \JsonException
      */
-    public static function JsonOnline(array $param): ?string
+    public static function jsonOnline(array $param): ?string
     {
         $ch = curl_init("https://jsoneditoronline.herokuapp.com/v1/docs/");
         curl_setopt_array($ch,
@@ -76,13 +76,13 @@ class Utils
 
     /**
      * Explode с возможностью использовать несколько символов
-     * @param $delimiters
-     * @param $string
+     * @param array $delimiters
+     * @param string $haystack
      * @return array|bool
      */
-    public static function multiExplode($delimiters, $string): array|bool
+    public static function multiExplode(array $delimiters, string $haystack): array|bool
     {
-        $ready = str_replace($delimiters, $delimiters[0], $string);
+        $ready = str_replace($delimiters, $delimiters[0], $haystack);
         return explode($delimiters[0], $ready);
     }
 
@@ -106,30 +106,6 @@ class Utils
     public static function var_dumpToStdout($data): void
     {
         file_put_contents('php://stdout', var_export($data, true));
-    }
-
-    /**
-     * Строка в unixtime
-     * 1 час
-     * unixtime + 3600
-     * @param string $string
-     * @return int|false
-     */
-    public static function strTime(string $string): int|false
-    {
-        $exp = explode(' ', $string);
-        $strtime = end($exp);
-        $prev = prev($exp);
-
-        $int = (int)$prev;
-
-        return match ($strtime) {
-            'с', 'сек', 'секунд', 'секунда', 'секунды', 's', 'second', 'seconds' => time() + (1 * $int),
-            'м', 'мин', 'минут', 'минута', 'минуты', 'm', 'minute', 'minutes' => time() + (60 * $int),
-            'ч', 'час', 'часов', 'часа', 'hour', 'hours' => time() + (3600 * $int),
-            'д', 'дн', 'дней', 'дня', 'd', 'day', 'days' => time() + (86400 * $int),
-            default => false,
-        };
     }
 
     /**
