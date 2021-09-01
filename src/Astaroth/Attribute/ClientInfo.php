@@ -23,7 +23,7 @@ class ClientInfo implements AttributeValidatorInterface
     public const INTENT_SUBSCRIBE = "intent_subscribe";
     public const INTENT_UNSUBSCRIBE = "intent_unsubscribe";
 
-    private array $client_info;
+    private object $client_info;
 
     public function __construct(
         private array $button_actions =
@@ -46,16 +46,15 @@ class ClientInfo implements AttributeValidatorInterface
 
     public function validate(): bool
     {
-        return $this->client_info["button_actions"] === $this->button_actions
-            && $this->client_info["keyboard"] === $this->keyboard
-            && $this->client_info["inline_keyboard"] === $this->inline_keyboard
-            && $this->client_info["carousel"] === $this->carousel
-            && $this->client_info["lang_id"] === $this->lang_id;
+        return $this->client_info->button_actions === $this->button_actions
+            && $this->client_info->keyboard === $this->keyboard
+            && $this->client_info->inline_keyboard === $this->inline_keyboard
+            && $this->client_info->carousel === $this->carousel
+            && $this->client_info->lang_id === $this->lang_id;
     }
 
     public function setHaystack($haystack): static
     {
-        print_r($haystack);
         $this->client_info = $haystack;
         return $this;
     }
