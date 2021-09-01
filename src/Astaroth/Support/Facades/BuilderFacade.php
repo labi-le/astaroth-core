@@ -43,12 +43,14 @@ final class BuilderFacade
      * @param IBuilder ...$instance
      * @return array
      * @throws \Throwable
+     * @psalm-suppress NullableReturnStatement
      */
     public static function create(IBuilder ...$instance): array
     {
         $new_instance = self::messagePlaceholder(...$instance);
-        return FacadePlaceholder::getInstance()->getContainer()
-            ?->get(self::SERVICE_ID)
+
+        return FacadePlaceholder::getInstance()
+            ->getContainer()->get(self::SERVICE_ID)
             ?->create(...$new_instance);
     }
 
@@ -60,7 +62,7 @@ final class BuilderFacade
     public static function changeToken(string $access_token): Builder
     {
         /**
-         * @var $instance Builder
+         * @var Builder $instance
          */
         $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
         return $instance->setDefaultToken($access_token);

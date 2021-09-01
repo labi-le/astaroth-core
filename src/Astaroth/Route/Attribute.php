@@ -85,7 +85,7 @@ class Attribute
         foreach ($methods as $method) {
             foreach ($method["attribute"] as $attribute) {
                 /**
-                 * @var $attribute AttributeValidatorInterface
+                 * @var AttributeValidatorInterface $attribute
                  */
                 $validate = match ($attribute::class) {
                     Message::class => $attribute->setHaystack($data->getText())
@@ -115,7 +115,7 @@ class Attribute
         foreach ($methods as $method) {
             foreach ($method["attribute"] as $attribute) {
                 /**
-                 * @var $attribute AttributeValidatorInterface
+                 * @var AttributeValidatorInterface $attribute
                  */
                 $validate = match ($attribute::class) {
                     Payload::class => $attribute->setHaystack($data->getPayload())
@@ -135,7 +135,7 @@ class Attribute
      * method_exist is not needed since method 100% exists
      * @param object $instance
      * @param string $method
-     * @param ...$args
+     * @param mixed ...$args
      */
     private function execute(object $instance, string $method, ...$args): void
     {

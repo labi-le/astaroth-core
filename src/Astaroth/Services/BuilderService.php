@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class BuilderService
  * @package Astaroth\Services
  */
-class BuilderService
+class BuilderService implements ServiceInterface
 {
     public function __invoke(ContainerBuilder $container)
     {

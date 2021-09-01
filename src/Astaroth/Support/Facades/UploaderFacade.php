@@ -18,7 +18,7 @@ final class UploaderFacade
     public static function upload(ICanBeSaved ...$instance): array
     {
         /**
-         * @var $facade Uploader
+         * @var Uploader $facade
          */
         $facade = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
         return $facade->upload(...$instance);
@@ -31,7 +31,7 @@ final class UploaderFacade
     public static function changeToken(string $access_token): Uploader
     {
         /**
-         * @var $instance Uploader
+         * @var Uploader $instance
          */
         $instance = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
 

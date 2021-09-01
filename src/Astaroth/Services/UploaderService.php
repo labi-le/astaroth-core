@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class UploaderService
  * @package Astaroth\Services
  */
-class UploaderService
+class UploaderService implements ServiceInterface
 {
     public function __invoke(ContainerBuilder $container)
     {

@@ -32,6 +32,7 @@ class ReflectionParser
      * Parse method params from class
      * @param ReflectionParameter ...$parameters
      * @return array
+     * @psalm-suppress UndefinedMethod
      */
     private function parseMethodParameters(ReflectionParameter ...$parameters): array
     {

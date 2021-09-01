@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 
@@ -33,7 +34,7 @@ class Route
     /**
      * Set class map
      * @param string $class_map
-     * @return Route
+     * @return static
      * @throws \Exception
      */
     public function setClassMap(string $class_map): static

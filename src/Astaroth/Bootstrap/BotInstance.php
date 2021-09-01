@@ -43,9 +43,9 @@ class BotInstance
     {
         [$secret_key, $handle_repeated_requests, $confirmation, $is_debug] =
             [
-                $container->getParameter(Configuration::SECRET_KEY),
+                (string)$container->getParameter(Configuration::SECRET_KEY),
                 $container->getParameter(Configuration::HANDLE_REPEATED_REQUESTS) === Configuration::YES,
-                $container->getParameter(Configuration::CONFIRMATION_KEY),
+                (string)$container->getParameter(Configuration::CONFIRMATION_KEY),
                 $container->getParameter(Configuration::DEBUG) === Configuration::YES,
             ];
 
@@ -61,8 +61,8 @@ class BotInstance
     private function longpoll(ContainerBuilder $container): HandlerInterface
     {
         return (new LongPoll(
-            $container->getParameter(Configuration::ACCESS_TOKEN),
-            $container->getParameter(Configuration::API_VERSION)
+            (string)$container->getParameter(Configuration::ACCESS_TOKEN),
+            (string)$container->getParameter(Configuration::API_VERSION)
         ));
     }
 }
