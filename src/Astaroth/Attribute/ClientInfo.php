@@ -55,6 +55,7 @@ class ClientInfo implements AttributeValidatorInterface
 
     public function setHaystack($haystack): static
     {
+        print_r($haystack);
         $this->client_info = $haystack;
         return $this;
     }

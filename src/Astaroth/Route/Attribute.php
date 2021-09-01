@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 use Astaroth\Attribute\Attachment;
+use Astaroth\Attribute\ClientInfo;
 use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\Payload;
@@ -94,6 +95,7 @@ class Attribute
                         ->validate(),
                     Attachment::class => $attribute->setHaystack($data->getAttachments())
                         ->validate(),
+                    ClientInfo::class => $attribute->setHaystack($data->getClientInfo())
                 };
 
                 if ($validate) {
