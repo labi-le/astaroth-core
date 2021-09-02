@@ -54,7 +54,7 @@ class ClientInfo implements AttributeValidatorInterface
 
     public function validate(): bool
     {
-        return $this->client_info->button_actions === $this->button_actions
+        return in_array($this->button_actions, $this->client_info->button_actions, true)
             && $this->client_info->keyboard === $this->keyboard
             && $this->client_info->inline_keyboard === $this->inline_keyboard
             && $this->client_info->carousel === $this->carousel
