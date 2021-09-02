@@ -34,7 +34,7 @@ class ClientInfo implements AttributeValidatorInterface
      * @param int $lang_id
      */
     public function __construct(
-        private array   $button_actions =
+        private array $button_actions =
         [
             self::TEXT,
             self::VKPAY,
@@ -45,20 +45,19 @@ class ClientInfo implements AttributeValidatorInterface
             self::INTENT_SUBSCRIBE,
             self::INTENT_UNSUBSCRIBE
         ],
-        private bool    $keyboard = true,
-        private bool    $inline_keyboard = true,
-        private bool    $carousel = true,
-        private int     $lang_id = 0,
+        private bool  $keyboard = true,
+        private bool  $inline_keyboard = true,
+        private bool  $carousel = true,
+        private int   $lang_id = 0,
     )
     {
     }
 
     public function validate(): bool
     {
-        if (count(array_intersect_key(
+        if ((count($this->button_actions) > 0) && count(array_intersect_key(
                     $this->button_actions,
-                    $this->client_info->button_actions
-                )
+                    $this->client_info->button_actions)
             ) > 0 === false) {
             return false;
         }
