@@ -45,20 +45,38 @@ class ClientInfo implements AttributeValidatorInterface
             self::INTENT_SUBSCRIBE,
             self::INTENT_UNSUBSCRIBE
         ],
-        private ?bool $keyboard = null,
-        private ?bool $inline_keyboard = null,
-        private ?bool $carousel = null,
-        private int   $lang_id = 0)
+        private bool $keyboard = true,
+        private bool $inline_keyboard = true,
+        private bool $carousel = true,
+        private int  $lang_id = 0)
     {
     }
 
     public function validate(): bool
     {
-        return in_array($this->button_actions, $this->client_info->button_actions, true)
-            && $this->client_info->keyboard === $this->keyboard
-            && $this->client_info->inline_keyboard === $this->inline_keyboard
-            && $this->client_info->carousel === $this->carousel
-            && $this->client_info->lang_id === $this->lang_id;
+        if (count(array_intersect_key(
+                    $this->button_actions,
+                    $this->client_info->button_actions
+                )
+            ) > 0 === false) {
+            return false;
+        }
+
+        if (($this->client_info->keyboard === $this->keyboard) === false) {
+            return false;
+        }
+        if (($this->client_info->inline_keyboard === $this->inline_keyboard) === false) {
+            return false;
+        }
+        if (($this->client_info->carousel === $this->carousel) === false) {
+            return false;
+        }
+
+        if (($this->client_info->lang_id === $this->lang_id) === false) {
+            return false;
+        }
+
+        return true;
     }
 
     public function setHaystack($haystack): static
