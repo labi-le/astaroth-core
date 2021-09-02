@@ -120,8 +120,14 @@ class Attribute
             foreach ($method["attribute"] as $attribute) {
                 $validate = $event($attribute);
 
-                if ($validate && $this->execute($instance, $method["name"], $data) === false) {
-                    break 2;
+                if ($validate) {
+                    $method_return = $this->execute($instance, $method["name"], $data);
+
+                    if ($method_return === false){
+                        break 2;
+                    }
+
+                    (new ReturnResultHandler($method_return))->process();
                 }
             }
         }
@@ -134,9 +140,9 @@ class Attribute
      * @param object $instance
      * @param string $method
      * @param mixed ...$args
-     * @return bool
+     * @return mixed
      */
-    private function execute(object $instance, string $method, ...$args): bool
+    private function execute(object $instance, string $method, ...$args): mixed
     {
         return $instance->$method(...$args);
     }
