@@ -83,26 +83,14 @@ class Attribute
      */
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
-        foreach ($methods as $method) {
-            foreach ($method["attribute"] as $attribute) {
-                /**
-                 * @var AttributeValidatorInterface $attribute
-                 */
-                $validate = match ($attribute::class) {
-                    Message::class => $attribute->setHaystack($data->getText())
-                        ->validate(),
-                    Payload::class => $attribute->setHaystack($data->getPayload())
-                        ->validate(),
-                    Attachment::class => $attribute->setHaystack($data->getAttachments())
-                        ->validate(),
-                    ClientInfo::class => $attribute->setHaystack($data->getClientInfo())
-                };
-
-                if ($validate) {
-                    $this->execute($instance, $method["name"], $data);
-                }
-            }
-        }
+        $this->event($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
+            return match ($attribute::class) {
+                Message::class => $attribute->setHaystack($data->getText())->validate(),
+                Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
+                Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
+                ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate()
+            };
+        }, $data);
     }
 
     /**
@@ -114,18 +102,29 @@ class Attribute
      */
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
     {
+        $this->event($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
+            return match ($attribute::class) {
+                Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
+            };
+        }, $data);
+    }
+
+    private function event(
+        object   $instance,
+        array    $methods,
+        callable $event,
+                 $data
+    ): void
+    {
         foreach ($methods as $method) {
             foreach ($method["attribute"] as $attribute) {
                 /**
                  * @var AttributeValidatorInterface $attribute
                  */
-                $validate = match ($attribute::class) {
-                    Payload::class => $attribute->setHaystack($data->getPayload())
-                        ->validate(),
-                };
+                $validate = $event($attribute);
 
-                if ($validate) {
-                    $this->execute($instance, $method["name"], $data);
+                if ($validate && $this->execute($instance, $method["name"], $data) === false) {
+                    break 2;
                 }
             }
         }
@@ -138,9 +137,10 @@ class Attribute
      * @param object $instance
      * @param string $method
      * @param mixed ...$args
+     * @return bool
      */
-    private function execute(object $instance, string $method, ...$args): void
+    private function execute(object $instance, string $method, ...$args): bool
     {
-        $instance->$method(...$args);
+        return $instance->$method(...$args);
     }
 }
