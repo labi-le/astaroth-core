@@ -118,9 +118,6 @@ class Attribute
     {
         foreach ($methods as $method) {
             foreach ($method["attribute"] as $attribute) {
-                /**
-                 * @var AttributeValidatorInterface $attribute
-                 */
                 $validate = $event($attribute);
 
                 if ($validate && $this->execute($instance, $method["name"], $data) === false) {

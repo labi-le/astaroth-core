@@ -28,13 +28,13 @@ class ClientInfo implements AttributeValidatorInterface
     /**
      * By default, a regular keyboard is installed that supports everything
      * @param array|string[] $button_actions
-     * @param bool|null $keyboard
-     * @param bool|null $inline_keyboard
-     * @param bool|null $carousel
+     * @param bool $keyboard
+     * @param bool $inline_keyboard
+     * @param bool $carousel
      * @param int $lang_id
      */
     public function __construct(
-        private array $button_actions =
+        private array   $button_actions =
         [
             self::TEXT,
             self::VKPAY,
@@ -45,10 +45,11 @@ class ClientInfo implements AttributeValidatorInterface
             self::INTENT_SUBSCRIBE,
             self::INTENT_UNSUBSCRIBE
         ],
-        private bool $keyboard = true,
-        private bool $inline_keyboard = true,
-        private bool $carousel = true,
-        private int  $lang_id = 0)
+        private bool    $keyboard = true,
+        private bool    $inline_keyboard = true,
+        private bool    $carousel = true,
+        private int     $lang_id = 0,
+    )
     {
     }
 
