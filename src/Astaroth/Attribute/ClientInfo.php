@@ -25,6 +25,14 @@ class ClientInfo implements AttributeValidatorInterface
 
     private object $client_info;
 
+    /**
+     * By default, a regular keyboard is installed that supports everything
+     * @param array|string[] $button_actions
+     * @param bool|null $keyboard
+     * @param bool|null $inline_keyboard
+     * @param bool|null $carousel
+     * @param int $lang_id
+     */
     public function __construct(
         private array $button_actions =
         [
