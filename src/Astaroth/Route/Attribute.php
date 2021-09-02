@@ -124,7 +124,7 @@ class Attribute
                     $method_return = $this->execute($instance, $method["name"], $data);
 
                     if ($method_return === false){
-                        break 2;
+                        die;
                     }
 
                     (new ReturnResultHandler($method_return))->process();
