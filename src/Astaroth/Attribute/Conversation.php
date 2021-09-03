@@ -26,7 +26,7 @@ class Conversation implements AttributeValidatorInterface
      */
     public array $member_id = [];
 
-    private MessageNew|MessageEvent|null $haystack;
+    private MessageNew|MessageEvent $haystack;
 
     /**
      * Conversation constructor.
@@ -72,7 +72,6 @@ class Conversation implements AttributeValidatorInterface
         $this->haystack = match ($haystack->getType()) {
             Events::MESSAGE_NEW => $haystack->messageNew(),
             Events::MESSAGE_EVENT => $haystack->messageEvent(),
-            default => null
         };
         return $this;
     }
