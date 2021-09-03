@@ -19,7 +19,7 @@ class MessageTest extends TestCase
 
     public function testValidate()
     {
-        $hs = (new MessageRegex("aboba", Message::STRICT))->setHaystack("aboba");
+        $hs = (new Message("aboba", Message::STRICT))->setHaystack("aboba");
         assertTrue($hs->validate());
     }
 }
