@@ -7,7 +7,7 @@ namespace Astaroth\Route;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;
 use Astaroth\Attribute\Conversation;
-use Astaroth\Attribute\Message;
+use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
@@ -86,7 +86,8 @@ class Attribute
     {
         $this->event($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
             return match ($attribute::class) {
-                Message::class => $attribute->setHaystack($data->getText())->validate(),
+                MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
+                MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
                 Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
                 ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate()
