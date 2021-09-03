@@ -39,7 +39,7 @@ class Route
      */
     public function setClassMap(string $class_map): static
     {
-        $this->class_map = ClassFinder::getClassesInNamespace($class_map);
+        $this->class_map = ClassFinder::getClassesInNamespace($class_map, ClassFinder::RECURSIVE_MODE);
         return $this;
     }
 
