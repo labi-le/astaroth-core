@@ -21,7 +21,11 @@ class MessageRegex implements AttributeValidatorInterface
 
     public function validate(): bool
     {
-        return (bool)preg_match($this->pattern, $this->haystack);
+        try {
+            return (bool)preg_match($this->pattern, $this->haystack);
+        } catch (\Exception) {
+            return false;
+        }
     }
 
     public function setHaystack($haystack): static
