@@ -11,6 +11,7 @@ use Astaroth\Attribute\Message;
 use Astaroth\Attribute\Payload;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 
@@ -44,7 +45,7 @@ class Attribute
                  * If the attribute is a Conversation object and the validation data is negative
                  * @see Conversation
                  */
-                if (($attribute instanceof Conversation) && $attribute->setHaystack($data)->validate() === false) {
+                if (($attribute instanceof Conversation) && in_array($data->getType(), [Events::MESSAGE_NEW, Events::MESSAGE_EVENT], true) && $attribute->setHaystack($data)->validate() === false) {
                     break;
                 }
 
@@ -130,7 +131,7 @@ class Attribute
                 if ($validate) {
                     $method_return = $this->execute($instance, $method["name"], $data);
 
-                    if ($method_return === false){
+                    if ($method_return === false) {
                         die;
                     }
 
