@@ -116,13 +116,13 @@ class Attribute
      * @param object $instance
      * @param array $methods
      * @param callable $event
-     * @param $data
+     * @param object ...$data
      */
     private function event(
         object   $instance,
         array    $methods,
         callable $event,
-                 $data
+        object ...$data
     ): void
     {
         foreach ($methods as $method) {
@@ -130,7 +130,7 @@ class Attribute
                 $validate = $event($attribute);
 
                 if ($validate) {
-                    $method_return = $this->execute($instance, $method["name"], $data);
+                    $method_return = $this->execute($instance, $method["name"], ...$data);
 
                     if ($method_return === false) {
                         die;
