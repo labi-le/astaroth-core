@@ -109,6 +109,13 @@ class Attribute
         }, $data);
     }
 
+    /**
+     * General event coordinator
+     * @param object $instance
+     * @param array $methods
+     * @param callable $event
+     * @param $data
+     */
     private function event(
         object   $instance,
         array    $methods,
