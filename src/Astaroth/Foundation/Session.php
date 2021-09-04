@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Auth\Configuration;
-
 /**
  * Class Session
  * Simple database for recording states
@@ -20,14 +18,10 @@ class Session
      */
     private string $fullStoragePath;
 
-    public function __construct(int $id, private string $type)
+    public function __construct(int $id, private string $type, string $cache_path)
     {
         $storageName = $id . self::FILE_EXTENSION;
-
-        $cache_path = Application::getContainer()->getParameter(Configuration::CACHE_PATH);
-
-        $tmp_path = $cache_path ?: sys_get_temp_dir();
-        $this->fullStoragePath = $tmp_path . DIRECTORY_SEPARATOR . $storageName;
+        $this->fullStoragePath = $cache_path . DIRECTORY_SEPARATOR . $storageName;
     }
 
     /**
