@@ -171,6 +171,9 @@ class Configuration
         return $key;
     }
 
+    /**
+     * @return string[]
+     */
     public function getEntityNamespace(): array
     {
         return array_map('trim', explode(',', $this->getConfig(self::ENTITY_NAMESPACE)));
@@ -252,6 +255,16 @@ class Configuration
     public function getDatabaseUser(): ?string
     {
         $key = $this->getConfig(self::DATABASE_USER);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    public function getDatabaseName(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_NAME);
         if (empty($key)) {
             return null;
         }

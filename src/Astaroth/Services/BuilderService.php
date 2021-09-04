@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Services;
 
 use Astaroth\Auth\Configuration;
+use Astaroth\Auth\ParameterMissingException;
 use Astaroth\VkUtils\Builder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -16,12 +17,15 @@ class BuilderService implements ServiceInterface
 {
     public const SERVICE_ID = "builder";
 
-    public function __invoke(ContainerBuilder $container)
+    /**
+     * @throws ParameterMissingException
+     */
+    public function __invoke(ContainerBuilder $container, Configuration $configuration)
     {
         $container
             ->register(self::SERVICE_ID, Builder::class)
             ->setLazy(true)
-            ->addArgument($container->getParameter(Configuration::API_VERSION))
-            ->addMethodCall("setDefaultToken", [$container->getParameter(Configuration::ACCESS_TOKEN)]);
+            ->addArgument($configuration->getApiVersion())
+            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);
     }
 }

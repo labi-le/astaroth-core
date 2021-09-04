@@ -16,12 +16,12 @@ class UploaderService implements ServiceInterface
 {
     public const SERVICE_ID = "uploader";
 
-    public function __invoke(ContainerBuilder $container)
+    public function __invoke(ContainerBuilder $container, Configuration $configuration)
     {
         $container
             ->register(self::SERVICE_ID,Uploader::class)
             ->setLazy(true)
-            ->addArgument($container->getParameter(Configuration::API_VERSION))
-            ->addMethodCall("setDefaultToken", [$container->getParameter(Configuration::ACCESS_TOKEN)]);
+            ->addArgument($configuration->getApiVersion())
+            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);
     }
 }
