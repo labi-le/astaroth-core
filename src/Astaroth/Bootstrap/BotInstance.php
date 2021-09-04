@@ -9,11 +9,10 @@ use Astaroth\Auth\Configuration;
 use Astaroth\Callback\Callback;
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\Longpoll\Longpoll;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class BotInstance
 {
-    public function __construct(private ContainerBuilder $container)
+    public function __construct(private Configuration $container)
     {
     }
 
@@ -29,40 +28,32 @@ class BotInstance
     /**
      * @throws \Exception
      */
-    private function selectStartupType(ContainerBuilder $container): HandlerInterface
+    private function selectStartupType(Configuration $configuration): HandlerInterface
     {
-        return $container->getParameter(Configuration::TYPE) === Configuration::CALLBACK
-            ? $this->callback($container)
-            : $this->longpoll($container);
+        return $configuration->getType() === Configuration::CALLBACK
+            ? $this->callback($configuration)
+            : $this->longpoll($configuration);
     }
 
     /**
      * @throws \Exception
      */
-    private function callback(ContainerBuilder $container): HandlerInterface
+    private function callback(Configuration $configuration): HandlerInterface
     {
-        [$secret_key, $handle_repeated_requests, $confirmation, $is_debug] =
-            [
-                (string)$container->getParameter(Configuration::SECRET_KEY),
-                $container->getParameter(Configuration::HANDLE_REPEATED_REQUESTS) === Configuration::YES,
-                (string)$container->getParameter(Configuration::CONFIRMATION_KEY),
-                $container->getParameter(Configuration::DEBUG) === Configuration::YES,
-            ];
-
         $callback = new Callback(
-            $confirmation,
-            $secret_key ?: null,
-            $handle_repeated_requests
+            $configuration->getCallbackConfirmationKey(),
+            $configuration->getCallbackSecretKey(),
+            $configuration->isHandleRepeatedRequest()
         );
 
-        return $is_debug ? $callback->disableClearHeaders() : $callback;
+        return $configuration->isDebug() ? $callback->disableClearHeaders() : $callback;
     }
 
-    private function longpoll(ContainerBuilder $container): HandlerInterface
+    private function longpoll(Configuration $configuration): HandlerInterface
     {
         return (new LongPoll(
-            (string)$container->getParameter(Configuration::ACCESS_TOKEN),
-            (string)$container->getParameter(Configuration::API_VERSION)
+            $configuration->getAccessToken(),
+            $configuration->getApiVersion()
         ));
     }
 }

@@ -51,8 +51,6 @@ class Application
         $container = self::getContainer();
         $configuration = Configuration::set($dir, $type);
 
-        array_walk($configuration, static fn($value, $key) => $container->setParameter($key, $value));
-
         foreach (ClassFinder::getClassesInNamespace(Configuration::SERVICE_NAMESPACE) as $service) {
             /** @var ServiceInterface $service */
             $service = new $service;
@@ -62,7 +60,7 @@ class Application
         FacadePlaceholder::getInstance($container);
 
         (new Route(
-            new LazyHandler((new BotInstance($container))->bootstrap())))
+            new LazyHandler((new BotInstance($configuration))->bootstrap())))
             ->setClassMap((string)$container->getParameter(Configuration::APP_NAMESPACE))
             ->handle();
     }
