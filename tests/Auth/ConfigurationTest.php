@@ -7,13 +7,13 @@ namespace Auth;
 use Astaroth\Auth\Configuration;
 use Astaroth\Foundation\Application;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertIsArray;
+use function PHPUnit\Framework\assertIsObject;
 
 class ConfigurationTest extends TestCase
 {
 
     public function testGet()
     {
-        assertIsArray((new Configuration(dirname(__DIR__)))->get(Application::DEV));
+        assertIsObject(Configuration::set(dirname(__DIR__), Application::DEV));
     }
 }

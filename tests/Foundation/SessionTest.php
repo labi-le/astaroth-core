@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Foundation;
 
-use Astaroth\Foundation\Application;
 use Astaroth\Foundation\Session;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
@@ -19,8 +18,7 @@ class SessionTest extends TestCase
 
     protected function setUp(): void
     {
-        Application::getContainer()->setParameter("CACHE_PATH", sys_get_temp_dir());
-        $this->session = new Session(self::ID, self::TYPE);
+        $this->session = new Session(self::ID, self::TYPE, sys_get_temp_dir());
     }
 
     protected function tearDown(): void
