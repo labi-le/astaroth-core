@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
+use Astaroth\Services\UploaderService;
 use Astaroth\VkUtils\Contracts\ICanBeSaved;
 use Astaroth\VkUtils\Uploader;
 
 final class UploaderFacade
 {
-    private const SERVICE_ID = "uploader";
-
     /**
      * @param ICanBeSaved ...$instance
      * @return array
@@ -20,7 +19,7 @@ final class UploaderFacade
         /**
          * @var Uploader $facade
          */
-        $facade = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $facade = FacadePlaceholder::getInstance()->getContainer()->get(UploaderService::SERVICE_ID);
         return $facade->upload(...$instance);
     }
 
@@ -33,7 +32,7 @@ final class UploaderFacade
         /**
          * @var Uploader $instance
          */
-        $instance = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $instance = FacadePlaceholder::getInstance()->getContainer()->get(UploaderService::SERVICE_ID);
 
         return clone $instance->setDefaultToken($access_token);
     }

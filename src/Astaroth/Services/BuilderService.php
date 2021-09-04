@@ -14,10 +14,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class BuilderService implements ServiceInterface
 {
+    public const SERVICE_ID = "builder";
+
     public function __invoke(ContainerBuilder $container)
     {
         $container
-            ->register("builder", Builder::class)
+            ->register(self::SERVICE_ID, Builder::class)
             ->setLazy(true)
             ->addArgument($container->getParameter(Configuration::API_VERSION))
             ->addMethodCall("setDefaultToken", [$container->getParameter(Configuration::ACCESS_TOKEN)]);

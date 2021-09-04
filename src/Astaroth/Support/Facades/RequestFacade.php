@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
+use Astaroth\Services\ClientService;
 use Astaroth\VkUtils\Client;
 
 final class RequestFacade
 {
-    private const SERVICE_ID = "client";
-
     /**
      * @throws \Throwable
      */
@@ -19,7 +18,7 @@ final class RequestFacade
         /**
          * @var Client $instance
          */
-        $instance = FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $instance = FacadePlaceholder::getInstance()->getContainer()->get(ClientService::SERVICE_ID);
         return $instance->request($method, $parameters, $token);
     }
 }

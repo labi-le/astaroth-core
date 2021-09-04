@@ -6,6 +6,7 @@ namespace Astaroth\Support\Facades;
 
 
 use Astaroth\Foundation\Placeholder;
+use Astaroth\Services\BuilderService;
 use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
@@ -16,8 +17,6 @@ use Astaroth\VkUtils\Contracts\IMessageBuilder;
  */
 final class BuilderFacade
 {
-    private const SERVICE_ID = "builder";
-
     /**
      * We check the message for placeholders and, if necessary, add
      * @param IBuilder ...$instances
@@ -50,7 +49,7 @@ final class BuilderFacade
         $new_instance = self::messagePlaceholder(...$instance);
 
         return FacadePlaceholder::getInstance()
-            ->getContainer()->get(self::SERVICE_ID)
+            ->getContainer()->get(BuilderService::SERVICE_ID)
             ?->create(...$new_instance);
     }
 

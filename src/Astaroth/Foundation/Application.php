@@ -49,8 +49,7 @@ class Application
     public function run(string $dir = null, string $type = Application::DEV): void
     {
         $container = self::getContainer();
-        $configuration = (new Configuration($dir))
-            ->get($type);
+        $configuration = Configuration::set($dir, $type);
 
         array_walk($configuration, static fn($value, $key) => $container->setParameter($key, $value));
 

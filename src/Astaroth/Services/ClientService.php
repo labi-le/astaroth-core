@@ -14,10 +14,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class ClientService implements ServiceInterface
 {
+    public const SERVICE_ID = "client";
+
     public function __invoke(ContainerBuilder $container)
     {
         $container
-            ->register("client", Client::class)
+            ->register(self::SERVICE_ID, Client::class)
             ->setLazy(true)
             ->addArgument($container->getParameter(Configuration::API_VERSION))
             ->addMethodCall("setDefaultToken", [$container->getParameter(Configuration::ACCESS_TOKEN)]);

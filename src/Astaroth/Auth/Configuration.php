@@ -13,6 +13,8 @@ use Exception;
 
 class Configuration
 {
+    private array $config = [];
+
     public const YES = "yes";
     public const NO = "no";
 
@@ -30,8 +32,13 @@ class Configuration
     public const HANDLE_REPEATED_REQUESTS = "HANDLE_REPEATED_REQUESTS";
 
     public const APP_NAMESPACE = "APP_NAMESPACE";
+    public const ENTITY_NAMESPACE = "ENTITY_NAMESPACE";
 
-    public const SERVICE_NAMESPACE = "Astaroth\Services";
+    public const DATABASE_DRIVER = "DATABASE_DRIVER";
+    public const DATABASE_NAME = "DATABASE_NAME";
+    public const DATABASE_USER = "DATABASE_USER";
+    public const DATABASE_PASSWORD = "DATABASE_PASSWORD";
+    public const DATABASE_HOST = "DATABASE_HOST";
 
     /**
      * Configuration file structure
@@ -42,8 +49,14 @@ class Configuration
             self::CACHE_PATH,
 
             self::APP_NAMESPACE,
+            self::ENTITY_NAMESPACE,
             self::ACCESS_TOKEN,
             self::TYPE,
+
+            self::DATABASE_DRIVER,
+            self::DATABASE_USER,
+            self::DATABASE_PASSWORD,
+            self::DATABASE_HOST,
 
             self::API_VERSION,
             self::CONFIRMATION_KEY,
@@ -52,19 +65,19 @@ class Configuration
             self::HANDLE_REPEATED_REQUESTS
         ];
 
-    public function __construct(private ?string $dir = null)
+    public const SERVICE_NAMESPACE = "Astaroth\Services";
+
+    private function __construct(string $dir, string $type)
     {
+        $this->setConfig(match (Application::DEV) {
+            Application::DEV => $this->parseDevEnv($dir),
+            Application::PRODUCTION => $this->parseProdEnv()
+        });
     }
 
-    /**
-     * @throws Exception
-     */
-    public function get(string $type = Application::DEV): array
+    public static function set(string $dir, string $type = Application::DEV): static
     {
-        return match ($type) {
-            Application::DEV => $this->parseDevEnv(),
-            Application::PRODUCTION => $this->parseProdEnv()
-        };
+        return new static($dir, $type);
     }
 
 
@@ -80,9 +93,9 @@ class Configuration
     /**
      * @throws Exception
      */
-    private function parseDevEnv(): array
+    private function parseDevEnv(string $dir): array
     {
-        $dotenv = Dotenv::createImmutable($this->dir);
+        $dotenv = Dotenv::createImmutable($dir);
         $dotenv->load();
 
         $this->validation($dotenv);
@@ -117,6 +130,156 @@ class Configuration
         if ((getenv(self::TYPE) === self::CALLBACK) && empty(getenv(self::CONFIRMATION_KEY))) {
             throw new ParameterMissingException("Not specified " . self::CONFIRMATION_KEY);
         }
+    }
+
+    /**
+     * @throws ParameterMissingException
+     */
+    public function getAccessToken(): string
+    {
+        $key = $this->getConfig(self::ACCESS_TOKEN);
+        if (empty($key)) {
+            return throw new ParameterMissingException("Missing parameter " . self::ACCESS_TOKEN . " from environment");
+        }
+
+        return $key;
+    }
+
+    public function getApiVersion(): string
+    {
+        return $this->getConfig(self::API_VERSION);
+    }
+
+    /**
+     * @throws ParameterMissingException
+     */
+    public function getAppNamespace(): string
+    {
+        $key = $this->getConfig(self::APP_NAMESPACE);
+        if (empty($key)) {
+            return throw new ParameterMissingException("Missing parameter " . self::APP_NAMESPACE . " from environment");
+        }
+
+        return $key;
+    }
+
+    public function getEntityNamespace(): array
+    {
+        return array_map('trim', explode(',', $this->getConfig(self::ENTITY_NAMESPACE)));
+    }
+
+    public function isHandleRepeatedRequest(): bool
+    {
+        return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->getConfig(self::DEBUG) === self::YES;
+    }
+
+    public function getType(): string
+    {
+        $key = $this->getConfig(self::TYPE);
+        if (empty($key)) {
+            return throw new ParameterMissingException("Missing parameter " . self::TYPE . " from environment\n set " . self::CALLBACK . " or " . self::LONGPOLL);
+        }
+
+        return $key;
+    }
+
+    public function getCachePath(): string
+    {
+        $path = $this->getConfig(self::CACHE_PATH);
+        if (empty($path)) {
+            return sys_get_temp_dir();
+        }
+
+        return $path;
+    }
+
+    public function getCallbackSecretKey(): ?string
+    {
+        $key = $this->getConfig(self::SECRET_KEY);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    /**
+     * @throws ParameterMissingException
+     */
+    public function getCallbackConfirmationKey(): string
+    {
+        $key = $this->getConfig(self::CONFIRMATION_KEY);
+        if (empty($key)) {
+            return throw new ParameterMissingException("Missing parameter " . self::CONFIRMATION_KEY . " from environment");
+        }
+
+        return $key;
+    }
+
+    public function getDatabaseDriver(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_DRIVER);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    public function getDatabaseHost(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_HOST);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    public function getDatabaseUser(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_USER);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    public function getDatabasePassword(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_PASSWORD);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+
+    /**
+     * @param mixed $key
+     * @return mixed
+     */
+    private function getConfig(mixed $key = null): mixed
+    {
+        if ($key === null) {
+            return $this->config;
+        }
+        return $this->config[$key] ?? null;
+    }
+
+    /**
+     * @param array $config
+     */
+    private function setConfig(array $config): void
+    {
+        $this->config = $config;
     }
 
 }
