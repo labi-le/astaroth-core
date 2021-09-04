@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
+use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Services\UploaderService;
 use Astaroth\VkUtils\Contracts\ICanBeSaved;
 use Astaroth\VkUtils\Uploader;

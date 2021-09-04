@@ -13,7 +13,7 @@ class DatabaseService implements ServiceInterface
 {
     public const SERVICE_ID = "db";
 
-    public function __invoke(ContainerBuilder $container, Configuration $configuration)
+    public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         if (
             empty($configuration->getDatabaseDriver()) ||

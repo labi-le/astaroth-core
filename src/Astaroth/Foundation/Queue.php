@@ -20,17 +20,16 @@ class Queue
     /**
      * Queue constructor.
      * We create a queue object and fill it with anonymous functions
-     * @param int $id
-     * @param string $queue_name
+     * @param Session $session
      * @param callable ...$queue
      * @example function(Queue $q){};
      */
-    public function __construct(int $id, string $queue_name, callable ...$queue)
+    public function __construct(Session $session, callable ...$queue)
     {
         $this->queue = new \SplQueue();
         array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
 
-        $this->session = new Session($id, $queue_name);
+        $this->session = $session;
 
         $this->createSession();
         $this->run();

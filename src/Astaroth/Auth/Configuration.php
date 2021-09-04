@@ -69,7 +69,7 @@ class Configuration
 
     private function __construct(string $dir, string $type)
     {
-        $this->setConfig(match (Application::DEV) {
+        $this->setConfig(match ($type) {
             Application::DEV => $this->parseDevEnv($dir),
             Application::PRODUCTION => $this->parseProdEnv()
         });

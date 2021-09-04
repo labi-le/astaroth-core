@@ -9,5 +9,5 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 interface ServiceInterface
 {
-    public function __invoke(ContainerBuilder $container, Configuration $configuration);
+    public function __invoke(ContainerBuilder $container, Configuration $configuration): void;
 }

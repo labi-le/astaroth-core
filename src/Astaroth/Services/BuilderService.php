@@ -20,7 +20,7 @@ class BuilderService implements ServiceInterface
     /**
      * @throws ParameterMissingException
      */
-    public function __invoke(ContainerBuilder $container, Configuration $configuration)
+    public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         $container
             ->register(self::SERVICE_ID, Builder::class)

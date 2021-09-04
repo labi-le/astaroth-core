@@ -9,7 +9,6 @@ use Astaroth\Bootstrap\BotInstance;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
 use Astaroth\Services\ServiceInterface;
-use Astaroth\Support\Facades\FacadePlaceholder;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -54,10 +53,10 @@ class Application
         foreach (ClassFinder::getClassesInNamespace(Configuration::SERVICE_NAMESPACE) as $service) {
             /** @var ServiceInterface $service */
             $service = new $service;
-            $service($container);
+            $service($container, $configuration);
         }
 
-        FacadePlaceholder::getInstance($container);
+        FacadePlaceholder::getInstance($container, $configuration);
 
         (new Route(
             new LazyHandler((new BotInstance($configuration))->bootstrap())))

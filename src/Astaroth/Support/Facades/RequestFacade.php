@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
+use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Services\ClientService;
 use Astaroth\VkUtils\Client;
 

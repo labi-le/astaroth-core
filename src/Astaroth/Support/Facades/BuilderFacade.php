@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
+use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Placeholder;
 use Astaroth\Services\BuilderService;
 use Astaroth\VkUtils\Builder;
@@ -63,7 +64,7 @@ final class BuilderFacade
         /**
          * @var Builder $instance
          */
-        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(self::SERVICE_ID);
+        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(BuilderService::SERVICE_ID);
         return $instance->setDefaultToken($access_token);
     }
 

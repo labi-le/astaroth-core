@@ -16,7 +16,7 @@ class ClientService implements ServiceInterface
 {
     public const SERVICE_ID = "client";
 
-    public function __invoke(ContainerBuilder $container, Configuration $configuration)
+    public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         $container
             ->register(self::SERVICE_ID, Client::class)
