@@ -49,11 +49,11 @@ class Queue
     /**
      * Change the queue to a specific
      * @param int $queue
-     * @return bool
+     * @return void
      */
-    private function changeCurrentQueue(int $queue): bool
+    private function changeCurrentQueue(int $queue): void
     {
-        return $this->session->put(static::CURRENT, $queue);
+        $this->session->put(static::CURRENT, $queue);
     }
 
     /**

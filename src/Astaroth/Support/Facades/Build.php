@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
+use Astaroth\Containers\BuilderContainer;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Placeholder;
-use Astaroth\Services\BuilderService;
 use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
 
 /**
- * Class BuilderFacade
- * @package Astaroth\Support\Facades\Message
+ * Class Build
+ * @package Astaroth\Support\Facades\Build
  */
-final class BuilderFacade
+final class Build
 {
     /**
      * We check the message for placeholders and, if necessary, add
@@ -39,18 +39,18 @@ final class BuilderFacade
     }
 
     /**
-     * BuilderFacade create instance
+     * Build create instance
      * @param IBuilder ...$instance
      * @return array
      * @throws \Throwable
      * @psalm-suppress NullableReturnStatement
      */
-    public static function create(IBuilder ...$instance): array
+    public static function new(IBuilder ...$instance): array
     {
         $new_instance = self::messagePlaceholder(...$instance);
 
         return FacadePlaceholder::getInstance()
-            ->getContainer()->get(BuilderService::SERVICE_ID)
+            ->getContainer()->get(BuilderContainer::CONTAINER_ID)
             ?->create(...$new_instance);
     }
 
@@ -64,8 +64,18 @@ final class BuilderFacade
         /**
          * @var Builder $instance
          */
-        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(BuilderService::SERVICE_ID);
+        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(BuilderContainer::CONTAINER_ID);
         return $instance->setDefaultToken($access_token);
+    }
+
+    /**
+     * @param IBuilder ...$instance
+     * @return array
+     * @throws \Throwable
+     */
+    public function __invoke(IBuilder ...$instance): array
+    {
+        return self::new(...$instance);
     }
 
 }

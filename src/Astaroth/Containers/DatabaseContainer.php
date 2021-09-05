@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Services;
+namespace Astaroth\Containers;
 
 use Astaroth\Auth\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class DatabaseService implements ServiceInterface
+class DatabaseContainer implements ContainerInterface
 {
-    public const SERVICE_ID = "db";
+    public const CONTAINER_ID = "db";
 
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
@@ -38,7 +38,7 @@ class DatabaseService implements ServiceInterface
         $config = Setup::createAnnotationMetadataConfiguration($configuration->getEntityNamespace(), $configuration->isDebug());
 
         $container
-            ->register(self::SERVICE_ID, EntityManager::class)
+            ->register(self::CONTAINER_ID, EntityManager::class)
             ->setLazy(true)
             ->addMethodCall("create", [$connection, $config]);
     }

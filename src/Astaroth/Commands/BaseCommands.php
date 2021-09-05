@@ -8,8 +8,8 @@ namespace Astaroth\Commands;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Utils;
-use Astaroth\Support\Facades\BuilderFacade;
-use Astaroth\Support\Facades\RequestFacade;
+use Astaroth\Support\Facades\Build;
+use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Builders\Message;
 use Astaroth\VkUtils\Contracts\IBuilder;
 
@@ -28,10 +28,10 @@ abstract class BaseCommands
             ->setAttachment(...$attachment);
 
         if ($access_token) {
-            return BuilderFacade::changeToken($access_token)->create($message);
+            return Build::changeToken($access_token)->create($message);
         }
 
-        return BuilderFacade::create($message);
+        return Build::new($message);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class BaseCommands
      */
     protected function sendMessageEventAnswer(MessageNew|MessageEvent $data, array $event): array
     {
-        return RequestFacade::request("messages.sendMessageEventAnswer",
+        return Request::call("messages.sendMessageEventAnswer",
             [
                 "event_id" => $data->getEventId(),
                 "user_id" => $data->getUserId(),
@@ -61,14 +61,14 @@ abstract class BaseCommands
      * @throws \Throwable
      * @see https://vk.com/dev/messages.edit
      */
-    protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null)
+    protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null): array
     {
         $params = $message->getParams();
         $params["peer_id"] = $params["peer_ids"];
         $params["conversation_message_id"] = $conversation_message_id;
         $params["message_id"] = $message_id;
 
-        return RequestFacade::request("messages.edit", $params);
+        return Request::call("messages.edit", $params);
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class BaseCommands
      */
     protected function kick(int $chat_id, int $id): array
     {
-        return RequestFacade::request("messages.removeChatUser", ["chat_id" => $chat_id, "member_id" => $id]);
+        return Request::call("messages.removeChatUser", ["chat_id" => $chat_id, "member_id" => $id]);
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class BaseCommands
      */
     protected function usersGet(int|string $user_ids, string $fields = null, string $name_case = "nom"): array
     {
-        return RequestFacade::request("users.get", ["user_ids" => $user_ids, "fields" => $fields, "name_case" => $name_case]);
+        return Request::call("users.get", ["user_ids" => $user_ids, "fields" => $fields, "name_case" => $name_case]);
     }
 
     /**
@@ -105,7 +105,7 @@ abstract class BaseCommands
      */
     protected function groupsGetById(int|string $group_id, string $fields = null): array
     {
-        return RequestFacade::request("groups.getById", ["group_ids" => $group_id, "fields" => $fields]);
+        return Request::call("groups.getById", ["group_ids" => $group_id, "fields" => $fields]);
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class BaseCommands
      */
     protected function utilsGetShortLink(string $url, bool $private = false): array
     {
-        return RequestFacade::request("utils.getShortLink", ["url" => $url, "private" => $private]);
+        return Request::call("utils.getShortLink", ["url" => $url, "private" => $private]);
     }
 
     /**

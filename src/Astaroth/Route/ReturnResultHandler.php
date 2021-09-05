@@ -13,7 +13,7 @@ class ReturnResultHandler
         $this->result = $result;
     }
 
-    public function process()
+    public function process(): void
     {
         if (is_callable($this->result)) {
             ($this->result)();

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Services;
+namespace Astaroth\Containers;
 
 use Astaroth\Auth\Configuration;
-use Astaroth\VkUtils\Client;
+use Astaroth\VkUtils\Uploader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class ClientService
+ * Class UploaderContainer
  * @package Astaroth\Services
  */
-class ClientService implements ServiceInterface
+class UploaderContainer implements ContainerInterface
 {
-    public const SERVICE_ID = "client";
+    public const SERVICE_ID = "uploader";
 
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         $container
-            ->register(self::SERVICE_ID, Client::class)
+            ->register(self::SERVICE_ID, Uploader::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
             ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);

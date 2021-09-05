@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Services;
+namespace Astaroth\Containers;
 
 use Astaroth\Auth\Configuration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-interface ServiceInterface
+interface ContainerInterface
 {
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void;
 }

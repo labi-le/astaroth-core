@@ -8,7 +8,7 @@ use Astaroth\Foundation\Queue as _Queue;
 
 class Queue
 {
-    public static function create(int $id, string $type, callable ...$queue)
+    public static function create(int $id, string $type, callable ...$queue): _Queue
     {
         return new _Queue(Session::set($id, $type), ...$queue);
     }

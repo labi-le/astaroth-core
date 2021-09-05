@@ -6,9 +6,9 @@ namespace Astaroth\Foundation;
 
 use Astaroth\Auth\Configuration;
 use Astaroth\Bootstrap\BotInstance;
+use Astaroth\Containers\ContainerInterface;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
-use Astaroth\Services\ServiceInterface;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -51,7 +51,7 @@ class Application
         $configuration = Configuration::set($dir, $type);
 
         foreach (ClassFinder::getClassesInNamespace(Configuration::SERVICE_NAMESPACE) as $service) {
-            /** @var ServiceInterface $service */
+            /** @var ContainerInterface $service */
             $service = new $service;
             $service($container, $configuration);
         }

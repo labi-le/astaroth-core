@@ -26,8 +26,8 @@ final class FacadePlaceholder
     }
 
     /**
-     * @param ContainerInterface $container
-     * @param Configuration $configuration
+     * @param ContainerInterface|null $container
+     * @param Configuration|null $configuration
      * @return FacadePlaceholder
      */
     public static function getInstance(ContainerInterface $container = null, Configuration $configuration = null): FacadePlaceholder
