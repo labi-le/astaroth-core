@@ -131,7 +131,8 @@ class Attribute
 
                 if ($validate) {
                     if (isset($method["parameters"])) {
-                        $data + $this->parameterInitialisator($method["parameters"]);
+                        /** @noinspection SlowArrayOperationsInLoopInspection */
+                        $data = array_merge($data, $this->parameterInitialisator($method["parameters"]));
                     }
 
                     $method_return = $this->execute($instance, $method["name"], ...$data);
@@ -170,7 +171,7 @@ class Attribute
     {
         $extra = [];
         foreach ($methodParams as $parameter) {
-            if (in_array($parameter["type"], [MessageNew::class, MessageEvent::class], true) === false) {
+            if (in_array($parameter["type"], [MessageNew::class, MessageEvent::class], true)) {
                 $extra[] = new $parameter["type"];
             }
         }
