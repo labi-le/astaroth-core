@@ -60,7 +60,7 @@ class Application
 
         (new Route(
             new LazyHandler((new BotInstance($configuration))->bootstrap())))
-            ->setClassMap((string)$container->getParameter(Configuration::APP_NAMESPACE))
+            ->setClassMap($configuration->getAppNamespace())
             ->handle();
     }
 }
