@@ -18,4 +18,9 @@ final class Entity
     {
         return FacadePlaceholder::getContainer()->get(DatabaseContainer::CONTAINER_ID, ContainerInterface::NULL_ON_INVALID_REFERENCE);
     }
+
+    public function __invoke()
+    {
+        return self::manage();
+    }
 }
