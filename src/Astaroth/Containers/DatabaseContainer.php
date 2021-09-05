@@ -42,8 +42,7 @@ class DatabaseContainer implements ContainerInterface
         $config = Setup::createAnnotationMetadataConfiguration($configuration->getEntityNamespace(), $configuration->isDebug());
 
         $container
-            ->register(self::CONTAINER_ID, EntityManager::class)
-            ->setLazy(true)
-            ->addMethodCall("create", [$connection, $config]);
+            ->set(self::CONTAINER_ID, EntityManager::create($connection, $config));
     }
+
 }
