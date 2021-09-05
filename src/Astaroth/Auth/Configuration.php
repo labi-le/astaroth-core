@@ -65,7 +65,7 @@ class Configuration
             self::HANDLE_REPEATED_REQUESTS
         ];
 
-    public const SERVICE_NAMESPACE = "Astaroth\Services";
+    public const CONTAINER_NAMESPACE = "Astaroth\Services";
 
     private function __construct(string $dir, string $type)
     {

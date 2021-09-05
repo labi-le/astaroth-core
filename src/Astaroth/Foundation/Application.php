@@ -50,10 +50,10 @@ class Application
         $container = self::getContainer();
         $configuration = Configuration::set($dir, $type);
 
-        foreach (ClassFinder::getClassesInNamespace(Configuration::SERVICE_NAMESPACE) as $service) {
-            /** @var ContainerInterface $service */
-            $service = new $service;
-            $service($container, $configuration);
+        foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE) as $containerObject) {
+            /** @var ContainerInterface $containerObject */
+            $containerObject = new $containerObject;
+            $containerObject($container, $configuration);
         }
 
         FacadePlaceholder::getInstance($container, $configuration);
