@@ -122,7 +122,7 @@ class Attribute
         object   $instance,
         array    $methods,
         callable $event,
-        object ...$data
+        object   ...$data
     ): void
     {
         foreach ($methods as $method) {
@@ -130,6 +130,10 @@ class Attribute
                 $validate = $event($attribute);
 
                 if ($validate) {
+                    if (isset($method["parameters"])) {
+                        $data + $this->parameterInitialisator($method["parameters"]);
+                    }
+
                     $method_return = $this->execute($instance, $method["name"], ...$data);
 
                     if ($method_return === false) {
@@ -154,5 +158,22 @@ class Attribute
     private function execute(object $instance, string $method, ...$args): mixed
     {
         return $instance->$method(...$args);
+    }
+
+
+    /**
+     * Adds the necessary parameters to the method that requires it
+     * @param array $methodParams
+     * @return object[]
+     */
+    private function parameterInitialisator(array $methodParams)
+    {
+        $extra = [];
+        foreach ($methodParams as $parameter) {
+            if (in_array($parameter["type"], [MessageNew::class, MessageEvent::class], true) === false) {
+                $extra[] = new $parameter["type"];
+            }
+        }
+        return $extra;
     }
 }
