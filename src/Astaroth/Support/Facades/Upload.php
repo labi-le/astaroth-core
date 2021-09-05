@@ -15,7 +15,7 @@ final class Upload
      */
     public function __invoke(ICanBeSaved ...$instance): array
     {
-        return $this->attachments(...$instance);
+        return self::attachments(...$instance);
     }
 
     /**
@@ -23,7 +23,7 @@ final class Upload
      * @return array
      * @throws \Exception
      */
-    private function attachments(ICanBeSaved ...$instance): array
+    public static function attachments(ICanBeSaved ...$instance): array
     {
         /**
          * @var Uploader $facade
