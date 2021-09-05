@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class UploaderContainer
- * @package Astaroth\Services
+ * @package Astaroth\Containers
  */
 class UploaderContainer implements ContainerInterface
 {

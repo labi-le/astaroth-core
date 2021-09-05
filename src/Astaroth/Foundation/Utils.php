@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Support\Facades\Build;
+use Astaroth\Support\Facades\Create;
 use Astaroth\VkUtils\Builders\Message;
 
 class Utils
@@ -135,6 +135,6 @@ class Utils
             );
         }
 
-        Build::new($message);
+        Create::new($message);
     }
 }

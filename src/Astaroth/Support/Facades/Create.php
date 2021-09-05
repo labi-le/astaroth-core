@@ -13,10 +13,10 @@ use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
 
 /**
- * Class Build
- * @package Astaroth\Support\Facades\Build
+ * Class Create
+ * @package Astaroth\Support\Facades\Create
  */
-final class Build
+final class Create
 {
     /**
      * We check the message for placeholders and, if necessary, add
@@ -39,7 +39,7 @@ final class Build
     }
 
     /**
-     * Build create instance
+     * Create instance
      * @param IBuilder ...$instance
      * @return array
      * @throws \Throwable

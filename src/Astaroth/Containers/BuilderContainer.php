@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class BuilderContainer
- * @package Astaroth\Services
+ * @package Astaroth\Containers
  */
 class BuilderContainer implements ContainerInterface
 {

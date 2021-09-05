@@ -9,6 +9,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Class ClientContainer
+ * @package Astaroth\Containers
+ */
 class DatabaseContainer implements ContainerInterface
 {
     public const CONTAINER_ID = "db";

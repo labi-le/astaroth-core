@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class ClientContainer
- * @package Astaroth\Services
+ * @package Astaroth\Containers
  */
 class ClientContainer implements ContainerInterface
 {

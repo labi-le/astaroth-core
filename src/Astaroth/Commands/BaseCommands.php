@@ -8,7 +8,7 @@ namespace Astaroth\Commands;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Utils;
-use Astaroth\Support\Facades\Build;
+use Astaroth\Support\Facades\Create;
 use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Builders\Message;
 use Astaroth\VkUtils\Contracts\IBuilder;
@@ -28,10 +28,10 @@ abstract class BaseCommands
             ->setAttachment(...$attachment);
 
         if ($access_token) {
-            return Build::changeToken($access_token)->create($message);
+            return Create::changeToken($access_token)->create($message);
         }
 
-        return Build::new($message);
+        return Create::new($message);
     }
 
     /**
