@@ -50,7 +50,7 @@ class Application
         $container = self::getContainer();
         $configuration = Configuration::set($dir, $type);
 
-        foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE) as $containerObject) {
+        foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
             /** @var ContainerInterface $containerObject */
             $containerObject = new $containerObject;
             $containerObject($container, $configuration);
