@@ -171,7 +171,7 @@ class Attribute
     {
         $extra = [];
         foreach ($methodParams as $parameter) {
-            if (in_array($parameter["type"], [MessageNew::class, MessageEvent::class], true) === false) {
+            if ((in_array($parameter["type"], [MessageNew::class, MessageEvent::class], true) === false) && class_exists($parameter["type"])) {
                 $extra[] = new $parameter["type"];
             }
         }
