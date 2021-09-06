@@ -6,10 +6,10 @@ namespace Astaroth\Support\Facades;
 
 use Astaroth\Foundation\Queue as _Queue;
 
-class Queue
+class Queue extends _Queue
 {
-    public static function create(int $id, string $type, callable ...$queue): _Queue
+    public function __construct(int $id, string $type, callable ...$queue)
     {
-        return new _Queue(Session::set($id, $type), ...$queue);
+        parent::__construct(new Session($id, $type), ...$queue);
     }
 }

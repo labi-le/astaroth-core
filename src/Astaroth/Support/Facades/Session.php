@@ -7,10 +7,10 @@ namespace Astaroth\Support\Facades;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Session as _Session;
 
-class Session
+class Session extends _Session
 {
-    public static function set(int $id, string $type): _Session
+    public function __construct(int $id, string $type)
     {
-        return new _Session($id, $type, FacadePlaceholder::getConfiguration()->getCachePath());
+        parent::__construct($id, $type, FacadePlaceholder::getConfiguration()->getCachePath());
     }
 }
