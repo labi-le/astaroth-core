@@ -5,18 +5,23 @@ declare(strict_types=1);
 namespace Astaroth\Containers;
 
 use Astaroth\Auth\Configuration;
+use Astaroth\Contracts\ContainerPlaceholderInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class ClientContainer
+ * Class ClientContainerInterface
  * @package Astaroth\Containers
  */
-class DatabaseContainer implements ContainerInterface
+class DatabaseContainerInterface implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "db";
 
+    /**
+     * @throws ORMException
+     */
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         if (

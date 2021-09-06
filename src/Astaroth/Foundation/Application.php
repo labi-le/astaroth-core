@@ -6,7 +6,7 @@ namespace Astaroth\Foundation;
 
 use Astaroth\Auth\Configuration;
 use Astaroth\Bootstrap\BotInstance;
-use Astaroth\Containers\ContainerInterface;
+use Astaroth\Contracts\ContainerPlaceholderInterface;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
 use HaydenPierce\ClassFinder\ClassFinder;
@@ -51,9 +51,8 @@ class Application
         $configuration = Configuration::set($dir, $type);
 
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
-            /** @var ContainerInterface $containerObject */
-            $containerObject = new $containerObject;
-            $containerObject($container, $configuration);
+            /** @var ContainerPlaceholderInterface $containerObject */
+            (new $containerObject)($container, $configuration);
         }
 
         FacadePlaceholder::getInstance($container, $configuration);

@@ -6,6 +6,7 @@ namespace Astaroth\Bootstrap;
 
 
 use Astaroth\Auth\Configuration;
+use Astaroth\Auth\ParameterMissingException;
 use Astaroth\Callback\Callback;
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\Longpoll\Longpoll;
@@ -49,6 +50,9 @@ class BotInstance
         return $configuration->isDebug() ? $callback->disableClearHeaders() : $callback;
     }
 
+    /**
+     * @throws ParameterMissingException
+     */
     private function longpoll(Configuration $configuration): HandlerInterface
     {
         return (new LongPoll(

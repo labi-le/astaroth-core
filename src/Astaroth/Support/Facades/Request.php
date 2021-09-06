@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
-use Astaroth\Containers\ClientContainer;
+use Astaroth\Containers\ClientContainerInterface;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\VkUtils\Client;
 
@@ -23,7 +23,7 @@ final class Request
         /**
          * @var Client $instance
          */
-        $instance = FacadePlaceholder::getInstance()->getContainer()->get(ClientContainer::CONTAINER_ID);
+        $instance = FacadePlaceholder::getInstance()->getContainer()->get(ClientContainerInterface::CONTAINER_ID);
         return $instance->request($method, $parameters, $token);
     }
 

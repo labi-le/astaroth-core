@@ -20,6 +20,9 @@ use Astaroth\VkUtils\Contracts\IBuilder;
 abstract class BaseCommands
 {
 
+    /**
+     * @throws \Throwable
+     */
     protected function message(int $peer_id, string $text = null, array $attachment = [], string $access_token = null): array
     {
         $message = (new Message())

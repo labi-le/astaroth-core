@@ -167,7 +167,7 @@ class Attribute
      * @param array $methodParams
      * @return object[]
      */
-    private function parameterInitialisator(array $methodParams)
+    private function parameterInitialisator(array $methodParams): array
     {
         $extra = [];
         foreach ($methodParams as $parameter) {

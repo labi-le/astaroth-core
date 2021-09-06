@@ -13,7 +13,7 @@ use Exception;
 
 class Configuration
 {
-    private array $config = [];
+    private array $config;
 
     public const YES = "yes";
     public const NO = "no";
@@ -67,14 +67,20 @@ class Configuration
 
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
 
+    /**
+     * @throws Exception
+     */
     private function __construct(string $dir, string $type)
     {
-        $this->setConfig(match ($type) {
+        $this->config = match ($type) {
             Application::DEV => $this->parseDevEnv($dir),
             Application::PRODUCTION => $this->parseProdEnv()
-        });
+        };
     }
 
+    /**
+     * @throws Exception
+     */
     public static function set(string $dir, string $type = Application::DEV): static
     {
         return new static($dir, $type);
@@ -189,6 +195,9 @@ class Configuration
         return $this->getConfig(self::DEBUG) === self::YES;
     }
 
+    /**
+     * @throws ParameterMissingException
+     */
     public function getType(): string
     {
         $key = $this->getConfig(self::TYPE);
@@ -294,13 +303,4 @@ class Configuration
         }
         return $this->config[$key] ?? null;
     }
-
-    /**
-     * @param array $config
-     */
-    private function setConfig(array $config): void
-    {
-        $this->config = $config;
-    }
-
 }

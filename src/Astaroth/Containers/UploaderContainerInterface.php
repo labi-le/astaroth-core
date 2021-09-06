@@ -6,16 +6,17 @@ namespace Astaroth\Containers;
 
 use Astaroth\Auth\Configuration;
 use Astaroth\Auth\ParameterMissingException;
-use Astaroth\VkUtils\Builder;
+use Astaroth\Contracts\ContainerPlaceholderInterface;
+use Astaroth\VkUtils\Uploader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class BuilderContainer
+ * Class UploaderContainerInterface
  * @package Astaroth\Containers
  */
-class BuilderContainer implements ContainerInterface
+class UploaderContainerInterface implements ContainerPlaceholderInterface
 {
-    public const CONTAINER_ID = "builder";
+    public const SERVICE_ID = "uploader";
 
     /**
      * @throws ParameterMissingException
@@ -23,7 +24,7 @@ class BuilderContainer implements ContainerInterface
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         $container
-            ->register(self::CONTAINER_ID, Builder::class)
+            ->register(self::SERVICE_ID, Uploader::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
             ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);
