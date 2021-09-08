@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Support\Facades\Session;
@@ -47,10 +49,19 @@ class State implements AttributeValidatorInterface
 
     /**
      * @inheritDoc
+     * @param MessageNew|MessageEvent|DataFetcher $haystack
+     * @return static
      */
-    public function setHaystack($haystack)
+    public function setHaystack($haystack): static
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof DataFetcher) {
+            $this->haystack = match ($haystack->getType()) {
+                Events::MESSAGE_NEW => $haystack->messageNew(),
+                Events::MESSAGE_EVENT => $haystack->messageEvent(),
+            };
+        } else {
+            $this->haystack = $haystack;
+        }
         return $this;
     }
 }
