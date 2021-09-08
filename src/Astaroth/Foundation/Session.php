@@ -43,7 +43,7 @@ class Session
      */
     public function get(string $key): mixed
     {
-        return $this->getStorageData()[$this->getType()][$key] ?? null;
+        return $this->getCurrentTypeData()[$key] ?? null;
     }
 
     /**
@@ -56,6 +56,7 @@ class Session
     {
         $storage = $this->getStorageData() ?: [];
         $storage[$this->getType()][$key] = $value;
+
         return $this->saveToFile($storage);
     }
 
@@ -78,10 +79,10 @@ class Session
      * @param bool $current_type
      * @return bool
      */
-    public function purge(bool $current_type = false): bool
+    public function purge(bool $current_type = true): bool
     {
         if ($current_type) {
-            $storage = $this->getStorageData() ?: [];
+            $storage = $this->getStorageData();
             unset($storage[$this->getType()]);
 
             return $this->saveToFile($storage);
@@ -92,12 +93,12 @@ class Session
 
     /**
      * Get data from session file
-     * @return mixed
+     * @return array
      */
-    private function getStorageData(): mixed
+    private function getStorageData(): array
     {
         $content = (string)@file_get_contents($this->fullStoragePath);
-        return @json_decode($content, true);
+        return @json_decode($content, true) ?: [];
     }
 
     /**
@@ -106,6 +107,11 @@ class Session
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getCurrentTypeData()
+    {
+        return $this->getStorageData()[$this->getType()] ?? [];
     }
 
 }
