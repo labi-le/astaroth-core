@@ -141,7 +141,7 @@ class Attribute
                 if ($validate) {
                     if (isset($method["parameters"])) {
                         /** @noinspection SlowArrayOperationsInLoopInspection */
-                        $data = array_merge($data, $this->parameterInitialisator($method["parameters"]));
+                        $data = array_merge($data, $this->parameterInitializer($method["parameters"]));
                     }
 
                     $method_return = $this->execute($instance, $method["name"], ...$data);
@@ -176,7 +176,7 @@ class Attribute
      * @param array $methodParams
      * @return object[]
      */
-    private function parameterInitialisator(array $methodParams): array
+    private function parameterInitializer(array $methodParams): array
     {
         $extra = [];
         foreach ($methodParams as $parameter) {
