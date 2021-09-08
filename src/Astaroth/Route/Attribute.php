@@ -10,6 +10,7 @@ use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
+use Astaroth\Attribute\State;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
@@ -43,10 +44,16 @@ class Attribute
             foreach ($class["attribute"] as $attribute) {
 
                 /**
-                 * If the attribute is a Conversation object and the validation data is negative
+                 * If the attribute is a Conversation or State object and the validation data is negative
                  * @see Conversation
+                 * @see State
                  */
-                if (($attribute instanceof Conversation) && in_array($data->getType(), [Events::MESSAGE_NEW, Events::MESSAGE_EVENT], true) && $attribute->setHaystack($data)->validate() === false) {
+                if (
+                    ($attribute instanceof Conversation || $attribute instanceof State)
+                    &&
+                    in_array($data->getType(), [Events::MESSAGE_NEW, Events::MESSAGE_EVENT], true)
+                    && $attribute->setHaystack($data)->validate() === false
+                ) {
                     break;
                 }
 
@@ -90,7 +97,8 @@ class Attribute
                 Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
                 Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
-                ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate()
+                ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate(),
+                State::class => $attribute->setHaystack($data)->validate(),
             };
         }, $data);
     }
@@ -107,6 +115,7 @@ class Attribute
         $this->event($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
             return match ($attribute::class) {
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
+                State::class => $attribute->setHaystack($data)->validate(),
             };
         }, $data);
     }
