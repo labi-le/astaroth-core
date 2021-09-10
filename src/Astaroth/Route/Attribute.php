@@ -151,6 +151,8 @@ class Attribute
                     }
 
                     (new ReturnResultHandler($method_return))->process();
+
+                    break;
                 }
             }
         }
