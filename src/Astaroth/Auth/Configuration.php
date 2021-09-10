@@ -70,7 +70,7 @@ class Configuration
     /**
      * @throws Exception
      */
-    private function __construct(string $dir, string $type)
+    private function __construct(?string $dir, string $type)
     {
         $this->config = match ($type) {
             Application::DEV => $this->parseDevEnv($dir),
@@ -81,7 +81,7 @@ class Configuration
     /**
      * @throws Exception
      */
-    public static function set(string $dir, string $type = Application::DEV): static
+    public static function set(?string $dir, string $type = Application::DEV): static
     {
         return new static($dir, $type);
     }
