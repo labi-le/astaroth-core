@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute\Refactor;
 
-use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Route\DataTransferObject\MethodInfo;
@@ -106,30 +105,7 @@ class Execute
      */
     public function addExtraParameters(object $instance): static
     {
-        if ($instance instanceof DataFetcher) {
-            $this->checkOnEvents($instance);
-        } else {
-            $this->extraParameters[] = $instance;
-        }
-
+        $this->extraParameters[] = $instance;
         return $this;
-    }
-
-    /**
-     * If an object of the DataFetcher type comes to the parameters, then we select events from it and add to the parameters
-     * @param DataFetcher $instance
-     */
-    private function checkOnEvents(DataFetcher $instance): void
-    {
-        if (
-            in_array($instance->getType(), self::AVAILABLE_EVENTS, true)
-        ) {
-            $this->addExtraParameters(
-                match ($instance->getType()) {
-                    MessageNew::class => $instance->messageNew(),
-                    MessageEvent::class => $instance->messageEvent(),
-                }
-            );
-        }
     }
 }
