@@ -125,7 +125,7 @@ class Queue
      */
     public function leave(): void
     {
-        $this->session->purge(true);
+        $this->session->purge();
     }
 
     /**

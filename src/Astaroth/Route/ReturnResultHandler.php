@@ -24,7 +24,7 @@ class ReturnResultHandler
         }
     }
 
-    private function runCallable(callable $callable)
+    private function runCallable(callable $callable): void
     {
         $callable();
     }

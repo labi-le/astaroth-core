@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute\Refactor;
+namespace Astaroth\Route\Attribute;
 
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;

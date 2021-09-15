@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 
-use Astaroth\Attribute\Refactor\AttributeHandler;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Handler\LazyHandler;
+use Astaroth\Route\Attribute\AttributeHandler;
 use HaydenPierce\ClassFinder\ClassFinder;
 
 /**

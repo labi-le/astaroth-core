@@ -19,7 +19,7 @@ class ReflectionParser
     {
     }
 
-    public static function setClassMap(array $class_map)
+    public static function setClassMap(array $class_map): ReflectionParser
     {
         return new static($class_map);
     }

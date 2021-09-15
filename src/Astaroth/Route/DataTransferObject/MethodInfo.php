@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\DataTransferObject;
 
-use Astaroth\Contracts\AttributeValidatorInterface;
-
 final class MethodInfo
 {
     /**
@@ -31,7 +29,7 @@ final class MethodInfo
     }
 
     /**
-     * @return AttributeValidatorInterface|object[]
+     * @return object[]
      */
     public function getAttribute(): array
     {

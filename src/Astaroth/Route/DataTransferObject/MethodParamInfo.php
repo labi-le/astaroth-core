@@ -29,12 +29,4 @@ final class MethodParamInfo
     {
         return $this->type;
     }
-
-    /**
-     * @return bool
-     */
-    public function isObjectCreated(): bool
-    {
-        return $this->isObjectCreated;
-    }
 }
