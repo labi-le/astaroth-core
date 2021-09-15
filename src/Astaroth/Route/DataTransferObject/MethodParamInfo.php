@@ -10,7 +10,6 @@ final class MethodParamInfo
     (
         private string $name,
         private string $type,
-
     )
     {
     }
@@ -29,5 +28,13 @@ final class MethodParamInfo
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isObjectCreated(): bool
+    {
+        return $this->isObjectCreated;
     }
 }

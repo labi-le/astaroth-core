@@ -20,7 +20,7 @@ class Execute
         ];
 
     /** @var object[] */
-    private array $extraParameters;
+    private array $extraParameters = [];
 
 
     /**
@@ -81,7 +81,11 @@ class Execute
     private function parameterInitializer(array $methodParams): void
     {
         foreach ($methodParams as $parameter) {
-            if (class_exists($parameter->getType()) && in_array($parameter, $this->getExtraParameters(), true) === false) {
+            if (
+                in_array($parameter->getType(), self::AVAILABLE_EVENTS, true) === false
+                && class_exists($parameter->getType())
+                && in_array($parameter, $this->getExtraParameters(), true) === false
+            ) {
                 $this->addExtraParameters(new ($parameter->getType()));
             }
         }
