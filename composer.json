@@ -24,7 +24,9 @@
     "haydenpierce/class-finder": "^0.4.3",
     "labile/vk-longpoll": "^2",
     "ext-curl": "*",
-    "doctrine/orm": ">=2.9.5"
+    "doctrine/orm": ">=2.9.5",
+    "symfony/cache": ">=v3.4.47",
+    "monolog/monolog": "^2.3"
   },
 
   "autoload": {
