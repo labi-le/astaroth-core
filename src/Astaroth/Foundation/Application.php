@@ -52,9 +52,10 @@ class Application
 
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
             /**
-             * @var ContainerPlaceholderInterface $containerObject
+             * @var ContainerPlaceholderInterface $instanceContainer
              */
-            ($containerObject)($container, $configuration);
+            $instanceContainer = new $containerObject;
+            $instanceContainer($container, $configuration);
         }
 
         FacadePlaceholder::getInstance($container, $configuration);
