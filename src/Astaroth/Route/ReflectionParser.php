@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 
-use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Route\DataTransferObject\ClassInfo;
+use Astaroth\Route\DataTransferObject\MethodInfo;
+use Astaroth\Route\DataTransferObject\MethodParamInfo;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
@@ -13,36 +15,40 @@ use ReflectionParameter;
 
 class ReflectionParser
 {
-    public function __construct(private array $class_map)
+    private function __construct(private array $class_map)
     {
     }
 
+    public static function setClassMap(array $class_map)
+    {
+        return new static($class_map);
+    }
+
     /**
-     * Parse the class that contains the attributes, etc...
-     * @param DataFetcher $data
+     * @return ClassInfo[]
      * @throws \ReflectionException
      */
-    public function handle(DataFetcher $data): void
+    public function parse(): array
     {
-        new Attribute($this->parseClass(), $data);
+        return $this->parseClass();
     }
 
 
     /**
      * Parse method params from class
      * @param ReflectionParameter ...$parameters
-     * @return array
+     * @return MethodParamInfo[]
      * @psalm-suppress UndefinedMethod
      */
     private function parseMethodParameters(ReflectionParameter ...$parameters): array
     {
         $method_params = [];
         foreach ($parameters as $parameter) {
-            $method_params[] =
-                [
-                    "name" => $parameter->getName(),
-                    "type" => $parameter->getType()?->getName(),
-                ];
+            $method_params[] = new MethodParamInfo
+            (
+                $parameter->getName(),
+                $parameter->getType()?->getName()
+            );
         }
         return $method_params;
     }
@@ -50,7 +56,7 @@ class ReflectionParser
     /**
      * Parse attributes from class\methods
      * @param ReflectionAttribute ...$parameters
-     * @return array
+     * @return object[]
      */
     private function parseAttribute(ReflectionAttribute ...$parameters): array
     {
@@ -65,19 +71,20 @@ class ReflectionParser
     /**
      * Parse method from class
      * @param ReflectionMethod ...$class
-     * @return array
+     * @return MethodInfo[]
      */
     private function parseMethod(ReflectionMethod ...$class): array
     {
         $parameters = [];
         foreach ($class as $method) {
-            if ($method->getAttributes() !== []) {
-                $parameters[] =
-                    [
-                        "name" => $method->getName(),
-                        "parameters" => $this->parseMethodParameters(...$method->getParameters()),
-                        "attribute" => $this->parseAttribute(...$method->getAttributes()),
-                    ];
+            $attributes = $method->getAttributes();
+            if ($attributes !== []) {
+                $parameters[] = new MethodInfo
+                (
+                    $method->getName(),
+                    $this->parseAttribute(...$attributes),
+                    $this->parseMethodParameters(...$method->getParameters())
+                );
             }
         }
 
@@ -86,7 +93,7 @@ class ReflectionParser
 
     /**
      * Parse class method, attribute
-     * @return array
+     * @return ClassInfo[]
      * @throws \ReflectionException
      */
     private function parseClass(): array
@@ -96,18 +103,17 @@ class ReflectionParser
             $reflectionClass = new ReflectionClass($_map);
 
             if ($reflectionClass->getAttributes() !== []) {
-                $name = $reflectionClass->getName();
                 $attribute = $this->parseAttribute(...$reflectionClass->getAttributes());
                 $methods = $this->parseMethod(...$reflectionClass->getMethods());
 
                 if ($attribute !== [] && $methods !== []) {
-                    $map[] =
-                        [
-                            "name" => $name,
-                            "attribute" => $attribute,
-                            "methods" => $methods,
-                            "instance" => $reflectionClass->newInstance()
-                        ];
+                    $map[] = new ClassInfo
+                    (
+                        $reflectionClass->getName(),
+                        $attribute,
+                        $methods,
+                        $reflectionClass->newInstance()
+                    );
                 }
             }
         }

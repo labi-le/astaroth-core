@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 
+use Astaroth\Attribute\Refactor\AttributeHandler;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Handler\LazyHandler;
 use HaydenPierce\ClassFinder\ClassFinder;
@@ -50,7 +51,10 @@ class Route
     public function handle(): void
     {
         $this->handler->listen(function (DataFetcher $data) {
-            (new ReflectionParser($this->getClassMap()))->handle($data);
+            new AttributeHandler(
+                ReflectionParser::setClassMap($this->getClassMap())->parse(),
+                $data
+            );
         });
     }
 }

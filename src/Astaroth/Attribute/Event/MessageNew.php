@@ -9,7 +9,7 @@ use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 /**
- * Attribute defining new message
+ * AttributeOLD defining new message
  */
 class MessageNew implements AttributeValidatorInterface
 {

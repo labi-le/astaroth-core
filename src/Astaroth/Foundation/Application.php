@@ -51,8 +51,11 @@ class Application
         $configuration = Configuration::set($dir, $type);
 
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
-            /** @var ContainerPlaceholderInterface $containerObject */
-            (new $containerObject)($container, $configuration);
+            /**
+             * @var ContainerPlaceholderInterface $instanceContainer
+             */
+            $instanceContainer = new ContainerBuilder();
+            ($instanceContainer)($container, $configuration);
         }
 
         FacadePlaceholder::getInstance($container, $configuration);

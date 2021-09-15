@@ -16,32 +16,32 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Route\DataTransferObject\ClassInfo;
 
 
 /**
- * Class Attribute
+ * Class AttributeOLD
  * @package Astaroth\Route
  */
-class Attribute
+class AttributeOLD
 {
     /**
-     * @param array $executable An array of classes, methods and attributes
+     * @param ClassInfo[] $executable An array of classes, methods and attributes
      * @param DataFetcher $data
      */
-    public function __construct(array $executable, DataFetcher $data)
+    public function __construct(array $executable, private DataFetcher $data)
     {
-        $this->process($executable, $data);
+        $this->process($executable);
     }
 
     /**
-     * Attribute check and routing
-     * @param array $classes
-     * @param DataFetcher $data
+     * AttributeOLD check and routing
+     * @param ClassInfo[] $classes
      */
-    private function process(array $classes, DataFetcher $data): void
+    private function process(array $classes): void
     {
         foreach ($classes as $class) {
-            foreach ($class["attribute"] as $attribute) {
+            foreach ($class->getAttribute() as $attribute) {
 
                 /**
                  * If the attribute is a Conversation or State object and the validation data is negative
@@ -51,8 +51,8 @@ class Attribute
                 if (
                     ($attribute instanceof Conversation || $attribute instanceof State)
                     &&
-                    in_array($data->getType(), [Events::MESSAGE_NEW, Events::MESSAGE_EVENT], true)
-                    && $attribute->setHaystack($data)->validate() === false
+                    in_array($this->data->getType(), [Events::MESSAGE_NEW, Events::MESSAGE_EVENT], true)
+                    && $attribute->setHaystack($this->data)->validate() === false
                 ) {
                     break;
                 }
@@ -63,9 +63,9 @@ class Attribute
                  */
                 if (
                     $attribute instanceof \Astaroth\Attribute\Event\MessageNew &&
-                    $attribute->setHaystack($data->getType())->validate()
+                    $attribute->setHaystack($this->data->getType())->validate()
                 ) {
-                    $this->messageNew($class["instance"], $class["methods"], $data->messageNew());
+                    $this->messageNew($class->getClassInstance(), $class->getMethods());
                 }
 
                 /**
@@ -74,9 +74,9 @@ class Attribute
                  */
                 if (
                     $attribute instanceof \Astaroth\Attribute\Event\MessageEvent &&
-                    $attribute->setHaystack($data->getType())->validate()
+                    $attribute->setHaystack($this->data->getType())->validate()
                 ) {
-                    $this->messageEvent($class["instance"], $class["methods"], $data->messageEvent());
+                    $this->messageEvent($class->getClassInstance(), $class->getMethods());
                 }
 
             }
@@ -87,37 +87,35 @@ class Attribute
      * Checks attributes for an event message_new
      * @param object $instance
      * @param array $methods
-     * @param MessageNew $data
-     * @see \Astaroth\Attribute\Event\MessageNeww
+     * @see \Astaroth\Attribute\Event\MessageNew
      */
-    private function messageNew(object $instance, array $methods, MessageNew $data): void
+    private function messageNew(object $instance, array $methods): void
     {
-        $this->event($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
+        $this->event($instance, $methods, function (AttributeValidatorInterface $attribute) {
             return match ($attribute::class) {
-                Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
-                Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
-                Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
-                ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate(),
-                State::class => $attribute->setHaystack($data)->validate(),
+                Message::class, MessageRegex::class => $attribute->setHaystack($this->data->messageNew()->getText())->validate(),
+                Payload::class => $attribute->setHaystack($this->data->messageNew()->getPayload())->validate(),
+                Attachment::class => $attribute->setHaystack($this->data->messageNew()->getAttachments())->validate(),
+                ClientInfo::class => $attribute->setHaystack($this->data->messageNew()->getClientInfo())->validate(),
+                State::class => $attribute->setHaystack($this->data->messageNew())->validate(),
             };
-        }, $data);
+        }, $this->data->messageNew());
     }
 
     /**
      * Checks attributes for an event message_event
      * @param object $instance
      * @param array $methods
-     * @param MessageEvent $data
      * @see \Astaroth\Attribute\Event\MessageEvent
      */
-    private function messageEvent(object $instance, array $methods, MessageEvent $data): void
+    private function messageEvent(object $instance, array $methods): void
     {
-        $this->event($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
+        $this->event($instance, $methods, function (AttributeValidatorInterface $attribute) {
             return match ($attribute::class) {
-                Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
-                State::class => $attribute->setHaystack($data)->validate(),
+                Payload::class => $attribute->setHaystack($this->data->messageEvent()->getPayload())->validate(),
+                State::class => $attribute->setHaystack($this->data->messageEvent())->validate(),
             };
-        }, $data);
+        }, $this->data->messageEvent());
     }
 
     /**

@@ -6,18 +6,31 @@ namespace Astaroth\Route;
 
 class ReturnResultHandler
 {
-    private mixed $result;
-
     public function __construct(mixed $result = null)
     {
-        $this->result = $result;
+        $this->process($result);
     }
 
-    public function process(): void
+    public function process(mixed $result): void
     {
-        if (is_callable($this->result)) {
-            ($this->result)();
+        /** If the user-method returned callable, then execute it */
+        if (is_callable($result)) {
+            $this->runCallable($result);
         }
-        //
+
+        /** If the user-method returned false, then stop processing commands */
+        if ($result === false) {
+            $this->terminate();
+        }
+    }
+
+    private function runCallable(callable $callable)
+    {
+        $callable();
+    }
+
+    private function terminate(): void
+    {
+        die;
     }
 }
