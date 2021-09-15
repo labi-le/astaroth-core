@@ -13,8 +13,13 @@ use Attribute;
  */
 class Before
 {
-    public function __construct(InvokableInterface $invocable, array $args = [])
+    public function __construct(string $invocable, array $args = [])
     {
-        $invocable($args);
+        /**
+         * @var InvokableInterface $object
+         * @psalm-suppress UndefinedClass
+         */
+        $object = new $invocable;
+        $object($args);
     }
 }
