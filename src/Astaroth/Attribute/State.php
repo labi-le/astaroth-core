@@ -20,7 +20,7 @@ class State implements AttributeValidatorInterface
     public const PEER = 3;
 
     //reserved
-    private const STATE = "_state";
+    public const RESERVED_NAME = "__state";
 
     private MessageNew|MessageEvent $haystack;
 
@@ -44,7 +44,7 @@ class State implements AttributeValidatorInterface
             self::PEER => $this->haystack->getPeerId(),
         };
 
-        return (bool)(new Session($member_id, self::STATE))->get($this->state_name);
+        return (bool)(new Session($member_id, self::RESERVED_NAME))->get($this->state_name);
     }
 
     /**
