@@ -8,6 +8,7 @@ use Astaroth\Attribute\Aspect\Before;
 use Astaroth\Contracts\InvokableInterface;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertIsObject;
+use function PHPUnit\Framework\assertIsString;
 
 class BeforeTest extends TestCase
 {
@@ -17,7 +18,7 @@ class BeforeTest extends TestCase
         $class = new class implements InvokableInterface {
             public function __invoke(array $args = []): void
             {
-                echo "before";
+                assertIsString("before");
             }
         };
         assertIsObject(new Before($class::class));

@@ -8,6 +8,7 @@ use Astaroth\Attribute\Aspect\After;
 use Astaroth\Contracts\InvokableInterface;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertIsObject;
+use function PHPUnit\Framework\assertIsString;
 
 class AfterTest extends TestCase
 {
@@ -17,7 +18,7 @@ class AfterTest extends TestCase
         $class = new class implements InvokableInterface {
             public function __invoke(array $args = []): void
             {
-                echo "after";
+                assertIsString("after");
             }
         };
         assertIsObject(new After($class::class));
