@@ -69,7 +69,7 @@ class Queue
      * Get queue length
      * @return int|null
      */
-    private function getLengthQueue(): ?int
+    public function getLengthQueue(): ?int
     {
         return $this->session->get(static::COUNT);
     }
