@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute\Aspect;
 
-use Astaroth\Contracts\InvokableInterface;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
@@ -13,8 +12,13 @@ use Attribute;
  */
 class After
 {
-    public function __construct(InvokableInterface $invocable, array $args = [])
+    /**
+     * Class being executed must be invokable
+     * @param string $invokable
+     * @param array $args
+     */
+    public function __construct(string $invokable, array $args = [])
     {
-        register_shutdown_function(static fn() => $invocable($args));
+        register_shutdown_function(static fn() => $invokable($args));
     }
 }
