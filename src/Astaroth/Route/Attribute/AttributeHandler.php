@@ -11,6 +11,7 @@ use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Attribute\State;
+use Astaroth\Contracts\InvokableInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -24,8 +25,8 @@ class AttributeHandler
      * @param DataFetcher $data
      */
     public function __construct(
-        array         $instances,
-        DataFetcher   $data,
+        array       $instances,
+        DataFetcher $data,
     )
     {
         $this->handle($instances, $data);
@@ -89,13 +90,20 @@ class AttributeHandler
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
         $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
-            return match ($attribute::class) {
+            $isVerified = match ($attribute::class) {
                 Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
                 Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
                 ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate(),
                 State::class => $attribute->setHaystack($data)->validate(),
+                default => false
             };
+
+            if ($isVerified && $attribute instanceof InvokableInterface) {
+                $attribute();
+            }
+
+            return $isVerified;
         });
 
         $execute->addExtraParameters($data)->launch();
@@ -111,10 +119,18 @@ class AttributeHandler
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
     {
         $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
-            return match ($attribute::class) {
+            $isVerified = match ($attribute::class) {
                 Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
                 State::class => $attribute->setHaystack($data->messageEvent())->validate(),
+                default => false
             };
+
+
+            if ($isVerified && $attribute instanceof InvokableInterface) {
+                $attribute();
+            }
+
+            return $isVerified;
         });
 
         $execute->addExtraParameters($data)->launch();
