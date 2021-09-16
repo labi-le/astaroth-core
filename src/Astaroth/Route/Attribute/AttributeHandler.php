@@ -11,7 +11,6 @@ use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Attribute\State;
-use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -89,7 +88,7 @@ class AttributeHandler
      */
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
-        $execute = new Execute($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
+        $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
             return match ($attribute::class) {
                 Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
@@ -111,7 +110,7 @@ class AttributeHandler
      */
     private function messageEvent(object $instance, array $methods, MessageEvent $data): void
     {
-        $execute = new Execute($instance, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
+        $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
             return match ($attribute::class) {
                 Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
                 State::class => $attribute->setHaystack($data->messageEvent())->validate(),
