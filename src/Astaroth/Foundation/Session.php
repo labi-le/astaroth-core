@@ -60,6 +60,14 @@ class Session
         return $this->saveToFile($storage);
     }
 
+    public function removeKey(string $key): bool
+    {
+        $storage = $this->getStorageData() ?: [];
+        unset($storage[$this->getType()][$key]);
+
+        return $this->saveToFile($storage);
+    }
+
     /**
      * Save data to session file
      * @param array $data
