@@ -13,35 +13,34 @@ class Placeholder extends BaseCommands
 {
     private const PATTERN = "/%(?:@?last-|(?:@?ful{2}-|@?))name/";
 
-    public const NAME = "name";
-    public const MENTION_NAME = "mention_name";
 
-    public const FULL_NAME = "full_name";
-    public const MENTION_FULL_NAME = "mention_full_name";
+    //VK NAME *******************************************
+    public const NAME = "name";
 
     public const LAST_NAME = "last_name";
-    public const MENTION_LAST_NAME = "mention_last_name";
-
-    public const PERCENT = "%";
-    public const STAR = "*";
-    public const MENTION = self::PERCENT . "@";
+    public const FIRST_NAME = "first_name";
 
     public const ID = "id";
     public const CLUB = "club";
 
-    public const FIRST_NAME = "first_name";
+    //END VK NAME *******************************************
 
-    public static array $tag =
-        [
-            self::NAME => self::PERCENT . self::NAME,
-            self::MENTION_NAME => self::MENTION . self::NAME,
+    //TAG *******************************************************************
+    public const NAME_TAG = "name";
+    public const MENTION_NAME_TAG = self::MENTION . self::NAME_TAG;
 
-            self::FULL_NAME => self::PERCENT . self::FULL_NAME,
-            self::MENTION_FULL_NAME => self::MENTION . self::FULL_NAME,
+    public const FULL_NAME_TAG = "full-name";
+    public const MENTION_FULL_NAME_TAG = self::MENTION . self::FULL_NAME_TAG;
 
-            self::LAST_NAME => self::PERCENT . self::LAST_NAME,
-            self::MENTION_LAST_NAME => self::MENTION . self::LAST_NAME
-        ];
+    public const LAST_NAME_TAG = "last-name";
+    public const MENTION_LAST_NAME_TAG = self::MENTION . self::LAST_NAME_TAG;
+
+    public const PERCENT = "%";
+    public const STAR = "*";
+
+    public const MENTION = self::PERCENT . "@";
+    //END TAG *******************************************************************
+
 
     public function __construct(private string $subject){}
 
@@ -62,18 +61,18 @@ class Placeholder extends BaseCommands
         $star_and_club_str = self::STAR . self::CLUB;
         return preg_replace_callback(self::PATTERN, static function ($match) use ($star_and_club_str, $star_and_id_str, $id, $member_id, $member_name, $member_last_name, $member_full_name) {
             return match (current($match)) {
-                self::$tag[self::NAME] => $member_name,
-                self::$tag[self::MENTION_NAME] => $id > 0
+                self::NAME_TAG => $member_name,
+                self::MENTION_NAME_TAG => $id > 0
                     ? "$star_and_id_str$member_id($member_name)"
                     : "$star_and_club_str$member_id($member_name)",
 
-                self::$tag[self::FULL_NAME] => $member_full_name,
-                self::$tag[self::MENTION_FULL_NAME] => $id > 0
+                self::FULL_NAME_TAG => $member_full_name,
+                self::MENTION_FULL_NAME_TAG => $id > 0
                     ? "$star_and_id_str$member_id($member_full_name)"
                     : "$star_and_club_str$member_id($member_name)",
 
-                self::$tag[self::LAST_NAME] => $id > 0 ? $member_last_name : $member_name,
-                self::$tag[self::MENTION_LAST_NAME] => $id > 0
+                self::LAST_NAME_TAG => $id > 0 ? $member_last_name : $member_name,
+                self::MENTION_LAST_NAME_TAG => $id > 0
                     ? "$star_and_id_str$member_id($member_last_name)"
                     : "$star_and_club_str$member_id($member_name)",
 
