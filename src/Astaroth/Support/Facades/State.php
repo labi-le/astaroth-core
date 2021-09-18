@@ -26,4 +26,10 @@ final class State
     {
         return self::_add($member_id, $state_name);
     }
+
+    public static function remove(int $member_id, string $state_name)
+    {
+        return (new Session($member_id, \Astaroth\Attribute\State::RESERVED_NAME))
+            ->removeKey($state_name);
+    }
 }
