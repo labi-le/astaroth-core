@@ -23,7 +23,7 @@ class SessionTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->session->purge();
+        $this->session->purge(false);
     }
 
     public function testChangeType()
@@ -42,6 +42,18 @@ class SessionTest extends TestCase
     public function testPut()
     {
         $this->testGet();
+    }
+
+    public function testRemoveKey()
+    {
+        $key = "saswdeudbinfoesfdwuawidojwadwadwahoidjwd9j";
+        $this->session->put($key, true);
+
+        assertEquals(true, $this->session->get($key));
+
+        $this->session->removeKey($key);
+
+        assertEquals(null, $this->session->get($key));
     }
 
     public function testPurge()
