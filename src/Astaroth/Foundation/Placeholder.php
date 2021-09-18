@@ -76,6 +76,8 @@ class Placeholder extends BaseCommands
                 self::$tag[self::MENTION_LAST_NAME] => $id > 0
                     ? "$star_and_id_str$member_id($member_last_name)"
                     : "$star_and_club_str$member_id($member_name)",
+
+                default => throw new \UnhandledMatchError("No valid placeholder found")
             };
         }, $this->getSubject());
     }
