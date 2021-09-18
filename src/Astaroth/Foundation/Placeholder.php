@@ -16,33 +16,35 @@ class Placeholder extends BaseCommands
 
     //VK NAME *******************************************
     public const NAME = "name";
-
     public const LAST_NAME = "last_name";
     public const FIRST_NAME = "first_name";
-
     public const ID = "id";
     public const CLUB = "club";
 
     //END VK NAME *******************************************
 
     //TAG *******************************************************************
-    public const NAME_TAG = "name";
-    public const MENTION_NAME_TAG = self::MENTION . self::NAME_TAG;
+    private const NAME_TAG = self::PERCENT . "name";
+    private const MENTION_NAME_TAG = self::MENTION . self::NAME_TAG;
 
-    public const FULL_NAME_TAG = "full-name";
-    public const MENTION_FULL_NAME_TAG = self::MENTION . self::FULL_NAME_TAG;
+    private const FULL_NAME_TAG = self::PERCENT . "full-name";
+    private const MENTION_FULL_NAME_TAG = self::MENTION . self::FULL_NAME_TAG;
 
-    public const LAST_NAME_TAG = "last-name";
-    public const MENTION_LAST_NAME_TAG = self::MENTION . self::LAST_NAME_TAG;
-
-    public const PERCENT = "%";
-    public const STAR = "*";
-
-    public const MENTION = self::PERCENT . "@";
+    private const LAST_NAME_TAG = self::PERCENT . "last-name";
+    private const MENTION_LAST_NAME_TAG = self::MENTION . self::LAST_NAME_TAG;
     //END TAG *******************************************************************
 
+    private const PERCENT = "%";
+    private const STAR = "*";
+    private const MENTION = "@";
 
-    public function __construct(private string $subject){}
+    private const STAR_AND_ID = self::STAR . self::ID;
+    private const STAR_AND_CLUB = self::STAR . self::CLUB;
+
+
+    public function __construct(private string $subject)
+    {
+    }
 
     /**
      * @throws \Throwable
@@ -57,28 +59,28 @@ class Placeholder extends BaseCommands
 
         $member_full_name = trim("$member_name $member_last_name");
 
-        $star_and_id_str = self::STAR . self::ID;
-        $star_and_club_str = self::STAR . self::CLUB;
-        return preg_replace_callback(self::PATTERN, static function ($match) use ($star_and_club_str, $star_and_id_str, $id, $member_id, $member_name, $member_last_name, $member_full_name) {
-            return match (current($match)) {
-                self::NAME_TAG => $member_name,
-                self::MENTION_NAME_TAG => $id > 0
-                    ? "$star_and_id_str$member_id($member_name)"
-                    : "$star_and_club_str$member_id($member_name)",
+        return preg_replace_callback(self::PATTERN,
+            static function ($match) use ($id, $member_id, $member_name, $member_last_name, $member_full_name) {
+                return match (current($match)) {
+                    self::NAME_TAG => $member_name,
+                    self::MENTION_NAME_TAG => $id > 0
+                        ? self::STAR_AND_ID . "$member_id($member_name)"
+                        : self::STAR_AND_CLUB . "$member_id($member_name)",
 
-                self::FULL_NAME_TAG => $member_full_name,
-                self::MENTION_FULL_NAME_TAG => $id > 0
-                    ? "$star_and_id_str$member_id($member_full_name)"
-                    : "$star_and_club_str$member_id($member_name)",
+                    self::FULL_NAME_TAG => $member_full_name,
+                    self::MENTION_FULL_NAME_TAG => $id > 0
+                        ? self::STAR_AND_ID . "$member_id($member_full_name)"
+                        : self::STAR_AND_CLUB . "$member_id($member_name)",
 
-                self::LAST_NAME_TAG => $id > 0 ? $member_last_name : $member_name,
-                self::MENTION_LAST_NAME_TAG => $id > 0
-                    ? "$star_and_id_str$member_id($member_last_name)"
-                    : "$star_and_club_str$member_id($member_name)",
+                    self::LAST_NAME_TAG => $id > 0 ? $member_last_name : $member_name,
+                    self::MENTION_LAST_NAME_TAG => $id > 0
+                        ? self::STAR_AND_ID . "$member_id($member_last_name)"
+                        : self::STAR_AND_CLUB . "$member_id($member_name)",
 
-                default => throw new \UnhandledMatchError("No valid placeholder found")
-            };
-        }, $this->getSubject());
+                    default => throw new \UnhandledMatchError("No valid placeholder found")
+                };
+            },
+            $this->getSubject());
     }
 
     /**
