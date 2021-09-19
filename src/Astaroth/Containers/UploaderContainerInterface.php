@@ -27,6 +27,7 @@ class UploaderContainerInterface implements ContainerPlaceholderInterface
             ->register(self::SERVICE_ID, Uploader::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
-            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);
+            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()])
+            ->addMethodCall("setParallelProcess", [$configuration->getCountParallelOperations()]);
     }
 }

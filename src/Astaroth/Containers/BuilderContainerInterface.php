@@ -27,6 +27,8 @@ class BuilderContainerInterface implements ContainerPlaceholderInterface
             ->register(self::CONTAINER_ID, Builder::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
-            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);
+            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()])
+            ->addMethodCall("setParallelProcess", [$configuration->getCountParallelOperations()])
+        ;
     }
 }

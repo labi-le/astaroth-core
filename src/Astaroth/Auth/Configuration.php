@@ -40,6 +40,8 @@ class Configuration
     public const DATABASE_PASSWORD = "DATABASE_PASSWORD";
     public const DATABASE_HOST = "DATABASE_HOST";
 
+    public const COUNT_PARALLEL_OPERATIONS = "COUNT_PARALLEL_OPERATIONS";
+
     /**
      * Configuration file structure
      */
@@ -62,7 +64,9 @@ class Configuration
             self::CONFIRMATION_KEY,
             self::SECRET_KEY,
 
-            self::HANDLE_REPEATED_REQUESTS
+            self::HANDLE_REPEATED_REQUESTS,
+
+            self::COUNT_PARALLEL_OPERATIONS
         ];
 
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
@@ -182,7 +186,7 @@ class Configuration
      */
     public function getEntityNamespace(): array
     {
-        return array_map('trim', explode(',', $this->getConfig(self::ENTITY_NAMESPACE)));
+        return array_map("trim", explode(',', $this->getConfig(self::ENTITY_NAMESPACE)));
     }
 
     public function isHandleRepeatedRequest(): bool
@@ -286,6 +290,16 @@ class Configuration
         $key = $this->getConfig(self::DATABASE_PASSWORD);
         if (empty($key)) {
             return null;
+        }
+
+        return $key;
+    }
+
+    public function getCountParallelOperations(): int
+    {
+        $key = $this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
+        if (empty($key)) {
+            return 0;
         }
 
         return $key;
