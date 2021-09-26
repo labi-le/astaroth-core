@@ -21,17 +21,19 @@ class Placeholder extends BaseCommands
     public const ID = "id";
     public const CLUB = "club";
 
+    public const FULL_NAME = "full-name";
+
     //END VK NAME *******************************************
 
     //TAG *******************************************************************
     private const NAME_TAG = self::PERCENT . "name";
-    private const MENTION_NAME_TAG = self::PERCENT .  self::MENTION . self::NAME_TAG;
+    private const MENTION_NAME_TAG = self::PERCENT .  self::MENTION . self::NAME;
 
     private const FULL_NAME_TAG = self::PERCENT . "full-name";
-    private const MENTION_FULL_NAME_TAG = self::PERCENT .  self::MENTION . self::FULL_NAME_TAG;
+    private const MENTION_FULL_NAME_TAG = self::PERCENT .  self::MENTION . self::FULL_NAME;
 
     private const LAST_NAME_TAG = self::PERCENT . "last-name";
-    private const MENTION_LAST_NAME_TAG = self::PERCENT .  self::MENTION . self::LAST_NAME_TAG;
+    private const MENTION_LAST_NAME_TAG = self::PERCENT .  self::MENTION . self::LAST_NAME;
     //END TAG *******************************************************************
 
     private const PERCENT = "%";
