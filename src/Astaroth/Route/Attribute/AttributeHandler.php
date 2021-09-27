@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
+use Astaroth\Attribute\Action;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;
 use Astaroth\Attribute\Conversation;
@@ -11,6 +12,7 @@ use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Attribute\State;
+use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\Contracts\InvokableInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
@@ -90,12 +92,16 @@ class AttributeHandler
     private function messageNew(object $instance, array $methods, MessageNew $data): void
     {
         $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
+            /**
+             * @var AttributeValidatorInterface $attribute
+             */
             $isVerified = match ($attribute::class) {
                 Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
                 Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
                 ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate(),
                 State::class => $attribute->setHaystack($data)->validate(),
+                Action::class => $attribute->setHaystack($data->getAction())->validate(),
                 default => false
             };
 
