@@ -63,7 +63,7 @@ class AttributeHandler
                     $attribute instanceof \Astaroth\Attribute\Event\MessageNew &&
                     $attribute->setHaystack($data->getType())->validate()
                 ) {
-                    $this->messageNew($class->getClassInstance(), $class->getMethods(), $data->messageNew());
+                    $this->messageNew($class->getClassName(), $class->getMethods(), $data->messageNew());
                 }
 
                 /**
@@ -74,7 +74,7 @@ class AttributeHandler
                     $attribute instanceof \Astaroth\Attribute\Event\MessageEvent &&
                     $attribute->setHaystack($data->getType())->validate()
                 ) {
-                    $this->messageEvent($class->getClassInstance(), $class->getMethods(), $data->messageEvent());
+                    $this->messageEvent($class->getClassName(), $class->getMethods(), $data->messageEvent());
                 }
 
             }
@@ -84,14 +84,14 @@ class AttributeHandler
 
     /**
      * Checks attributes for an event message_new
-     * @param object $instance
+     * @param string $instanceName
      * @param MethodInfo[] $methods
      * @param MessageNew $data
      * @see \Astaroth\Attribute\Event\MessageNew
      */
-    private function messageNew(object $instance, array $methods, MessageNew $data): void
+    private function messageNew(string $instanceName, array $methods, MessageNew $data): void
     {
-        $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
+        $execute = new Execute($instanceName, $methods, static function ($attribute) use ($data) {
             /**
              * @var AttributeValidatorInterface $attribute
              */
@@ -117,14 +117,14 @@ class AttributeHandler
 
     /**
      * Checks attributes for an event message_event
-     * @param object $instance
+     * @param string $instanceName
      * @param MethodInfo[] $methods
      * @param MessageEvent $data
      * @see \Astaroth\Attribute\Event\MessageEvent
      */
-    private function messageEvent(object $instance, array $methods, MessageEvent $data): void
+    private function messageEvent(string $instanceName, array $methods, MessageEvent $data): void
     {
-        $execute = new Execute($instance, $methods, static function ($attribute) use ($data) {
+        $execute = new Execute($instanceName, $methods, static function ($attribute) use ($data) {
             $isVerified = match ($attribute::class) {
                 Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
                 State::class => $attribute->setHaystack($data->messageEvent())->validate(),

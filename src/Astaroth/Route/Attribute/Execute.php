@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
+use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Route\DataTransferObject\MethodInfo;
@@ -24,12 +25,12 @@ class Execute
 
     /**
      * General event coordinator
-     * @param object $instance
+     * @param string $instanceName
      * @param MethodInfo[] $methods
      * @param \Closure $event
      */
     public function __construct(
-        private object   $instance,
+        private string   $instanceName,
         private array    $methods,
         private \Closure $event,
     )
@@ -40,13 +41,18 @@ class Execute
      * We call methods from the class on which the correct route is set
      * And add arguments
      * method_exist is not needed since method 100% exists
-     * @param object $instance
+     * @param string $instanceName
      * @param string $method
      * @return mixed
      */
-    private function execute(object $instance, string $method): mixed
+    private function execute(string $instanceName, string $method): mixed
     {
-        return $instance->$method(...$this->getExtraParameters());
+        /**
+         * @var object $userDefinedClass
+         * @see Configuration::getAppNamespace()
+         */
+        $userDefinedClass = new $instanceName;
+        return $userDefinedClass->$method(...$this->getExtraParameters());
     }
 
     public function launch(): void
@@ -56,7 +62,7 @@ class Execute
                 if ($this->runEvent($attribute)) {
 
                     $this->parameterInitializer($method->getParameters());
-                    $method_return = $this->execute($this->instance, $method->getName());
+                    $method_return = $this->execute($this->instanceName, $method->getName());
 
                     /** We process the result returned by the method */
                     new ReturnResultHandler($method_return);

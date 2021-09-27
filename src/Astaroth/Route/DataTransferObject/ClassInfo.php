@@ -10,14 +10,14 @@ final class ClassInfo
      * @param string $name
      * @param object[] $attribute
      * @param MethodInfo[] $methods
-     * @param object|null $classInstance
+     * @param string $className
      */
     public function __construct
     (
-        private string  $name,
-        private array   $attribute,
-        private array   $methods,
-        private ?object $classInstance = null,
+        private string $name,
+        private array  $attribute,
+        private array  $methods,
+        private string $className,
     )
     {
     }
@@ -47,11 +47,11 @@ final class ClassInfo
     }
 
     /**
-     * @return ?object
+     * @return string
      */
-    public function getClassInstance(): ?object
+    public function getClassName(): string
     {
-        return $this->classInstance;
+        return $this->className;
     }
 
 

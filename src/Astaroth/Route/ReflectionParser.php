@@ -99,6 +99,7 @@ class ReflectionParser
     private function parseClass(): array
     {
         $map = [];
+        /** @var string $_map */
         foreach ($this->class_map as $_map) {
             $reflectionClass = new ReflectionClass($_map);
 
@@ -112,7 +113,7 @@ class ReflectionParser
                         $reflectionClass->getName(),
                         $attribute,
                         $methods,
-                        $reflectionClass->newInstance()
+                        $_map
                     );
                 }
             }
