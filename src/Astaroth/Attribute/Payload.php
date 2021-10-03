@@ -31,7 +31,7 @@ class Payload implements AttributeValidatorInterface
             return match ($this->validation) {
                 static::STRICT => $this->payload_or_key === $this->haystack,
                 static::KEY_EXISTS => array_key_exists($this->payload_or_key, $this->haystack),
-                static::CONTAINS => count(array_intersect($this->payload_or_key, $this->haystack)) > 0,
+                static::CONTAINS => array_intersect($this->payload_or_key, $this->haystack) !== [],
             };
         }
 

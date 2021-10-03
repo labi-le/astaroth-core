@@ -90,11 +90,10 @@ class Utils
      * Регулярка, чтоб выбрать все айдишники из текста
      * @param string $string
      * @return array|bool
-     * @noinspection NotOptimalRegularExpressionsInspection
      */
     public static function regexId(string $string): array|bool
     {
-        preg_match_all('/\[(?:id|club)([0-9]*)\|.*?]/', $string, $match);
+        preg_match_all('/\[(?:id|club)(\d*)\|.*?]/', $string, $match);
         return $match[1];
     }
 

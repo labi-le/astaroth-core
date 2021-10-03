@@ -87,9 +87,9 @@ class Execute
     {
         foreach ($methodParams as $parameter) {
             if (
-                in_array($parameter->getType(), self::AVAILABLE_EVENTS, true) === false
+                !in_array($parameter->getType(), self::AVAILABLE_EVENTS, true)
                 && class_exists($parameter->getType())
-                && in_array($parameter, $this->getExtraParameters(), true) === false
+                && !in_array($parameter, $this->getExtraParameters(), true)
             ) {
                 $this->addExtraParameters(new ($parameter->getType()));
             }

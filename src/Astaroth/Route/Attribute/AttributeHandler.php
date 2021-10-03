@@ -50,7 +50,7 @@ class AttributeHandler
                  */
                 if (
                     ($attribute instanceof Conversation || $attribute instanceof State)
-                    && $attribute->setHaystack($data)->validate() === false
+                    && !$attribute->setHaystack($data)->validate()
                 ) {
                     break;
                 }

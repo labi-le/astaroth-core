@@ -55,28 +55,22 @@ class ClientInfo implements AttributeValidatorInterface
 
     public function validate(): bool
     {
-        if ((count($this->button_actions) > 0) && count(array_intersect_key(
+        if (($this->button_actions !== []) && array_intersect_key(
                     $this->button_actions,
-                    $this->client_info->button_actions)
-            ) > 0 === false) {
+                    $this->client_info->button_actions) === []) {
             return false;
         }
 
-        if (($this->client_info->keyboard === $this->keyboard) === false) {
+        if ($this->client_info->keyboard !== $this->keyboard) {
             return false;
         }
-        if (($this->client_info->inline_keyboard === $this->inline_keyboard) === false) {
+        if ($this->client_info->inline_keyboard !== $this->inline_keyboard) {
             return false;
         }
-        if (($this->client_info->carousel === $this->carousel) === false) {
+        if ($this->client_info->carousel !== $this->carousel) {
             return false;
         }
-
-        if (($this->client_info->lang_id === $this->lang_id) === false) {
-            return false;
-        }
-
-        return true;
+        return $this->client_info->lang_id === $this->lang_id;
     }
 
     public function setHaystack($haystack): static
