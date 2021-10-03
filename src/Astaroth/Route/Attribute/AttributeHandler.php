@@ -91,10 +91,7 @@ class AttributeHandler
      */
     private function messageNew(string $instanceName, array $methods, MessageNew $data): void
     {
-        $execute = new Execute($instanceName, $methods, static function ($attribute) use ($data) {
-            /**
-             * @var AttributeValidatorInterface $attribute
-             */
+        $execute = new Execute($instanceName, $methods, static function (AttributeValidatorInterface|InvokableInterface $attribute) use ($data) {
             $isVerified = match ($attribute::class) {
                 Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
@@ -124,7 +121,7 @@ class AttributeHandler
      */
     private function messageEvent(string $instanceName, array $methods, MessageEvent $data): void
     {
-        $execute = new Execute($instanceName, $methods, static function ($attribute) use ($data) {
+        $execute = new Execute($instanceName, $methods, static function (AttributeValidatorInterface|InvokableInterface $attribute) use ($data) {
             $isVerified = match ($attribute::class) {
                 Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
                 State::class => $attribute->setHaystack($data->messageEvent())->validate(),
