@@ -7,6 +7,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use function array_key_exists;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**

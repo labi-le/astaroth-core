@@ -10,6 +10,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Route\DataTransferObject\MethodInfo;
 use Astaroth\Route\DataTransferObject\MethodParamInfo;
 use Astaroth\Route\ReturnResultHandler;
+use function in_array;
 
 class Execute
 {

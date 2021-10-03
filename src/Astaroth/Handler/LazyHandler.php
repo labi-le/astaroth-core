@@ -8,6 +8,7 @@ namespace Astaroth\Handler;
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use function is_array;
 
 /**
  * Class LazyHandler

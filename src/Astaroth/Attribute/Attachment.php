@@ -6,6 +6,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use function count;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Route;
 
+use function is_callable;
+
 class ReturnResultHandler
 {
     public function __construct(mixed $result = null)

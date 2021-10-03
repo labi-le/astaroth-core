@@ -10,6 +10,7 @@ use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
+use function in_array;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 /**
