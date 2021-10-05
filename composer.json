@@ -19,7 +19,6 @@
     "labile/vk-keyboard": "^1.1",
     "vlucas/phpdotenv": "^5.3",
     "symfony/dependency-injection": "^5.3",
-    "symfony/console": "^5.3",
     "labile/text-matcher": "^1",
     "haydenpierce/class-finder": "^0.4.3",
     "labile/vk-longpoll": "^2",
