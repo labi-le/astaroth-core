@@ -6,17 +6,30 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use JetBrains\PhpStorm\ExpectedValues;
 use function count;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
  * Attribute defining the message
  */
-class Attachment implements AttributeValidatorInterface
+final class Attachment implements AttributeValidatorInterface
 {
     private array $haystack;
 
-    public function __construct(public string $type = Attachment::ALL, public int $count = 1)
+    public function __construct(
+        #[ExpectedValues(values: [
+            self::ALL,
+            self::VIDEO,
+            self::AUDIO,
+            self::AUDIO_MESSAGE,
+            self::DOC,
+            self::GRAFFITI,
+            self::STICKER,
+        ]
+        )]
+        public string $type = Attachment::ALL,
+        public int $count = 1)
     {
     }
 
