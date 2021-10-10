@@ -6,13 +6,14 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
  * Attribute defining the message keyboard info
  * keyboard available on the current client, etc.
  */
-class ClientInfo implements AttributeValidatorInterface
+final class ClientInfo implements AttributeValidatorInterface
 {
     public const TEXT = "text";
     public const VKPAY = "vkpay";
@@ -34,6 +35,17 @@ class ClientInfo implements AttributeValidatorInterface
      * @param int $lang_id
      */
     public function __construct(
+        #[ExpectedValues(values: [
+            self::TEXT,
+            self::VKPAY,
+            self::OPEN_APP,
+            self::LOCATION,
+            self::OPEN_LINK,
+            self::CALLBACK,
+            self::INTENT_SUBSCRIBE,
+            self::INTENT_UNSUBSCRIBE
+        ]
+        )]
         private array $button_actions =
         [
             self::TEXT,
@@ -45,10 +57,10 @@ class ClientInfo implements AttributeValidatorInterface
             self::INTENT_SUBSCRIBE,
             self::INTENT_UNSUBSCRIBE
         ],
-        private bool  $keyboard = true,
-        private bool  $inline_keyboard = true,
-        private bool  $carousel = true,
-        private int   $lang_id = 0,
+        private bool $keyboard = true,
+        private bool $inline_keyboard = true,
+        private bool $carousel = true,
+        private int $lang_id = 0,
     )
     {
     }
@@ -56,8 +68,8 @@ class ClientInfo implements AttributeValidatorInterface
     public function validate(): bool
     {
         if (($this->button_actions !== []) && array_intersect_key(
-                    $this->button_actions,
-                    $this->client_info->button_actions) === []) {
+                $this->button_actions,
+                $this->client_info->button_actions) === []) {
             return false;
         }
 
