@@ -11,20 +11,20 @@ use Attribute;
 /**
  * Perform certain operations before calling the method
  */
-class Before
+final class Before
 {
     /**
      * Class being executed must be invokable
-     * @param string $invokable
-     * @param array $args
+     * @param class-string<InvokableInterface> $invokable
+     * @param mixed ...$args
      */
-    public function __construct(string $invokable, array $args = [])
+    public function __construct(string $invokable, ...$args)
     {
         /**
          * @var InvokableInterface $object
          * @psalm-suppress UndefinedClass
          */
         $object = new $invokable;
-        $object($args);
+        $object(...$args);
     }
 }
