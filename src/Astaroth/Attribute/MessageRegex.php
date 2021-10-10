@@ -17,7 +17,7 @@ final class MessageRegex implements AttributeValidatorInterface
     private string $haystack;
     private string $pattern;
 
-    public function __construct(#[Language("PhpRegExp")] string $pattern)
+    public function __construct(#[Language("RegExp")] string $pattern)
     {
         $this->pattern = $pattern;
     }
