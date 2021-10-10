@@ -19,7 +19,7 @@ use function in_array;
 /**
  * An attribute that determines whether a dialogue is a conversation, a personal message, or it doesn't matter.
  */
-class Conversation implements AttributeValidatorInterface
+final class Conversation implements AttributeValidatorInterface
 {
     public const ALL = 6;
     public const CHAT = 12;
@@ -50,9 +50,9 @@ class Conversation implements AttributeValidatorInterface
     {
 
         $validate = match ($this->type) {
-            static::PERSONAL_DIALOG => $this->personalDialogValidate($this->haystack),
-            static::ALL => $this->allDialogValidate($this->haystack),
-            static::CHAT => $this->chatValidate($this->haystack)
+            self::PERSONAL_DIALOG => $this->personalDialogValidate($this->haystack),
+            self::ALL => $this->allDialogValidate($this->haystack),
+            self::CHAT => $this->chatValidate($this->haystack)
         };
 
         //if the ID array is not specified in the attribute, then we check if the type matches
@@ -106,7 +106,7 @@ class Conversation implements AttributeValidatorInterface
      * @param DataFetcher $haystack
      * @return $this
      */
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): Conversation
     {
         $this->haystack = match ($haystack->getType()) {
             Events::MESSAGE_NEW => $haystack->messageNew(),
