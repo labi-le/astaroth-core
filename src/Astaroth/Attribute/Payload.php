@@ -15,7 +15,7 @@ use function is_array;
 /**
  * Attribute that determines the click on the button (payload)
  */
-class Payload implements AttributeValidatorInterface
+final class Payload implements AttributeValidatorInterface
 {
 
     public const KEY_EXIST = 0;
