@@ -38,7 +38,9 @@ class Configuration
     public const DATABASE_NAME = "DATABASE_NAME";
     public const DATABASE_USER = "DATABASE_USER";
     public const DATABASE_PASSWORD = "DATABASE_PASSWORD";
+    public const DATABASE_URL = "DATABASE_URL";
     public const DATABASE_HOST = "DATABASE_HOST";
+    public const DATABASE_PORT = "DATABASE_PORT";
 
     public const COUNT_PARALLEL_OPERATIONS = "COUNT_PARALLEL_OPERATIONS";
 
@@ -56,9 +58,12 @@ class Configuration
             self::TYPE,
 
             self::DATABASE_DRIVER,
+            self::DATABASE_NAME,
             self::DATABASE_USER,
             self::DATABASE_PASSWORD,
+            self::DATABASE_URL,
             self::DATABASE_HOST,
+            self::DATABASE_PORT,
 
             self::API_VERSION,
             self::CONFIRMATION_KEY,
@@ -258,6 +263,26 @@ class Configuration
     public function getDatabaseHost(): ?string
     {
         $key = $this->getConfig(self::DATABASE_HOST);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    public function getDatabasePort(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_PORT);
+        if (empty($key)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    public function getDatabaseUrl(): ?string
+    {
+        $key = $this->getConfig(self::DATABASE_URL);
         if (empty($key)) {
             return null;
         }

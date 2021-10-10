@@ -24,25 +24,26 @@ class DatabaseContainer implements ContainerPlaceholderInterface
      */
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
-        if (
-            empty($configuration->getDatabaseDriver()) ||
-            empty($configuration->getDatabaseHost()) ||
-            empty($configuration->getDatabaseName()) ||
-            empty($configuration->getDatabaseUser()) ||
-            empty($configuration->getDatabasePassword())
+        $connection = [];
+        if ($configuration->getDatabaseUrl()) {
+            $connection["url"] = $configuration->getDatabaseUrl();
+        } else if (
+            $configuration->getDatabaseDriver() &&
+            $configuration->getDatabaseHost() &&
+            $configuration->getDatabaseName() &&
+            $configuration->getDatabaseUser() &&
+            $configuration->getDatabasePassword()
         ) {
-            return;
+            $connection["driver"] = $configuration->getDatabaseDriver();
+            $connection["host"] = $configuration->getDatabaseHost();
+            $connection["dbname"] = $configuration->getDatabaseName();
+            $connection["user"] = $configuration->getDatabaseUser();
+            $connection["password"] = $configuration->getDatabasePassword();
+
+            if ($configuration->getDatabasePort()) {
+                $connection["port"] = $configuration->getDatabasePort();
+            }
         }
-
-        $connection =
-            [
-                "driver" => $configuration->getDatabaseDriver(),
-                "host" => $configuration->getDatabaseHost(),
-                "dbname" => $configuration->getDatabaseName(),
-                "user" => $configuration->getDatabaseUser(),
-                "password" => $configuration->getDatabasePassword()
-            ];
-
 
         $config = Setup::createAnnotationMetadataConfiguration($configuration->getEntityPath(), $configuration->isDebug());
 
