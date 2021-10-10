@@ -11,9 +11,10 @@ use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Support\Facades\Session;
 use Attribute;
+use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-class State implements AttributeValidatorInterface
+final class State implements AttributeValidatorInterface
 {
     public const USER = 0;
     public const CHAT = 1;
@@ -24,7 +25,12 @@ class State implements AttributeValidatorInterface
 
     private MessageNew|MessageEvent $haystack;
 
-    public function __construct(private string $state_name, private int $member_type = State::USER)
+    public function __construct
+    (
+        private string $state_name,
+        #[ExpectedValues(values: [self::CHAT, self::PEER, self::USER])]
+        private int    $member_type = State::USER
+    )
     {
     }
 
@@ -50,9 +56,9 @@ class State implements AttributeValidatorInterface
     /**
      * @inheritDoc
      * @param MessageNew|MessageEvent|DataFetcher $haystack
-     * @return static
+     * @return State
      */
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): State
     {
         if ($haystack instanceof DataFetcher) {
             $this->haystack = match ($haystack->getType()) {
