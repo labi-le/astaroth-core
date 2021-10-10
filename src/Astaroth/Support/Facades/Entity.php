@@ -17,7 +17,7 @@ final class Entity extends EntityManagerDecorator
      */
     private static function getContainer(): ?object
     {
-        return FacadePlaceholder::getContainer()->get(DatabaseContainer::CONTAINER_ID, ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        return FacadePlaceholder::getContainer()->get(DatabaseContainer::CONTAINER_ID, ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE);
     }
 
     public function __invoke(): Entity
