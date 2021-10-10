@@ -45,10 +45,10 @@ class Application
     /**
      * @throws \Throwable
      */
-    public function run(string $dir = null, string $type = Application::DEV): void
+    public function run(string $envDir = null, string $type = Application::DEV): void
     {
         $container = self::getContainer();
-        $configuration = Configuration::set($dir, $type);
+        $configuration = Configuration::set($envDir, $type);
 
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
             /**
