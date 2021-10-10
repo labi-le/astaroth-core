@@ -7,6 +7,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use JetBrains\PhpStorm\ExpectedValues;
 use function array_key_exists;
 use function is_array;
 
@@ -23,7 +24,10 @@ class Payload implements AttributeValidatorInterface
 
     private array|null $haystack;
 
-    public function __construct(private array|string $payload_or_key, private int $validation = Payload::STRICT)
+    public function __construct(
+        private array|string $payload_or_key,
+        #[ExpectedValues(values: [static::STRICT, static::CONTAINS, static::KEY_EXIST])]
+        private int $validation = Payload::STRICT)
     {
     }
 
