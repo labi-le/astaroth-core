@@ -6,6 +6,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -14,7 +15,7 @@ use Attribute;
  *
  * @see https://i.imgur.com/4YQWIZ4.png
  */
-class Action implements AttributeValidatorInterface
+final class Action implements AttributeValidatorInterface
 {
     private ?object $haystack;
 
@@ -34,7 +35,23 @@ class Action implements AttributeValidatorInterface
      *
      * @see https://i.imgur.com/S4vcS9w.png
      */
-    public function __construct(private string $type, private array $anyData = [])
+    public function __construct(
+        #[ExpectedValues(values:
+            [
+                self::CHAT_PHOTO_UPDATE,
+                self::CHAT_PIN_MESSAGE,
+                self::CHAT_UNPIN_MESSAGE,
+                self::CHAT_PHOTO_REMOVE,
+                self::CHAT_INVITE_USER_BY_LINK,
+                self::CHAT_INVITE_USER,
+                self::CHAT_KICK_USER,
+                self::CHAT_CREATE,
+                self::CHAT_TITLE_UPDATE,
+            ]
+        )]
+        private string $type,
+        private array $anyData = []
+    )
     {
     }
 
@@ -57,7 +74,7 @@ class Action implements AttributeValidatorInterface
         return false;
     }
 
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): Action
     {
         $this->haystack = $haystack;
         return $this;
