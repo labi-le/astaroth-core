@@ -10,6 +10,9 @@ use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
 use function in_array;
 
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -34,34 +37,69 @@ class Conversation implements AttributeValidatorInterface
      * @param int $type
      * @param int ...$member_id
      */
-    public function __construct(public int $type = Conversation::ALL, int ...$member_id)
+    public function __construct(
+        #[ExpectedValues(values: [static::ALL, static::PERSONAL_DIALOG, static::CHAT])]
+        public int $type = Conversation::ALL,
+        int ...$member_id
+    )
     {
         $this->member_id = $member_id;
     }
 
     public function validate(): bool
     {
-        $concreteMethod = match ($this->haystack::class) {
-            MessageNew::class => fn() => $this->haystack->getFromId(),
-            MessageEvent::class => fn() => $this->haystack->getUserId(),
+
+        $validate = match ($this->type) {
+            static::PERSONAL_DIALOG => $this->personalDialogValidate($this->haystack),
+            static::ALL => $this->allDialogValidate($this->haystack),
+            static::CHAT => $this->chatValidate($this->haystack)
         };
 
-        $type = match ($this->type) {
-            static::PERSONAL_DIALOG => $this->haystack->getChatId() === null,
-            static::ALL => (bool)$this->haystack->getPeerId(),
-            static::CHAT => (bool)$this->haystack->getChatId()
-        };
-
-        $concreteId = match ($this->type) {
-            static::PERSONAL_DIALOG => $concreteMethod(),
-            static::ALL => $this->haystack->getPeerId(),
-            static::CHAT => $this->haystack->getChatId()
-        };
-
+        //if the ID array is not specified in the attribute, then we check if the type matches
         if ($this->member_id === []) {
-            return $type;
+            return $validate["type"];
         }
-        return in_array($concreteId, $this->member_id, true) && $type;
+
+        //condition opposite to above condition
+        return in_array($validate["id"], $this->member_id, true) && $validate["type"];
+    }
+
+    #[Pure] #[ArrayShape(["type" => "bool", "id" => "int"])]
+    private function personalDialogValidate(MessageNew|MessageEvent $data): array
+    {
+        return
+            [
+                "type" => $this->haystack->getChatId() === null,
+                "id" =>
+                /**
+                 * we find out the user's ID based on the fact that different events allow you to do this in different ways
+                 * since it is a closure it will be executed below
+                 */
+                    match ($data::class) {
+                        MessageNew::class => $this->haystack->getFromId(),
+                        MessageEvent::class => $this->haystack->getUserId(),
+                    }
+            ];
+    }
+
+    #[Pure] #[ArrayShape(["type" => "bool", "id" => "int"])]
+    private function allDialogValidate(MessageNew|MessageEvent $data): array
+    {
+        return
+            [
+                "type" => (bool)$this->haystack->getPeerId(),
+                "id" => $this->haystack->getPeerId()
+            ];
+    }
+
+    #[Pure] #[ArrayShape(["type" => "bool", "id" => "int"])]
+    private function chatValidate(MessageNew|MessageEvent $data): array
+    {
+        return
+            [
+                "type" => (bool)$this->haystack->getChatId(),
+                "id" => $this->haystack->getChatId()
+            ];
     }
 
     /**
