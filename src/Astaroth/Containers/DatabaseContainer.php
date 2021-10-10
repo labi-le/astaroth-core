@@ -43,6 +43,8 @@ class DatabaseContainer implements ContainerPlaceholderInterface
             if ($configuration->getDatabasePort()) {
                 $connection["port"] = $configuration->getDatabasePort();
             }
+        } else {
+            return;
         }
 
         $config = Setup::createAnnotationMetadataConfiguration($configuration->getEntityPath(), $configuration->isDebug());
