@@ -38,7 +38,7 @@ class Conversation implements AttributeValidatorInterface
      * @param int ...$member_id
      */
     public function __construct(
-        #[ExpectedValues(values: [static::ALL, static::PERSONAL_DIALOG, static::CHAT])]
+        #[ExpectedValues(values: [self::ALL, self::PERSONAL_DIALOG, self::CHAT])]
         public int $type = Conversation::ALL,
         int ...$member_id
     )

@@ -26,7 +26,7 @@ class Payload implements AttributeValidatorInterface
 
     public function __construct(
         private array|string $payload_or_key,
-        #[ExpectedValues(values: [static::STRICT, static::CONTAINS, static::KEY_EXIST])]
+        #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::KEY_EXIST])]
         private int $validation = Payload::STRICT)
     {
     }
