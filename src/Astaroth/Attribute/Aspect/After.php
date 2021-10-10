@@ -11,14 +11,14 @@ use Attribute;
 /**
  * Perform certain operations after calling the method
  */
-class After
+final class After
 {
     /**
      * Class being executed must be invokable
-     * @param string $invokable
-     * @param array $args
+     * @param class-string<InvokableInterface> $invokable
+     * @param mixed ...$args
      */
-    public function __construct(string $invokable, array $args = [])
+    public function __construct(string $invokable, ...$args)
     {
         register_shutdown_function(static function () use ($args, $invokable) {
             /**
@@ -26,7 +26,7 @@ class After
              * @psalm-suppress UndefinedClass
              */
             $object = new $invokable;
-            $object($args);
+            $object(...$args);
         });
     }
 }
