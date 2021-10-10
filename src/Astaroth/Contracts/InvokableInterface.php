@@ -7,8 +7,8 @@ namespace Astaroth\Contracts;
 interface InvokableInterface
 {
     /**
-     * @param array $args
+     * @param mixed $args
      * @return void
      */
-    public function __invoke(array $args = []): void;
+    public function __invoke(...$args): void;
 }
