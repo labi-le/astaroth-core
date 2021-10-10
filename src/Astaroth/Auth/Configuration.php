@@ -32,7 +32,7 @@ class Configuration
     public const HANDLE_REPEATED_REQUESTS = "HANDLE_REPEATED_REQUESTS";
 
     public const APP_NAMESPACE = "APP_NAMESPACE";
-    public const ENTITY_NAMESPACE = "ENTITY_NAMESPACE";
+    public const ENTITY_PATH = "ENTITY_PATH";
 
     public const DATABASE_DRIVER = "DATABASE_DRIVER";
     public const DATABASE_NAME = "DATABASE_NAME";
@@ -51,7 +51,7 @@ class Configuration
             self::CACHE_PATH,
 
             self::APP_NAMESPACE,
-            self::ENTITY_NAMESPACE,
+            self::ENTITY_PATH,
             self::ACCESS_TOKEN,
             self::TYPE,
 
@@ -184,9 +184,9 @@ class Configuration
     /**
      * @return string[]
      */
-    public function getEntityNamespace(): array
+    public function getEntityPath(): array
     {
-        return array_map("trim", explode(',', $this->getConfig(self::ENTITY_NAMESPACE)));
+        return array_map("trim", explode(',', $this->getConfig(self::ENTITY_PATH)));
     }
 
     public function isHandleRepeatedRequest(): bool
