@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class UploaderContainer implements ContainerPlaceholderInterface
 {
-    public const SERVICE_ID = "uploader";
+    public const CONTAINER_ID = "uploader";
 
     /**
      * @throws ParameterMissingException
@@ -24,7 +24,7 @@ class UploaderContainer implements ContainerPlaceholderInterface
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         $container
-            ->register(self::SERVICE_ID, Uploader::class)
+            ->register(self::CONTAINER_ID, Uploader::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
             ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()])

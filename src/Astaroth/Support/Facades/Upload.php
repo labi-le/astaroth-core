@@ -28,7 +28,7 @@ final class Upload
         /**
          * @var Uploader $facade
          */
-        $facade = FacadePlaceholder::getInstance()->getContainer()->get(UploaderContainer::SERVICE_ID);
+        $facade = FacadePlaceholder::getInstance()->getContainer()->get(UploaderContainer::CONTAINER_ID);
         return $facade->upload(...$instance);
     }
 
@@ -41,7 +41,7 @@ final class Upload
         /**
          * @var Uploader $instance
          */
-        $instance = FacadePlaceholder::getInstance()->getContainer()->get(UploaderContainer::SERVICE_ID);
+        $instance = FacadePlaceholder::getInstance()->getContainer()->get(UploaderContainer::CONTAINER_ID);
 
         return clone $instance->setDefaultToken($access_token);
     }
