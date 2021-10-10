@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
-use Astaroth\Containers\DatabaseContainerInterface;
+use Astaroth\Containers\DatabaseContainer;
 use Astaroth\Foundation\FacadePlaceholder;
 use Doctrine\ORM\Decorator\EntityManagerDecorator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +17,7 @@ final class Entity extends EntityManagerDecorator
      */
     private static function getContainer(): ?object
     {
-        return FacadePlaceholder::getContainer()->get(DatabaseContainerInterface::CONTAINER_ID, ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        return FacadePlaceholder::getContainer()->get(DatabaseContainer::CONTAINER_ID, ContainerInterface::NULL_ON_INVALID_REFERENCE);
     }
 
     public function __invoke(): Entity

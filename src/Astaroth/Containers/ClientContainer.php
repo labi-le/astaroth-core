@@ -7,16 +7,16 @@ namespace Astaroth\Containers;
 use Astaroth\Auth\Configuration;
 use Astaroth\Auth\ParameterMissingException;
 use Astaroth\Contracts\ContainerPlaceholderInterface;
-use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Client;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class UploaderContainerInterface
+ * Class ClientContainer
  * @package Astaroth\Containers
  */
-class UploaderContainerInterface implements ContainerPlaceholderInterface
+class ClientContainer implements ContainerPlaceholderInterface
 {
-    public const SERVICE_ID = "uploader";
+    public const CONTAINER_ID = "client";
 
     /**
      * @throws ParameterMissingException
@@ -24,10 +24,9 @@ class UploaderContainerInterface implements ContainerPlaceholderInterface
     public function __invoke(ContainerBuilder $container, Configuration $configuration): void
     {
         $container
-            ->register(self::SERVICE_ID, Uploader::class)
+            ->register(self::CONTAINER_ID, Client::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
-            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()])
-            ->addMethodCall("setParallelProcess", [$configuration->getCountParallelOperations()]);
+            ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()]);
     }
 }

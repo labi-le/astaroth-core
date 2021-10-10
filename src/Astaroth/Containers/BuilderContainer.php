@@ -11,10 +11,10 @@ use Astaroth\VkUtils\Builder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class BuilderContainerInterface
+ * Class BuilderContainer
  * @package Astaroth\Containers
  */
-class BuilderContainerInterface implements ContainerPlaceholderInterface
+class BuilderContainer implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "builder";
 

@@ -12,10 +12,10 @@ use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class ClientContainerInterface
+ * Class DatabaseContainer
  * @package Astaroth\Containers
  */
-class DatabaseContainerInterface implements ContainerPlaceholderInterface
+class DatabaseContainer implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "db";
 

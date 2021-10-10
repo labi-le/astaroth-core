@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Support\Facades;
 
 
-use Astaroth\Containers\BuilderContainerInterface;
+use Astaroth\Containers\BuilderContainer;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Placeholder;
 use Astaroth\VkUtils\Builder;
@@ -50,7 +50,7 @@ final class Create
         $new_instance = self::messagePlaceholder(...$instance);
 
         return FacadePlaceholder::getInstance()
-            ->getContainer()->get(BuilderContainerInterface::CONTAINER_ID)
+            ->getContainer()->get(BuilderContainer::CONTAINER_ID)
             ?->create(...$new_instance);
     }
 
@@ -64,7 +64,7 @@ final class Create
         /**
          * @var Builder $instance
          */
-        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(BuilderContainerInterface::CONTAINER_ID);
+        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(BuilderContainer::CONTAINER_ID);
         return $instance->setDefaultToken($access_token);
     }
 
