@@ -6,17 +6,20 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
+use JetBrains\PhpStorm\Language;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
  * Attribute defining the message
  */
-class MessageRegex implements AttributeValidatorInterface
+final class MessageRegex implements AttributeValidatorInterface
 {
     private string $haystack;
+    private string $pattern;
 
-    public function __construct(private string $pattern)
+    public function __construct(#[Language("PhpRegExp")] string $pattern)
     {
+        $this->pattern = $pattern;
     }
 
     public function validate(): bool
@@ -28,7 +31,7 @@ class MessageRegex implements AttributeValidatorInterface
         }
     }
 
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): MessageRegex
     {
         $this->haystack = $haystack;
         return $this;
