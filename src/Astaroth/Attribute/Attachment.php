@@ -54,7 +54,7 @@ final class Attachment implements AttributeValidatorInterface
         return count($attachments) === $this->count;
     }
 
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): Attachment
     {
         $this->haystack = $haystack;
         return $this;
