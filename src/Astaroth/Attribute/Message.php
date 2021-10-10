@@ -7,12 +7,13 @@ namespace Astaroth\Attribute;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\TextMatcher;
 use Attribute;
+use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
  * Attribute defining the message
  */
-class Message implements AttributeValidatorInterface
+final class Message implements AttributeValidatorInterface
 {
     private string $haystack;
 
@@ -22,7 +23,13 @@ class Message implements AttributeValidatorInterface
     public const END_AS = 3;
     public const SIMILAR_TO = 4;
 
-    public function __construct(private string $message, private int $validation = Message::STRICT)
+    public function __construct
+    (
+        private string $message,
+        #[ExpectedValues(values:
+            [self::STRICT, self::CONTAINS, self::START_AS, self::END_AS, self::SIMILAR_TO]
+        )]
+        private int    $validation = Message::STRICT)
     {
     }
 
