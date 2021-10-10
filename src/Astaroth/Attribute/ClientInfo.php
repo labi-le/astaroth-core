@@ -85,7 +85,7 @@ final class ClientInfo implements AttributeValidatorInterface
         return $this->client_info->lang_id === $this->lang_id;
     }
 
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): ClientInfo
     {
         $this->client_info = $haystack;
         return $this;
