@@ -20,7 +20,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Route\DataTransferObject\ClassInfo;
 use Astaroth\Route\DataTransferObject\MethodInfo;
 
-class AttributeHandler
+class EventAttributeHandler
 {
     /**
      * @param ClassInfo[] $instances
@@ -91,7 +91,7 @@ class AttributeHandler
      */
     private function messageNew(string $instanceName, array $methods, MessageNew $data): void
     {
-        $execute = new Execute($instanceName, $methods, static function (AttributeValidatorInterface|InvokableInterface $attribute) use ($data) {
+        $execute = new AttributeMethodExecutor($instanceName, $methods, static function (AttributeValidatorInterface|InvokableInterface $attribute) use ($data) {
             $isVerified = match ($attribute::class) {
                 Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
                 Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
@@ -103,7 +103,7 @@ class AttributeHandler
             };
 
             if ($isVerified && $attribute instanceof InvokableInterface) {
-                $attribute();
+                $attribute($data);
             }
 
             return $isVerified;
@@ -121,7 +121,7 @@ class AttributeHandler
      */
     private function messageEvent(string $instanceName, array $methods, MessageEvent $data): void
     {
-        $execute = new Execute($instanceName, $methods, static function (AttributeValidatorInterface|InvokableInterface $attribute) use ($data) {
+        $execute = new AttributeMethodExecutor($instanceName, $methods, static function (AttributeValidatorInterface|InvokableInterface $attribute) use ($data) {
             $isVerified = match ($attribute::class) {
                 Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
                 State::class => $attribute->setHaystack($data->messageEvent())->validate(),
@@ -130,7 +130,7 @@ class AttributeHandler
 
 
             if ($isVerified && $attribute instanceof InvokableInterface) {
-                $attribute();
+                $attribute($data);
             }
 
             return $isVerified;

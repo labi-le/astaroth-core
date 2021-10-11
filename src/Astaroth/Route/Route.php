@@ -8,7 +8,7 @@ namespace Astaroth\Route;
 
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Handler\LazyHandler;
-use Astaroth\Route\Attribute\AttributeHandler;
+use Astaroth\Route\Attribute\EventAttributeHandler;
 use HaydenPierce\ClassFinder\ClassFinder;
 
 /**
@@ -51,7 +51,7 @@ class Route
     public function handle(): void
     {
         $this->handler->listen(function (DataFetcher $data) {
-            new AttributeHandler(
+            new EventAttributeHandler(
                 ReflectionParser::setClassMap($this->getClassMap())->parse(),
                 $data
             );

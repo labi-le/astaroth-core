@@ -12,7 +12,7 @@ use Astaroth\Route\DataTransferObject\MethodParamInfo;
 use Astaroth\Route\ReturnResultHandler;
 use function in_array;
 
-class Execute
+class AttributeMethodExecutor
 {
     public const AVAILABLE_EVENTS =
         [
@@ -27,8 +27,10 @@ class Execute
     /**
      * General event coordinator
      * @param string $instanceName
-     * @param MethodInfo[] $methods
-     * @param \Closure $event
+     * @param MethodInfo[] $methods DTO
+     * @param \Closure $event must return bool, if true, then the call launch method
+     *
+     * @see execute()
      */
     public function __construct(
         private string   $instanceName,
