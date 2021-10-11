@@ -91,9 +91,9 @@ class Placeholder extends BaseCommands
     private function iterateId(int $id): array|false
     {
         if ($id > 0) {
-            return current($this->usersGet($id));
+            return current($this->usersGet([$id]));
         }
-        return current($this->groupsGetById($id));
+        return current($this->groupsGetById([$id]));
     }
 
     /**
