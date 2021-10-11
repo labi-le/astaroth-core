@@ -97,7 +97,7 @@ abstract class BaseCommands
     {
         $params = [];
         $params["message_ids"] = implode(",", $message_ids);
-        $params["conversation_message_id"] = implode(",", $conversation_message_ids);
+        $params["conversation_message_ids"] = implode(",", $conversation_message_ids);
         $params["peer_id"] = $peer_id;
         $params["spam"] = $spam;
         $params["group_id"] = $group_id;
