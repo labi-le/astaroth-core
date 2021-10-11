@@ -26,6 +26,7 @@ final class Attachment implements AttributeValidatorInterface
             self::DOC,
             self::GRAFFITI,
             self::STICKER,
+            self::PHOTO,
         ]
         )]
         public string $type = Attachment::ALL,
