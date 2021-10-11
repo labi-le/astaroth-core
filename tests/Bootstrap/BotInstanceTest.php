@@ -17,12 +17,12 @@ class BotInstanceTest extends TestCase
 
     public function testBootstrap()
     {
-        $configuration = Configuration::set(dirname(__DIR__), Application::DEV);
+        $configuration = Configuration::set(\dirname(__DIR__), Application::DEV);
 
         if ($configuration->getAccessToken() === "PUT_TOKEN_FOR_TEST"){
             throw new ParameterMissingException("ты забыл указать токен для тестирования");
         }
         $instance = new BotInstance($configuration);
-        assertEquals(Longpoll::class, get_class($instance->bootstrap()));
+        assertEquals(Longpoll::class, \get_class($instance->bootstrap()));
     }
 }

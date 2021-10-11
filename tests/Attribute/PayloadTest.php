@@ -15,7 +15,7 @@ class PayloadTest extends TestCase
     {
         $payload = new Payload("bar", Payload::KEY_EXIST);
 
-        assertEquals(Payload::class, $payload->setHaystack("foo")::class);
+        assertEquals(Payload::class, $payload->setHaystack(["foo"])::class);
     }
 
     public function testValidate()
