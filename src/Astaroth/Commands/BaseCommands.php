@@ -87,28 +87,39 @@ abstract class BaseCommands
     }
 
     /**
-     * @param int|string $user_ids
-     * @param string|null $fields
+     * @param int[] $user_ids
+     * @param string[] $fields
      * @param string $name_case
      * @return array
      * @throws \Throwable
      * @see https://vk.com/dev/users.get
      */
-    protected function usersGet(int|string $user_ids, string $fields = null, string $name_case = "nom"): array
+    protected function usersGet(array $user_ids, array $fields = [], string $name_case = "nom"): array
     {
-        return Request::call("users.get", ["user_ids" => $user_ids, "fields" => $fields, "name_case" => $name_case]);
+        return Request::call("users.get",
+            [
+                "user_ids" => implode(",", $user_ids),
+                "fields" => implode(",", $fields),
+                "name_case" => $name_case
+            ]
+        );
     }
 
     /**
-     * @param int|string $group_id
-     * @param string|null $fields
+     * @param int[] $group_ids
+     * @param string[] $fields
      * @return array
      * @throws \Throwable
      * @see https://vk.com/dev/groups.getById
      */
-    protected function groupsGetById(int|string $group_id, string $fields = null): array
+    protected function groupsGetById(array $group_ids, array $fields = []): array
     {
-        return Request::call("groups.getById", ["group_ids" => $group_id, "fields" => $fields]);
+        return Request::call("groups.getById",
+            [
+                "group_ids" => implode(",", $group_ids),
+                "fields" => implode(",", $fields)
+            ]
+        );
     }
 
     /**
