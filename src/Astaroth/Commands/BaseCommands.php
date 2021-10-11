@@ -75,6 +75,38 @@ abstract class BaseCommands
     }
 
     /**
+     * @param int[] $message_ids
+     * @param bool $spam
+     * @param int|null $group_id
+     * @param bool $delete_for_all
+     * @param int|null $peer_id
+     * @param int[] $conversation_message_ids
+     * @return array
+     * @throws \Throwable
+     * @see https://vk.com/dev/messages.delete
+     */
+    protected function messagesDelete
+    (
+        array $message_ids = [],
+        bool  $spam = false,
+        int   $group_id = null,
+        bool  $delete_for_all = false,
+        int   $peer_id = null,
+        array $conversation_message_ids = [],
+    ): array
+    {
+        $params = [];
+        $params["message_ids"] = implode(",", $message_ids);
+        $params["conversation_message_id"] = implode(",", $conversation_message_ids);
+        $params["peer_id"] = $peer_id;
+        $params["spam"] = $spam;
+        $params["group_id"] = $group_id;
+        $params["delete_for_all"] = $delete_for_all;
+
+        return Request::call("messages.delete", $params);
+    }
+
+    /**
      * @param int $chat_id
      * @param int $id
      * @return array
