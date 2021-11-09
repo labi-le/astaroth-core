@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 
+use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Attribute\EventAttributeHandler;
 use HaydenPierce\ClassFinder\ClassFinder;
 
@@ -19,7 +19,7 @@ class Route
 {
     private array $class_map;
 
-    public function __construct(private LazyHandler $handler)
+    public function __construct(private HandlerInterface $handler)
     {
     }
 
