@@ -87,8 +87,8 @@ final class Conversation implements AttributeValidatorInterface
     {
         return
             [
-                "type" => (bool)$this->haystack->getPeerId(),
-                "id" => $this->haystack->getPeerId()
+                "type" => (bool)$data->getPeerId(),
+                "id" => $data->getPeerId()
             ];
     }
 
