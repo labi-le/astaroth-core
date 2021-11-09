@@ -35,9 +35,9 @@ final class Payload implements AttributeValidatorInterface
     {
         if ($this->haystack) {
             return match ($this->validation) {
-                static::STRICT => $this->strictValidate($this->payload_or_key, $this->haystack),
-                static::KEY_EXIST => $this->keyExistValidate($this->payload_or_key, $this->haystack),
-                static::CONTAINS => $this->containsValidate($this->payload_or_key, $this->haystack),
+                self::STRICT => $this->strictValidate($this->payload_or_key, $this->haystack),
+                self::KEY_EXIST => $this->keyExistValidate($this->payload_or_key, $this->haystack),
+                self::CONTAINS => $this->containsValidate($this->payload_or_key, $this->haystack),
             };
         }
 

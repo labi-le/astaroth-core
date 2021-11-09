@@ -57,6 +57,7 @@ final class Action implements AttributeValidatorInterface
 
     public function validate(): bool
     {
+        //if haystack is object and type given in the attribute matches the type haystack
         if (
             $this->haystack
             && $this->type === $this->haystack->type
