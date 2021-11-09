@@ -69,15 +69,15 @@ final class Conversation implements AttributeValidatorInterface
     {
         return
             [
-                "type" => $this->haystack->getChatId() === null,
+                //if the chat id === null then this is clearly a personal conversation
+                "type" => $data->getChatId() === null,
                 "id" =>
                 /**
                  * we find out the user's ID based on the fact that different events allow you to do this in different ways
-                 * since it is a closure it will be executed below
                  */
                     match ($data::class) {
-                        MessageNew::class => $this->haystack->getFromId(),
-                        MessageEvent::class => $this->haystack->getUserId(),
+                        MessageNew::class => $data->getFromId(),
+                        MessageEvent::class => $data->getUserId(),
                     }
             ];
     }
@@ -97,8 +97,8 @@ final class Conversation implements AttributeValidatorInterface
     {
         return
             [
-                "type" => (bool)$this->haystack->getChatId(),
-                "id" => $this->haystack->getChatId()
+                "type" => (bool)$data->getChatId(),
+                "id" => $data->getChatId()
             ];
     }
 
