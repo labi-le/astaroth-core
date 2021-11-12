@@ -2,19 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Route;
+namespace Astaroth\Parser;
 
 
-use Astaroth\Route\DataTransferObject\ClassInfo;
-use Astaroth\Route\DataTransferObject\MethodInfo;
-use Astaroth\Route\DataTransferObject\MethodParamInfo;
+use Astaroth\Contracts\ParserInterface;
+use Astaroth\Parser\DataTransferObject\ClassInfo;
+use Astaroth\Parser\DataTransferObject\MethodInfo;
+use Astaroth\Parser\DataTransferObject\MethodParamInfo;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
-class ReflectionParser
+class ReflectionParser implements ParserInterface
 {
+    /**
+     * @param string[] $class_map
+     */
     private function __construct(private array $class_map)
     {
     }
@@ -99,7 +103,6 @@ class ReflectionParser
     private function parseClass(): array
     {
         $map = [];
-        /** @var string $_map */
         foreach ($this->class_map as $_map) {
             $reflectionClass = new ReflectionClass($_map);
 

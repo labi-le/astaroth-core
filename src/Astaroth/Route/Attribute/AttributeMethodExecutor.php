@@ -7,8 +7,8 @@ namespace Astaroth\Route\Attribute;
 use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Route\DataTransferObject\MethodInfo;
-use Astaroth\Route\DataTransferObject\MethodParamInfo;
+use Astaroth\Parser\DataTransferObject\MethodInfo;
+use Astaroth\Parser\DataTransferObject\MethodParamInfo;
 use Astaroth\Route\ReturnResultHandler;
 use function in_array;
 

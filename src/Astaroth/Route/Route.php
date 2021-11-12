@@ -8,6 +8,7 @@ namespace Astaroth\Route;
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Parser\ReflectionParser;
 use Astaroth\Route\Attribute\EventAttributeHandler;
 use HaydenPierce\ClassFinder\ClassFinder;
 

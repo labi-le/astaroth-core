@@ -16,8 +16,8 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Route\DataTransferObject\ClassInfo;
-use Astaroth\Route\DataTransferObject\MethodInfo;
+use Astaroth\Parser\DataTransferObject\ClassInfo;
+use Astaroth\Parser\DataTransferObject\MethodInfo;
 
 class EventAttributeHandler
 {

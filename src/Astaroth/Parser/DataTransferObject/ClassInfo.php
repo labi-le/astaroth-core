@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Route\DataTransferObject;
+namespace Astaroth\Parser\DataTransferObject;
 
 final class ClassInfo
 {
