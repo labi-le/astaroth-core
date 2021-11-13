@@ -32,8 +32,9 @@ final class MethodsInfo implements Stringable
         foreach ($this->getMethods() as $method) {
             $attributesInfo = "";
             foreach ($method->getAttribute() as $attr) {
-                $attributesInfo .= $attr::class;
+                $attributesInfo .= $attr::class . ", ";
             }
+            $attributesInfo = trim($attributesInfo, ", ");
 
             $methodsInfo .= "Method: {$method->getName()}\n";
             $methodsInfo .= "Enjoy attribute: $attributesInfo\n";
