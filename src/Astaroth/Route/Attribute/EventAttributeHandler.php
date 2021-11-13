@@ -17,7 +17,7 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Parser\DataTransferObject\ClassInfo;
-use Astaroth\Parser\DataTransferObject\MethodInfo;
+use Astaroth\Parser\DataTransferObject\MethodsInfo;
 
 class EventAttributeHandler
 {
@@ -84,11 +84,11 @@ class EventAttributeHandler
     /**
      * Checks attributes for an event message_new
      * @param string $instanceName
-     * @param MethodInfo[] $methods
+     * @param MethodsInfo $methods
      * @param MessageNew $data
      * @see \Astaroth\Attribute\Event\MessageNew
      */
-    private function messageNew(string $instanceName, array $methods, MessageNew $data): void
+    private function messageNew(string $instanceName, MethodsInfo $methods, MessageNew $data): void
     {
         $execute = new AttributeMethodExecutor($instanceName, $methods, static function (object $attribute) use ($data) {
             if ($attribute instanceof AttributeValidatorInterface) {
@@ -112,18 +112,22 @@ class EventAttributeHandler
     /**
      * Checks attributes for an event message_event
      * @param string $instanceName
-     * @param MethodInfo[] $methods
+     * @param MethodsInfo $methods
      * @param MessageEvent $data
      * @see \Astaroth\Attribute\Event\MessageEvent
      */
-    private function messageEvent(string $instanceName, array $methods, MessageEvent $data): void
+    private function messageEvent(string $instanceName, MethodsInfo $methods, MessageEvent $data): void
     {
-        $execute = new AttributeMethodExecutor($instanceName, $methods, static function (AttributeValidatorInterface $attribute) use ($data) {
-            return match ($attribute::class) {
-                Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
-                State::class => $attribute->setHaystack($data->messageEvent())->validate(),
-                default => false
-            };
+        $execute = new AttributeMethodExecutor($instanceName, $methods, static function (object $attribute) use ($data) {
+            if ($attribute instanceof AttributeValidatorInterface) {
+                return match ($attribute::class) {
+                    Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
+                    State::class => $attribute->setHaystack($data->messageEvent())->validate(),
+                    default => false
+                };
+            }
+
+            return false;
         });
 
         $execute->addExtraParameters($data)->launch();

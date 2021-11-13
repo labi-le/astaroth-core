@@ -7,8 +7,8 @@ namespace Astaroth\Route\Attribute;
 use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Parser\DataTransferObject\MethodInfo;
 use Astaroth\Parser\DataTransferObject\MethodParamInfo;
+use Astaroth\Parser\DataTransferObject\MethodsInfo;
 use Astaroth\Route\ReturnResultHandler;
 use function in_array;
 
@@ -27,15 +27,15 @@ class AttributeMethodExecutor
     /**
      * General event coordinator
      * @param string $instanceName
-     * @param MethodInfo[] $methods DTO
+     * @param MethodsInfo $methodsInfo DTO
      * @param \Closure $event must return bool, if true, then the call launch method
      *
      * @see execute()
      */
     public function __construct(
-        private string   $instanceName,
-        private array    $methods,
-        private \Closure $event,
+        private string      $instanceName,
+        private MethodsInfo $methodsInfo,
+        private \Closure    $event,
     )
     {
     }
@@ -60,7 +60,7 @@ class AttributeMethodExecutor
 
     public function launch(): void
     {
-        foreach ($this->methods as $method) {
+        foreach ($this->methodsInfo->getMethods() as $method) {
             foreach ($method->getAttribute() as $attribute) {
                 if ($this->runEvent($attribute)) {
 

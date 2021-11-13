@@ -9,6 +9,7 @@ use Astaroth\Contracts\ParserInterface;
 use Astaroth\Parser\DataTransferObject\ClassInfo;
 use Astaroth\Parser\DataTransferObject\MethodInfo;
 use Astaroth\Parser\DataTransferObject\MethodParamInfo;
+use Astaroth\Parser\DataTransferObject\MethodsInfo;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
@@ -75,9 +76,9 @@ class ReflectionParser implements ParserInterface
     /**
      * Parse method from class
      * @param ReflectionMethod ...$class
-     * @return MethodInfo[]
+     * @return MethodsInfo
      */
-    private function parseMethod(ReflectionMethod ...$class): array
+    private function parseMethod(ReflectionMethod ...$class): MethodsInfo
     {
         $parameters = [];
         foreach ($class as $method) {
@@ -92,7 +93,7 @@ class ReflectionParser implements ParserInterface
             }
         }
 
-        return $parameters;
+        return new MethodsInfo($parameters);
     }
 
     /**
@@ -110,7 +111,7 @@ class ReflectionParser implements ParserInterface
                 $attribute = $this->parseAttribute(...$reflectionClass->getAttributes());
                 $methods = $this->parseMethod(...$reflectionClass->getMethods());
 
-                if ($attribute !== [] && $methods !== []) {
+                if ($attribute !== [] && $methods->getMethods() !== []) {
                     $map[] = new ClassInfo
                     (
                         $reflectionClass->getName(),

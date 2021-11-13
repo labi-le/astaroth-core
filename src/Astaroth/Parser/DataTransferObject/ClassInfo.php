@@ -11,14 +11,14 @@ final class ClassInfo
     /**
      * @param string $name
      * @param object[] $attribute
-     * @param MethodInfo[] $methods
+     * @param MethodsInfo $methods
      * @param string $className
      */
     public function __construct
     (
         private string $name,
         private array  $attribute,
-        private array  $methods,
+        private MethodsInfo  $methods,
         private string $className,
     )
     {
@@ -51,9 +51,9 @@ final class ClassInfo
     }
 
     /**
-     * @return array
+     * @return MethodsInfo
      */
-    public function getMethods(): array
+    public function getMethods(): MethodsInfo
     {
         return $this->methods;
     }
