@@ -28,4 +28,9 @@ class DescriptionParserTest extends TestCase
     {
         assertEquals("test method description", (new DescriptionParser(__CLASS__))->getMethodDescription("testGetMethodDescription"));
     }
+
+    public function testGetAllMethodsDescription()
+    {
+        assertEquals("Method: testGetMethodDescription\nEnjoy attribute: Astaroth\Attribute\Description\nDescription: test method description\n\n", (new DescriptionParser(__CLASS__))->getAllMethodsDescription());
+    }
 }
