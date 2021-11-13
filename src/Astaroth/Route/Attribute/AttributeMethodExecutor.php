@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
+use Astaroth\Attribute\MessageRegex;
 use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -14,10 +15,12 @@ use function in_array;
 
 class AttributeMethodExecutor
 {
-    public const AVAILABLE_EVENTS =
+    public const PROTECTED_INSTANCES =
         [
             MessageNew::class,
-            MessageEvent::class
+            MessageEvent::class,
+
+            MessageRegex::class
         ];
 
     /** @var object[] */
@@ -90,7 +93,7 @@ class AttributeMethodExecutor
     {
         foreach ($methodParams as $parameter) {
             if (
-                !in_array($parameter->getType(), self::AVAILABLE_EVENTS, true)
+                !in_array($parameter->getType(), self::PROTECTED_INSTANCES, true)
                 && class_exists($parameter->getType())
                 && !in_array($parameter, $this->getExtraParameters(), true)
             ) {
