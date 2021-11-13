@@ -7,6 +7,7 @@ namespace Astaroth\Attribute;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
 use JetBrains\PhpStorm\Language;
+use function count;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -25,7 +26,7 @@ final class MessageRegex implements AttributeValidatorInterface
     public function validate(): bool
     {
         try {
-            return (bool)preg_match($this->pattern, $this->haystack);
+            return count($this->getMatches()) > 0;
         } catch (\Exception) {
             return false;
         }
@@ -35,5 +36,17 @@ final class MessageRegex implements AttributeValidatorInterface
     {
         $this->haystack = $haystack;
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getMatches(): array
+    {
+        /** @var string[] $matches */
+        $matches = [];
+        @preg_match($this->pattern, $this->haystack, $matches);
+
+        return $matches;
     }
 }
