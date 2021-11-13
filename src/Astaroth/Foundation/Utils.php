@@ -104,7 +104,9 @@ class Utils
      */
     public static function var_dumpToStdout(mixed ...$data): void
     {
-        file_put_contents('php://stdout', print_r($data, true));
+        foreach ($data as $out) {
+            file_put_contents('php://stdout', print_r($out, true));
+        }
     }
 
     /**
