@@ -100,11 +100,11 @@ class Utils
     /**
      * Простой дебаг в stdout
      * Будет полезно для callback
-     * @param $data
+     * @param mixed ...$data
      */
-    public static function var_dumpToStdout($data): void
+    public static function var_dumpToStdout(mixed ...$data): void
     {
-        file_put_contents('php://stdout', var_export($data, true));
+        file_put_contents('php://stdout', print_r($data, true));
     }
 
     /**
