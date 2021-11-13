@@ -38,7 +38,7 @@ final class DescriptionParser
             throw new MethodNotFoundException("$methodName not found in class $this->className");
         }
 
-        foreach (current($this->classInfo)->getMethods() as $method) {
+        foreach (current($this->classInfo)->getMethods()->getMethods() as $method) {
             if ($method->getName() === $methodName) {
                 return $method->getDescription();
             }
@@ -60,12 +60,8 @@ final class DescriptionParser
         return null;
     }
 
-    public function getAllMethodsDescription(): ?array
+    public function getAllMethodsDescription(): string
     {
-        $methodsDescription = [];
-        foreach (current($this->classInfo)->getMethods() as $method) {
-            $methodsDescription[$method->getName()] = $method->getDescription();
-        }
-        return $methodsDescription === [] ? null : $methodsDescription;
+        return current($this->classInfo)->getMethods()->__toString();
     }
 }
