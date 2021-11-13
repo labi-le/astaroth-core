@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Parser\DataTransferObject;
 
+use Astaroth\Attribute\Description;
+
 final class ClassInfo
 {
     /**
@@ -36,6 +38,16 @@ final class ClassInfo
     public function getAttribute(): array
     {
         return $this->attribute;
+    }
+
+    public function getDescription(): ?string
+    {
+        foreach ($this->getAttribute() as $attribute) {
+            if ($attribute instanceof Description) {
+                return $attribute->getDescription();
+            }
+        }
+        return null;
     }
 
     /**

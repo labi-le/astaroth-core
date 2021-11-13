@@ -26,7 +26,7 @@ final class DescriptionParser
 
     public function getClassDescription(): ?string
     {
-        return $this->getDescription(current($this->classInfo)->getAttribute());
+        return current($this->classInfo)->getDescription();
     }
 
     /**
@@ -40,7 +40,7 @@ final class DescriptionParser
 
         foreach (current($this->classInfo)->getMethods() as $method) {
             if ($method->getName() === $methodName) {
-                return $this->getDescription($method->getAttribute());
+                return $method->getDescription();
             }
         }
         return null;
@@ -58,5 +58,14 @@ final class DescriptionParser
             }
         }
         return null;
+    }
+
+    public function getAllMethodsDescription(): ?array
+    {
+        $methodsDescription = [];
+        foreach (current($this->classInfo)->getMethods() as $method) {
+            $methodsDescription[] = $method->getDescription();
+        }
+        return $methodsDescription === [] ? null : $methodsDescription;
     }
 }
