@@ -64,7 +64,7 @@ final class DescriptionParser
     {
         $methodsDescription = [];
         foreach (current($this->classInfo)->getMethods() as $method) {
-            $methodsDescription[] = $method->getDescription();
+            $methodsDescription[$method->getName()] = $method->getDescription();
         }
         return $methodsDescription === [] ? null : $methodsDescription;
     }
