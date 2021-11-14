@@ -12,10 +12,10 @@ use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Attribute\State;
 use Astaroth\Auth\Configuration;
+use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Foundation\Utils;
 use Astaroth\Parser\ClassNotFoundException;
 use Astaroth\Parser\DataTransferObject\MethodParamInfo;
 use Astaroth\Parser\DataTransferObject\MethodsInfo;
@@ -24,14 +24,6 @@ use function in_array;
 
 class MethodExecutor
 {
-    public const PROTECTED_INSTANCES =
-        [
-            MessageNew::class,
-            MessageEvent::class,
-
-            MessageRegex::class
-        ];
-
     /** @var AdditionalParameter[] */
     private array $extraParameters = [];
 
@@ -81,7 +73,10 @@ class MethodExecutor
                 if ($attribute instanceof AttributeValidatorInterface && $this->validateAttribute($attribute)) {
                     //if the validation is successful, proceed to the execution of the method
                     //passing attributes to parameters (if their type is explicitly specified in user-method)
-                    $this->addExtraAttributeToParameters($attribute);
+                    if ($attribute instanceof AttributeReturnInterface) {
+                        $this->addExtraAttributeToParameters($attribute);
+                    }
+
                     $this->addExtraParameters(...
                         array_map(static function (MethodParamInfo $info) {
                             return new AdditionalParameter($info->getName(), $info->getType(), true, null);
@@ -236,23 +231,19 @@ class MethodExecutor
 
     /**
      * We give the opportunity to get data from the attribute if it passed validation
-     * @param AttributeValidatorInterface $attribute
+     * @param AttributeReturnInterface $attribute
      */
-    private function addExtraAttributeToParameters(AttributeValidatorInterface $attribute): void
+    private function addExtraAttributeToParameters(AttributeReturnInterface $attribute): void
     {
         if (in_array($attribute::class, $this->forwardedAttributes, true)) {
-
-            if ($attribute instanceof MessageRegex) {
-                $this->addExtraParameters(
-                    new AdditionalParameter(
-                        "regex",
-                        $attribute::class,
-                        false,
-                        $attribute
-                    )
-                );
-            }
-            //...
+            $this->addExtraParameters(
+                new AdditionalParameter(
+                    $attribute::class . "_forwarded",
+                    $attribute::class,
+                    false,
+                    $attribute
+                )
+            );
         }
     }
 }
