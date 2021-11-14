@@ -36,6 +36,8 @@ class MethodExecutor
     private array $extraParameters = [];
 
     private array $availableAttribute = [];
+    private array $forwardedAttributes = [];
+
     private null|MessageEvent|MessageNew $validateData = null;
 
 
@@ -78,21 +80,8 @@ class MethodExecutor
             foreach ($method->getAttribute() as $attribute) {
                 if ($attribute instanceof AttributeValidatorInterface && $this->validateAttribute($attribute)) {
                     //if the validation is successful, proceed to the execution of the method
-
                     //passing attributes to parameters (if their type is explicitly specified in user-method)
-                    if ($attribute instanceof MessageRegex) {
-                        $this->addExtraParameters(
-                            new AdditionalParameter(
-                                "regex",
-                                $attribute::class,
-                                false,
-                                $attribute
-                            )
-                        );
-
-
-                    }
-
+                    $this->addExtraAttributeToParameters($attribute);
                     $this->addExtraParameters(...
                         array_map(static function (MethodParamInfo $info) {
                             return new AdditionalParameter($info->getName(), $info->getType(), true, null);
@@ -155,13 +144,10 @@ class MethodExecutor
      */
     private function parameterNormalizer(array $methodParametersSchema): array
     {
-        Utils::var_dumpToStdout($this->getExtraParameters());
-
         $methodParameters = [];
         foreach ($methodParametersSchema as $schema) {
             foreach ($this->getExtraParameters() as $extraParameter) {
                 if ($schema->getType() === $extraParameter->getType()) {
-
                     if ($extraParameter->isNeedCreateInstance() === true) {
                         $methodParameters[] = $this->initializeInstance($extraParameter->getType());
                     } else {
@@ -173,23 +159,6 @@ class MethodExecutor
         }
 
         return $methodParameters;
-
-//        foreach ($this->getExtraParameters() as $extraParameter) {
-//
-//        }
-
-//        foreach ($methodParametersSchema as $parameter) {
-//            if (
-//                class_exists($parameter->getType())
-//                && !in_array($parameter, $this->getExtraParameters(), true)
-//            ) {
-//                !in_array($parameter->getType(), self::PROTECTED_INSTANCES, true)
-//                array_multisort($this->extraParameters, $schema);
-
-//                TODO пробрасывать уже инициализированные инстансы
-//                $this->addExtraParameters(new ($parameter->getType()));
-//            }
-//        }
     }
 
 
@@ -217,7 +186,9 @@ class MethodExecutor
 
     public function setAvailableAttribute(string ...$class): static
     {
-        $this->availableAttribute = $class;
+        foreach ($class as $str) {
+            $this->availableAttribute[] = $str;
+        }
         return $this;
     }
 
@@ -253,5 +224,35 @@ class MethodExecutor
         }
 
         throw new ClassNotFoundException("$class not found");
+    }
+
+    public function setForwardedAttribute(string ...$class): static
+    {
+        foreach ($class as $str) {
+            $this->forwardedAttributes[] = $str;
+        }
+        return $this;
+    }
+
+    /**
+     * We give the opportunity to get data from the attribute if it passed validation
+     * @param AttributeValidatorInterface $attribute
+     */
+    private function addExtraAttributeToParameters(AttributeValidatorInterface $attribute): void
+    {
+        if (in_array($attribute::class, $this->forwardedAttributes, true)) {
+
+            if ($attribute instanceof MessageRegex) {
+                $this->addExtraParameters(
+                    new AdditionalParameter(
+                        "regex",
+                        $attribute::class,
+                        false,
+                        $attribute
+                    )
+                );
+            }
+            //...
+        }
     }
 }

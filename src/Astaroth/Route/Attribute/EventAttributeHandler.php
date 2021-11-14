@@ -103,6 +103,7 @@ class EventAttributeHandler
                 State::class,
                 Action::class
             )
+            ->setForwardedAttribute(MessageRegex::class)
             ->addExtraParameters
             (
                 new AdditionalParameter(
