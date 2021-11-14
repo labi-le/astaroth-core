@@ -8,6 +8,7 @@ use Astaroth\Attribute\Action;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;
 use Astaroth\Attribute\Conversation;
+use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
@@ -100,9 +101,10 @@ class EventAttributeHandler
                 Attachment::class,
                 ClientInfo::class,
                 State::class,
-                Action::class
+                Action::class,
+                Debug::class
             )
-            ->setForwardedAttribute(MessageRegex::class)
+            ->setForwardedAttribute(MessageRegex::class, Debug::class)
             ->addExtraParameters
             (
                 new AdditionalParameter(
@@ -126,7 +128,8 @@ class EventAttributeHandler
     {
         $execute = new MethodExecutor($instanceName, $methods);
         $execute
-            ->setAvailableAttribute(Payload::class, State::class)
+            ->setAvailableAttribute(Payload::class, State::class, Debug::class)
+            ->setForwardedAttribute(Debug::class)
             ->setValidateData($data)
             ->addExtraParameters
             (

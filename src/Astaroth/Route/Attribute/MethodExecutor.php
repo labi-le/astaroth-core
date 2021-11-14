@@ -7,6 +7,7 @@ namespace Astaroth\Route\Attribute;
 use Astaroth\Attribute\Action;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;
+use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
@@ -104,6 +105,10 @@ class MethodExecutor
     private function validateAttribute(AttributeValidatorInterface $attribute): bool
     {
         if (in_array($attribute::class, $this->getAvailableAttribute(), true)) {
+
+            if ($attribute::class === Debug::class) {
+                $attribute->setHaystack($this->getValidateData());
+            }
 
             if ($attribute::class === Message::class || $attribute::class === MessageRegex::class) {
                 $attribute->setHaystack($this->getValidateData()?->getText());
