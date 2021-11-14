@@ -28,6 +28,7 @@ final class Action implements AttributeValidatorInterface
     public const CHAT_PIN_MESSAGE = "chat_pin_message";
     public const CHAT_UNPIN_MESSAGE = "chat_unpin_message";
     public const CHAT_INVITE_USER_BY_LINK = "chat_invite_user_by_link";
+    public const CONVERSATION_STYLE_UPDATE = "conversation_style_update";
 
     /**
      * @param string $type accepts self constants
@@ -47,6 +48,7 @@ final class Action implements AttributeValidatorInterface
                 self::CHAT_KICK_USER,
                 self::CHAT_CREATE,
                 self::CHAT_TITLE_UPDATE,
+                self::CONVERSATION_STYLE_UPDATE,
             ]
         )]
         private string $type,
