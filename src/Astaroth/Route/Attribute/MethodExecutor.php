@@ -15,6 +15,7 @@ use Astaroth\Auth\Configuration;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Foundation\Utils;
 use Astaroth\Parser\ClassNotFoundException;
 use Astaroth\Parser\DataTransferObject\MethodParamInfo;
 use Astaroth\Parser\DataTransferObject\MethodsInfo;
@@ -80,7 +81,18 @@ class MethodExecutor
 
                     //passing attributes to parameters (if their type is explicitly specified in user-method)
                     if ($attribute instanceof MessageRegex) {
-                        $this->addExtraParameters($attribute);
+                        foreach ($method->getParameters() as $parameter) {
+                            if ($parameter->getType() === MessageRegex::class) {
+                                $this->addExtraParameters(
+                                    new AdditionalParameter(
+                                        $parameter->getName(),
+                                        $attribute::class,
+                                        false,
+                                        $attribute
+                                    )
+                                );
+                            }
+                        }
                     }
 
                     $this->addExtraParameters(...$method->getParameters());
@@ -107,7 +119,7 @@ class MethodExecutor
     {
         if (in_array($attribute::class, $this->getAvailableAttribute(), true)) {
 
-            if ($attribute::class === Message::class) {
+            if ($attribute::class === Message::class || $attribute::class === MessageRegex::class) {
                 $attribute->setHaystack($this->getValidateData()?->getText());
             }
             if ($attribute::class === Payload::class) {
@@ -141,10 +153,12 @@ class MethodExecutor
      */
     private function parameterNormalizer(array $methodParametersSchema): array
     {
+        Utils::var_dumpToStdout($this->getExtraParameters());
+
         $methodParameters = [];
         foreach ($methodParametersSchema as $schema) {
             foreach ($this->getExtraParameters() as $extraParameter) {
-                if ($schema->getType() === $extraParameter->getType()) {
+                if ($schema->getType() === $extraParameter->getType() && $schema->getName() === $extraParameter->getName()) {
 
                     if ($extraParameter->isNeedCreateInstance() === true) {
                         $methodParameters[] = $this->initializeInstance($extraParameter->getType());
