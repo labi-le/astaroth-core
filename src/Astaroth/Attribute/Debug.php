@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeReturnInterface;
+use Astaroth\Foundation\Utils;
 use Astaroth\TextMatcher;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -29,6 +30,9 @@ final class Debug implements AttributeReturnInterface
 
     public function setHaystack($haystack): Debug
     {
+        Utils::var_dumpToStdout($haystack);
+        var_dump($haystack);
+
         $this->haystack = $haystack;
         return $this;
     }
