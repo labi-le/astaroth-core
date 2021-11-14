@@ -17,7 +17,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 final class Debug implements AttributeReturnInterface
 {
-    private $haystack;
+    private mixed $haystack;
 
     public function __construct()
     {
