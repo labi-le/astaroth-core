@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Route;
 
+use JetBrains\PhpStorm\NoReturn;
 use function is_callable;
 
 class ReturnResultHandler
@@ -31,6 +32,7 @@ class ReturnResultHandler
         $callable();
     }
 
+    #[NoReturn]
     private function terminate(): void
     {
         die;
