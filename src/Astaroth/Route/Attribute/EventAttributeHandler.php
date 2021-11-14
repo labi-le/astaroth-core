@@ -90,23 +90,22 @@ class EventAttributeHandler
      */
     private function messageNew(string $instanceName, MethodsInfo $methods, MessageNew $data): void
     {
-        $execute = new AttributeMethodExecutor($instanceName, $methods, static function (object $attribute) use ($data) {
-            if ($attribute instanceof AttributeValidatorInterface) {
-                return match ($attribute::class) {
-                    Message::class, MessageRegex::class => $attribute->setHaystack($data->getText())->validate(),
-                    Payload::class => $attribute->setHaystack($data->getPayload())->validate(),
-                    Attachment::class => $attribute->setHaystack($data->getAttachments())->validate(),
-                    ClientInfo::class => $attribute->setHaystack($data->getClientInfo())->validate(),
-                    State::class => $attribute->setHaystack($data)->validate(),
-                    Action::class => $attribute->setHaystack($data->getAction())->validate(),
-                    default => false
-                };
-            }
-
-            return false;
-        });
-
-        $execute->addExtraParameters($data)->launch();
+        $execute = new MethodExecutor($instanceName, $methods);
+        $execute
+            ->setValidateData($data)
+            ->setAvailableAttribute
+            (
+                Message::class,
+                MessageRegex::class,
+                Payload::class,
+                Attachment::class,
+                ClientInfo::class,
+                State::class,
+                Action::class
+            )
+            ->addExtraParameters($data)
+            ->launch()
+        ;
     }
 
     /**
@@ -118,18 +117,11 @@ class EventAttributeHandler
      */
     private function messageEvent(string $instanceName, MethodsInfo $methods, MessageEvent $data): void
     {
-        $execute = new AttributeMethodExecutor($instanceName, $methods, static function (object $attribute) use ($data) {
-            if ($attribute instanceof AttributeValidatorInterface) {
-                return match ($attribute::class) {
-                    Payload::class => $attribute->setHaystack($data->messageEvent()->getPayload())->validate(),
-                    State::class => $attribute->setHaystack($data->messageEvent())->validate(),
-                    default => false
-                };
-            }
-
-            return false;
-        });
-
-        $execute->addExtraParameters($data)->launch();
+        $execute = new MethodExecutor($instanceName, $methods);
+        $execute
+            ->setAvailableAttribute(Payload::class, State::class)
+            ->setValidateData($data)
+            ->addExtraParameters($data)
+            ->launch();
     }
 }
