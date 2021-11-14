@@ -103,6 +103,15 @@ class EventAttributeHandler
                 State::class,
                 Action::class
             )
+            ->addExtraParameters
+            (
+                new AdditionalParameter(
+                    "data",
+                    $data::class,
+                    false,
+                    $data
+                )
+            )
             ->launch();
     }
 
@@ -119,6 +128,15 @@ class EventAttributeHandler
         $execute
             ->setAvailableAttribute(Payload::class, State::class)
             ->setValidateData($data)
+            ->addExtraParameters
+            (
+                new AdditionalParameter(
+                    "data",
+                    $data::class,
+                    false,
+                    $data
+                )
+            )
             ->launch();
     }
 }

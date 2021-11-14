@@ -83,7 +83,7 @@ class MethodExecutor
                     if ($attribute instanceof MessageRegex) {
                         $this->addExtraParameters(
                             new AdditionalParameter(
-                                self::getParameterName($attribute, $this->methodsInfo),
+                                "regex",
                                 $attribute::class,
                                 false,
                                 $attribute
@@ -160,7 +160,7 @@ class MethodExecutor
         $methodParameters = [];
         foreach ($methodParametersSchema as $schema) {
             foreach ($this->getExtraParameters() as $extraParameter) {
-                if ($schema->getType() === $extraParameter->getType() && $schema->getName() === $extraParameter->getName()) {
+                if ($schema->getType() === $extraParameter->getType()) {
 
                     if ($extraParameter->isNeedCreateInstance() === true) {
                         $methodParameters[] = $this->initializeInstance($extraParameter->getType());
@@ -208,7 +208,8 @@ class MethodExecutor
     public function addExtraParameters(AdditionalParameter ...$instances): static
     {
         foreach ($instances as $instance) {
-            $this->extraParameters[] = $instance;
+            isset($this->getExtraParameters()[$instance->getType()]) ?:
+                $this->extraParameters[$instance->getType()] = $instance;
         }
 
         return $this;
@@ -252,23 +253,5 @@ class MethodExecutor
         }
 
         throw new ClassNotFoundException("$class not found");
-    }
-
-    /**
-     * @param object $object
-     * @param MethodsInfo $methods
-     * @return string|null
-     */
-    public static function getParameterName(object $object, MethodsInfo $methods): ?string
-    {
-        foreach ($methods->getMethods() as $method) {
-            foreach ($method->getParameters() as $parameter) {
-                if ($parameter->getType() === $object::class) {
-                    return $parameter->getName();
-                }
-            }
-        }
-
-        return null;
     }
 }
