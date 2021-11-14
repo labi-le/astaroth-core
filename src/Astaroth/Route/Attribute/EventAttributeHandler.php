@@ -12,7 +12,6 @@ use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Attribute\State;
-use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
