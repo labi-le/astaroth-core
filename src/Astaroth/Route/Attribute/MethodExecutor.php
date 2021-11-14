@@ -81,21 +81,23 @@ class MethodExecutor
 
                     //passing attributes to parameters (if their type is explicitly specified in user-method)
                     if ($attribute instanceof MessageRegex) {
-                        foreach ($method->getParameters() as $parameter) {
-                            if ($parameter->getType() === MessageRegex::class) {
-                                $this->addExtraParameters(
-                                    new AdditionalParameter(
-                                        $parameter->getName(),
-                                        $attribute::class,
-                                        false,
-                                        $attribute
-                                    )
-                                );
-                            }
-                        }
+                        $this->addExtraParameters(
+                            new AdditionalParameter(
+                                self::getParameterName($attribute, $this->methodsInfo),
+                                $attribute::class,
+                                false,
+                                $attribute
+                            )
+                        );
+
+
                     }
 
-                    $this->addExtraParameters(...$method->getParameters());
+                    $this->addExtraParameters(...
+                        array_map(static function (MethodParamInfo $info) {
+                            return new AdditionalParameter($info->getName(), $info->getType(), true, null);
+                        }, $method->getParameters())
+                    );
 
                     //normalize the parameter list for the method
                     $parameters = $this->parameterNormalizer($method->getParameters());
@@ -200,28 +202,13 @@ class MethodExecutor
     }
 
     /**
-     * @param object ...$instances
+     * @param AdditionalParameter ...$instances
      * @return static
      */
-    public function addExtraParameters(object ...$instances): static
+    public function addExtraParameters(AdditionalParameter ...$instances): static
     {
-        foreach ($instances as $key => $instance) {
-            if ($instance instanceof MethodParamInfo) {
-                $this->extraParameters[] = new AdditionalParameter
-                (
-                    $instance->getName(),
-                    $instance->getType(),
-                    true,
-                );
-            } else {
-                $this->extraParameters[] = new AdditionalParameter
-                (
-                    "custom_method_param_$key",
-                    $instance::class,
-                    false,
-                    $instance
-                );
-            }
+        foreach ($instances as $instance) {
+            $this->extraParameters[] = $instance;
         }
 
         return $this;
@@ -265,5 +252,23 @@ class MethodExecutor
         }
 
         throw new ClassNotFoundException("$class not found");
+    }
+
+    /**
+     * @param object $object
+     * @param MethodsInfo $methods
+     * @return string|null
+     */
+    public static function getParameterName(object $object, MethodsInfo $methods): ?string
+    {
+        foreach ($methods->getMethods() as $method) {
+            foreach ($method->getParameters() as $parameter) {
+                if ($parameter->getType() === $object::class) {
+                    return $parameter->getName();
+                }
+            }
+        }
+
+        return null;
     }
 }

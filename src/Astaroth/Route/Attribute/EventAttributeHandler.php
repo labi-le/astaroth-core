@@ -103,9 +103,16 @@ class EventAttributeHandler
                 State::class,
                 Action::class
             )
-            ->addExtraParameters($data)
-            ->launch()
-        ;
+            ->addExtraParameters
+            (
+                new AdditionalParameter(
+                    MethodExecutor::getParameterName($data, $methods),
+                    $data::class,
+                    false,
+                    $data
+                )
+            )
+            ->launch();
     }
 
     /**
@@ -121,7 +128,9 @@ class EventAttributeHandler
         $execute
             ->setAvailableAttribute(Payload::class, State::class)
             ->setValidateData($data)
-            ->addExtraParameters($data)
+            ->addExtraParameters(
+                new AdditionalParameter("fetched", $data::class, false, $data)
+            )
             ->launch();
     }
 }
