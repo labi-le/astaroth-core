@@ -7,6 +7,7 @@ namespace Astaroth\Route\Attribute;
 use Astaroth\Attribute\Action;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;
+use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
@@ -21,6 +22,7 @@ use Astaroth\Parser\ClassNotFoundException;
 use Astaroth\Parser\DataTransferObject\MethodParamInfo;
 use Astaroth\Parser\DataTransferObject\MethodsInfo;
 use Astaroth\Route\ReturnResultHandler;
+use JetBrains\PhpStorm\ExpectedValues;
 use function in_array;
 
 class MethodExecutor
@@ -29,7 +31,6 @@ class MethodExecutor
     private array $extraParameters = [];
 
     private array $availableAttribute = [];
-    private array $forwardedAttributes = [];
 
     private null|MessageEvent|MessageNew $validateData = null;
 
@@ -74,9 +75,7 @@ class MethodExecutor
                 if ($attribute instanceof AttributeValidatorInterface && $this->validateAttribute($attribute)) {
                     //if the validation is successful, proceed to the execution of the method
                     //passing attributes to parameters (if their type is explicitly specified in user-method)
-                    if ($attribute instanceof AttributeReturnInterface) {
-                        $this->addExtraAttributeToParameters($attribute);
-                    }
+                    $this->addExtraAttributeToParameters($method->getAttribute());
 
                     $this->addExtraParameters(...
                         array_map(static function (MethodParamInfo $info) {
@@ -184,6 +183,11 @@ class MethodExecutor
         return $this;
     }
 
+    #[ExpectedValues(values: [
+        Action::class, Attachment::class, ClientInfo::class, Conversation::class,
+        Debug::class, Message::class, MessageRegex::class, Payload::class, State::class
+    ])
+    ]
     public function setAvailableAttribute(string ...$class): static
     {
         foreach ($class as $str) {
@@ -226,29 +230,23 @@ class MethodExecutor
         throw new ClassNotFoundException("$class not found");
     }
 
-    public function setForwardedAttribute(string ...$class): static
-    {
-        foreach ($class as $str) {
-            $this->forwardedAttributes[] = $str;
-        }
-        return $this;
-    }
-
     /**
      * We give the opportunity to get data from the attribute if it passed validation
-     * @param AttributeReturnInterface $attribute
+     * @param object[] $attributes
      */
-    private function addExtraAttributeToParameters(AttributeReturnInterface $attribute): void
+    private function addExtraAttributeToParameters(array $attributes): void
     {
-        if (in_array($attribute::class, $this->forwardedAttributes, true)) {
-            $this->addExtraParameters(
-                new AdditionalParameter(
-                    $attribute::class . "_forwarded",
-                    $attribute::class,
-                    false,
-                    $attribute
-                )
-            );
+        foreach ($attributes as $attribute) {
+            if ($attribute instanceof AttributeReturnInterface) {
+                $this->addExtraParameters(
+                    new AdditionalParameter(
+                        $attribute::class . "_forwarded",
+                        $attribute::class,
+                        false,
+                        $attribute
+                    )
+                );
+            }
         }
     }
 }

@@ -104,7 +104,6 @@ class EventAttributeHandler
                 Action::class,
                 Debug::class
             )
-            ->setForwardedAttribute(MessageRegex::class, Debug::class)
             ->addExtraParameters
             (
                 new AdditionalParameter(
@@ -129,7 +128,6 @@ class EventAttributeHandler
         $execute = new MethodExecutor($instanceName, $methods);
         $execute
             ->setAvailableAttribute(Payload::class, State::class, Debug::class)
-            ->setForwardedAttribute(Debug::class)
             ->setValidateData($data)
             ->addExtraParameters
             (
