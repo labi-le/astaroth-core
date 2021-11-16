@@ -56,6 +56,7 @@ class MethodExecutor
                     $this->parameterNormalizer($method->getParameters());
 
                     $method_return = $this->execute($this->className, $method->getName());
+                    $this->clearStack();
 
                     /** We process the result returned by the method */
                     new ReturnResultHandler($method_return);
@@ -171,7 +172,12 @@ class MethodExecutor
     public function validateAttribute(object $attribute): bool
     {
         return (bool)($this->callableValidateAttribute)($attribute);
+    }
 
+    private function clearStack()
+    {
+        unset($this->parameters);
+        $this->parameters = [];
     }
 
 }
