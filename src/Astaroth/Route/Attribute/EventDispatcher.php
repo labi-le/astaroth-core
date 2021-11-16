@@ -42,14 +42,16 @@ class EventDispatcher
     {
         return function ($attribute) {
             if ($attribute instanceof AttributeValidatorInterface) {
-                return (match ($this->validateData::class) {
-                    MessageNew::class => $this->messageNewValidate($attribute),
-                    MessageEvent::class => $this->messageEventValidate($attribute),
+                if ($this->validateData instanceof MessageNew) {
+                    $this->messageNewValidate($attribute);
+                }
+                if ($this->validateData instanceof MessageNew) {
+                    $this->messageEventValidate($attribute);
+                }
 
-                    //WallPostNew::class
-                    //todo implement another events
-                    default => $this->defaultValidate($attribute)
-                })->validate();
+                $this->anyEventValidate($attribute);
+
+                return $attribute->validate();
 
             }
 
@@ -57,7 +59,7 @@ class EventDispatcher
         };
     }
 
-    private function messageNewValidate(AttributeValidatorInterface $attribute): AttributeValidatorInterface
+    private function messageNewValidate(AttributeValidatorInterface $attribute): void
     {
         if ($attribute::class === Message::class || $attribute::class === MessageRegex::class) {
             $attribute->setHaystack($this->validateData->getText());
@@ -70,20 +72,16 @@ class EventDispatcher
         if (($attribute::class === Action::class)) {
             $attribute->setHaystack($this->validateData->getAction());
         }
-
-        return $attribute;
     }
 
-    private function messageEventValidate(AttributeValidatorInterface $attribute): AttributeValidatorInterface
+    private function messageEventValidate(AttributeValidatorInterface $attribute):void
     {
         if ($attribute::class === Payload::class) {
             $attribute->setHaystack($this->validateData->getPayload());
         }
-
-        return $attribute;
     }
 
-    private function defaultValidate(AttributeValidatorInterface $attribute): AttributeValidatorInterface
+    private function anyEventValidate(AttributeValidatorInterface $attribute): void
     {
         if ($attribute instanceof Debug || $attribute instanceof State) {
             $attribute->setHaystack($this->validateData);
@@ -91,8 +89,6 @@ class EventDispatcher
         if ($attribute::class === ClientInfo::class) {
             $attribute->setHaystack($this->validateData->getClientInfo());
         }
-
-        return $attribute;
     }
 
 }
