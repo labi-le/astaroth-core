@@ -7,15 +7,15 @@ use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Description;
 use Astaroth\Attribute\Event\MessageNew as TestEvent;
 use Astaroth\Attribute\Message;
+use Astaroth\Attribute\MessageRegex;
+use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Parser\DataTransferObject\ClassInfo;
 use Astaroth\Parser\ReflectionParser;
 use Astaroth\Route\Attribute\AdditionalParameter;
 use Astaroth\Route\Attribute\MethodExecutor;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertTrue;
 
 #[TestEvent]
 class MethodExecutorTest extends TestCase
@@ -23,10 +23,6 @@ class MethodExecutorTest extends TestCase
 
     private MethodExecutor $methodExecutor;
     private MessageNew $data;
-    /**
-     * @var ClassInfo[]
-     */
-    private array $classInfo;
 
     public function executableMethod(Description $description)
     {
@@ -73,8 +69,19 @@ class MethodExecutorTest extends TestCase
 }';
 
         $this->data = (new DataFetcher(json_decode($data, false)))->messageNew();
-        $this->classInfo = ReflectionParser::setClassMap([__CLASS__])->parse();
-        $this->methodExecutor = new MethodExecutor(self::class, current($this->classInfo)->getMethods());
+        $classInfo = ReflectionParser::setClassMap([__CLASS__])->parse();
+        $this->methodExecutor = new MethodExecutor(self::class, current($classInfo)->getMethods());
+
+        $this->methodExecutor
+            ->setCallableValidateAttribute(function ($attribute) {
+
+                if ($attribute instanceof AttributeValidatorInterface && ($attribute::class === Message::class || $attribute::class === MessageRegex::class)) {
+                    $attribute->setHaystack($this->data->getText());
+                }
+                return $attribute->validate();
+
+            })
+            ->addParameters(new AdditionalParameter("data", $this->data::class, false, $this->data));
     }
 
     #[Message("test")]
@@ -85,42 +92,15 @@ class MethodExecutorTest extends TestCase
         assertEquals("test", $data->getText());
     }
 
-    public function testGetAvailableAttribute()
-    {
-        assertEquals(\count($this->methodExecutor->getAvailableAttribute()), 3);
-    }
-
     public function testLaunch()
     {
-        $this->methodExecutor
-            ->setAvailableAttribute(Message::class, Debug::class, Description::class)
-            ->setValidateData($this->data->messageNew())
-            ->addExtraParameters(new AdditionalParameter("data", $this->data::class, false, $this->data))
-            ->launch()
-        ;
+        $this->methodExecutor->launch();
     }
 
 
-    public function testSetAvailableAttribute()
+    public function testAddParameters()
     {
-
-    }
-
-    public function testSetValidateData()
-    {
-        assertEquals($this->methodExecutor->setValidateData($this->data)::class, MethodExecutor::class);
-    }
-
-
-    public function testAddExtraParameters()
-    {
-        $this->methodExecutor->addExtraParameters(new AdditionalParameter("test", "test", false));
-        print_r($this->methodExecutor->getExtraParameters());
-//        assertEquals( MethodExecutor::class);
-    }
-
-    public function testGetValidateData()
-    {
-
+        $this->methodExecutor->addParameters(new AdditionalParameter("test", "test", false));
+        assertEquals($this->methodExecutor->getParameters()["test"]->getType(), "test");
     }
 }
