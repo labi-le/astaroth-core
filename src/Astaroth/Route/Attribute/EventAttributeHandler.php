@@ -4,20 +4,12 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
-use Astaroth\Attribute\Action;
-use Astaroth\Attribute\Attachment;
-use Astaroth\Attribute\ClientInfo;
 use Astaroth\Attribute\Conversation;
-use Astaroth\Attribute\Debug;
-use Astaroth\Attribute\Message;
-use Astaroth\Attribute\MessageRegex;
-use Astaroth\Attribute\Payload;
+use Astaroth\Attribute\Event\MessageEvent;
+use Astaroth\Attribute\Event\MessageNew;
 use Astaroth\Attribute\State;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\DataFetcher\Events\MessageEvent;
-use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Parser\DataTransferObject\ClassInfo;
-use Astaroth\Parser\DataTransferObject\MethodsInfo;
 
 class EventAttributeHandler
 {
@@ -59,10 +51,10 @@ class EventAttributeHandler
                  * @see \Astaroth\Attribute\Event\MessageNew
                  */
                 if (
-                    $attribute instanceof \Astaroth\Attribute\Event\MessageNew &&
+                    $attribute instanceof MessageNew &&
                     $attribute->setHaystack($data->getType())->validate()
                 ) {
-                    $this->messageNew($class->getClassName(), $class->getMethods(), $data->messageNew());
+                    new EventDispatcher($class, $data->messageNew());
                 }
 
                 /**
@@ -70,74 +62,14 @@ class EventAttributeHandler
                  * @see \Astaroth\Attribute\Event\MessageEvent
                  */
                 if (
-                    $attribute instanceof \Astaroth\Attribute\Event\MessageEvent &&
+                    $attribute instanceof MessageEvent &&
                     $attribute->setHaystack($data->getType())->validate()
                 ) {
-                    $this->messageEvent($class->getClassName(), $class->getMethods(), $data->messageEvent());
+                    new EventDispatcher($class, $data->messageEvent());
                 }
 
             }
         }
     }
 
-
-    /**
-     * Checks attributes for an event message_new
-     * @param string $instanceName
-     * @param MethodsInfo $methods
-     * @param MessageNew $data
-     * @see \Astaroth\Attribute\Event\MessageNew
-     */
-    private function messageNew(string $instanceName, MethodsInfo $methods, MessageNew $data): void
-    {
-        $execute = new MethodExecutor($instanceName, $methods);
-        $execute
-            ->setValidateData($data)
-            ->setAvailableAttribute
-            (
-                Message::class,
-                MessageRegex::class,
-                Payload::class,
-                Attachment::class,
-                ClientInfo::class,
-                State::class,
-                Action::class,
-                Debug::class
-            )
-            ->addExtraParameters
-            (
-                new AdditionalParameter(
-                    "data",
-                    $data::class,
-                    false,
-                    $data
-                )
-            )
-            ->launch();
-    }
-
-    /**
-     * Checks attributes for an event message_event
-     * @param string $instanceName
-     * @param MethodsInfo $methods
-     * @param MessageEvent $data
-     * @see \Astaroth\Attribute\Event\MessageEvent
-     */
-    private function messageEvent(string $instanceName, MethodsInfo $methods, MessageEvent $data): void
-    {
-        $execute = new MethodExecutor($instanceName, $methods);
-        $execute
-            ->setAvailableAttribute(Payload::class, State::class, Debug::class)
-            ->setValidateData($data)
-            ->addExtraParameters
-            (
-                new AdditionalParameter(
-                    "data",
-                    $data::class,
-                    false,
-                    $data
-                )
-            )
-            ->launch();
-    }
 }
