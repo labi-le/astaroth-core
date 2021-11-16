@@ -29,13 +29,6 @@ final class Debug implements AttributeReturnInterface, AttributeValidatorInterfa
 
     public function setHaystack($haystack): Debug
     {
-        Utils::var_dumpToStdout($haystack);
-        /**
-         * @noinspection ForgottenDebugOutputInspection
-         * @psalm-suppress ForbiddenCode
-         */
-        var_dump($haystack);
-
         $this->haystack = $haystack;
         return $this;
     }
