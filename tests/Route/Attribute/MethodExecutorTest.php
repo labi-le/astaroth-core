@@ -8,6 +8,7 @@ use Astaroth\Attribute\Description;
 use Astaroth\Attribute\Event\MessageNew as TestEvent;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
+use Astaroth\Attribute\State;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -16,6 +17,7 @@ use Astaroth\Route\Attribute\AdditionalParameter;
 use Astaroth\Route\Attribute\MethodExecutor;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
 
 #[TestEvent]
 class MethodExecutorTest extends TestCase
@@ -78,6 +80,11 @@ class MethodExecutorTest extends TestCase
                 if ($attribute instanceof AttributeValidatorInterface && ($attribute::class === Message::class || $attribute::class === MessageRegex::class)) {
                     $attribute->setHaystack($this->data->getText());
                 }
+
+                if ($attribute instanceof Debug || $attribute instanceof State) {
+                    $attribute->setHaystack($this->data);
+                }
+
                 return $attribute->validate();
 
             })
@@ -90,6 +97,12 @@ class MethodExecutorTest extends TestCase
     {
         assertEquals("method to be implicitly executed", $description->getResult());
         assertEquals("test", $data->getText());
+    }
+
+    #[Debug]
+    public function emptyMethod2(Debug $debug)
+    {
+        assertInstanceOf(MessageNew::class, $debug->getResult());
     }
 
     public function testLaunch()
