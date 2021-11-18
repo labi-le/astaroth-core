@@ -25,7 +25,7 @@ class EventDispatcher
     {
         (new MethodExecutor($classInfo->getName(), $classInfo->getMethods()))
             ->setCallableValidateAttribute($this->getValidateAttributeClosure())
-            ->addParameters(new AdditionalParameter(
+            ->addExtraParameters(new AdditionalParameter(
                 $this->validateData::class,
                 $this->validateData::class,
                 false,

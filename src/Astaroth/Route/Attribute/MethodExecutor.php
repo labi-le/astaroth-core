@@ -16,6 +16,9 @@ class MethodExecutor
     private const FORWARDED_PARAMETER = "__forwarded_parameter";
 
     /** @var AdditionalParameter[] */
+    private array $extraParameters = [];
+
+    /** @var AdditionalParameter[] */
     private array $parameters = [];
     private \Closure $callableValidateAttribute;
 
@@ -41,8 +44,8 @@ class MethodExecutor
     {
         foreach ($this->methodsInfo->getMethods() as $method) {
             foreach ($method->getAttribute() as $attribute) {
+                //if the validation is successful, proceed to the execution of the method
                 if ($this->validateAttribute($attribute)) {
-                    //if the validation is successful, proceed to the execution of the method
                     //passing attributes to parameters (if their type is explicitly specified in user-method)
                     $this->addExtraAttributeToParameters($method->getAttribute());
 
@@ -53,14 +56,14 @@ class MethodExecutor
                     );
 
                     //normalize the parameter list for the method
-                    $this->parameterNormalizer($method->getParameters());
+                    $parameters = $this->parameterNormalizer(array_merge($this->getParameters(), $this->getExtraParameters()), $method->getParameters());
 
-                    $method_return = $this->execute($this->className, $method->getName());
-                    $this->clearStack();
+                    $method_return = $this->execute($this->className, $method->getName(), $parameters);
 
                     /** We process the result returned by the method */
                     new ReturnResultHandler($method_return);
 
+                    $this->clearStack();
                     break;
                 }
             }
@@ -69,15 +72,16 @@ class MethodExecutor
 
     /**
      * Adds the necessary parameters to the method that requires it
+     * @param AdditionalParameter[] $parameters
      * @param MethodParamInfo[] $methodParametersSchema
-     * @return $this
+     * @return array
      * @throws ClassNotFoundException
      */
-    private function parameterNormalizer(array $methodParametersSchema): static
+    private function parameterNormalizer(array $parameters, array $methodParametersSchema): array
     {
         $methodParameters = [];
         foreach ($methodParametersSchema as $schema) {
-            foreach ($this->getParameters() as $extraParameter) {
+            foreach ($parameters as $extraParameter) {
                 if ($schema->getType() === $extraParameter->getType()) {
                     if ($extraParameter->isNeedCreateInstance() === true) {
                         $methodParameters[] = $this->initializeInstance($extraParameter->getType());
@@ -89,8 +93,7 @@ class MethodExecutor
             }
         }
 
-        $this->parameters = $methodParameters;
-        return $this;
+        return $methodParameters;
     }
 
 
@@ -132,6 +135,16 @@ class MethodExecutor
         return $this;
     }
 
+    public function addExtraParameters(AdditionalParameter ...$instances): static
+    {
+        foreach ($instances as $instance) {
+            isset($this->getParameters()[$instance->getType()]) ?:
+                $this->extraParameters[$instance->getType()] = $instance;
+        }
+
+        return $this;
+    }
+
 
     /**
      * @throws ClassNotFoundException
@@ -151,16 +164,17 @@ class MethodExecutor
      * method_exist is not needed since method 100% exists
      * @param string $className
      * @param string $method
+     * @param array $parameters
      * @return mixed
      */
-    private function execute(string $className, string $method): mixed
+    private function execute(string $className, string $method, array $parameters): mixed
     {
         /**
          * @var object $userDefinedClass
          * @see Configuration::getAppNamespace()
          */
         $userDefinedClass = new $className;
-        return $userDefinedClass->$method(...$this->parameters);
+        return $userDefinedClass->$method(...$parameters);
     }
 
     public function setCallableValidateAttribute(\Closure $closure): static
@@ -174,10 +188,18 @@ class MethodExecutor
         return (bool)($this->callableValidateAttribute)($attribute);
     }
 
-    private function clearStack()
+    private function clearStack(): void
     {
         unset($this->parameters);
         $this->parameters = [];
+    }
+
+    /**
+     * @return AdditionalParameter[]
+     */
+    public function getExtraParameters(): array
+    {
+        return $this->extraParameters;
     }
 
 }
