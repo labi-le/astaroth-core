@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace Astaroth\Parser\DataTransferObject;
 
 
+use Countable;
+use Iterator;
 use Stringable;
 
-final class MethodsInfo implements Stringable
+final class MethodsInfo implements Stringable, Iterator, Countable
 {
+    private int $position = 0;
+
     /**
      * @param MethodInfo[] $methods
      */
@@ -43,5 +47,35 @@ final class MethodsInfo implements Stringable
         }
 
         return $methodsInfo;
+    }
+
+    public function current(): MethodInfo
+    {
+        return $this->methods[$this->position];
+    }
+
+    public function next(): void
+    {
+        ++$this->position;
+    }
+
+    public function key(): int
+    {
+        return $this->position;
+    }
+
+    public function valid(): bool
+    {
+        return isset($this->methods[$this->position]);
+    }
+
+    public function rewind(): void
+    {
+        $this->position = 0;
+    }
+
+    public function count(): int
+    {
+        return \count($this->methods);
     }
 }
