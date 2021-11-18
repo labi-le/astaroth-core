@@ -42,7 +42,7 @@ class MethodExecutor
      */
     public function launch(): void
     {
-        foreach ($this->methodsInfo->getMethods() as $method) {
+        foreach ($this->methodsInfo as $method) {
             foreach ($method->getAttribute() as $attribute) {
                 //if the validation is successful, proceed to the execution of the method
                 if ($this->validateAttribute($attribute)) {
