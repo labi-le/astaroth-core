@@ -10,6 +10,7 @@ use Astaroth\Foundation\Application;
 use Dotenv\Dotenv;
 use Dotenv\Exception\ValidationException;
 use Exception;
+use JetBrains\PhpStorm\ExpectedValues;
 
 class Configuration
 {
@@ -90,6 +91,7 @@ class Configuration
     /**
      * @throws Exception
      */
+    #[ExpectedValues(values: [Application::DEV, Application::PRODUCTION])]
     public static function set(?string $dir, string $type = Application::DEV): static
     {
         return new static($dir, $type);
