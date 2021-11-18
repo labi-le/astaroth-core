@@ -100,9 +100,18 @@ class MethodExecutorTest extends TestCase
     }
 
     #[Debug]
-    public function emptyMethod2(Debug $debug)
+    #[Description("desc2")]
+    public function emptyMethod2(Debug $debug, Description $description)
     {
         assertInstanceOf(MessageNew::class, $debug->getResult());
+        assertEquals("desc2", $description->getResult());
+
+        $stack = [];
+        foreach (range(0, 10000) as $ignored) {
+            $stack[] = uniqid('', true);
+        }
+
+        assertEquals(10001, \count($stack));
     }
 
     public function testLaunch()
