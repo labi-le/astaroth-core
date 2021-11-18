@@ -15,7 +15,7 @@ class ConfigurationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configuration = Configuration::set(dirname(__DIR__), Application::DEV);
+        $this->configuration = Configuration::set(\dirname(__DIR__), Application::DEV);
     }
 
     public function testGetApiVersion()
