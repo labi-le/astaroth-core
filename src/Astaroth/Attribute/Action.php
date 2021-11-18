@@ -32,7 +32,7 @@ final class Action implements AttributeValidatorInterface
 
     /**
      * @param string $type accepts self constants
-     * @param string[] $anyData example ["member_id" => 418618]
+     * @param array $anyData example ["member_id" => 418618]
      *
      * @see https://i.imgur.com/S4vcS9w.png
      */
