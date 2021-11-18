@@ -329,7 +329,7 @@ class Configuration
             return 0;
         }
 
-        return $key;
+        return (int)$key;
     }
 
 
