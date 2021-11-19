@@ -14,7 +14,7 @@ final class DescriptionParser
     private array $classInfo;
 
     /**
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException|\ReflectionException
      */
     public function __construct(private string $className)
     {
