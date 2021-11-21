@@ -22,8 +22,8 @@ class Memory
         ($this->app)();
         $end = memory_get_usage(true);
 
-        $text = "Initial memory consumption: " . $this->convert($base_memory_usage, $this->convertTo) . $this->convertTo;
-        $text .= "\nFinal memory consumption: " . $this->convert($end, $this->convertTo) . $this->convertTo;
+        $text = "\n\nInitial memory consumption: " . $this->convert($base_memory_usage, $this->convertTo) . $this->convertTo;
+        $text .= "\nFinal memory consumption: " . $this->convert($end, $this->convertTo) . $this->convertTo . "\n\n";
 
         return new Dump($text);
     }
