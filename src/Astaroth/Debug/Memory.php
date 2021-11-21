@@ -57,8 +57,8 @@ class Memory implements Stringable
 
     public function __toString()
     {
-        $text = "\n\nBase memory usage: " . $this->convert($this->getBaseMemoryUsage(), $this->convertTo) . $this->convertTo;
-        $text .= "\nFinal memory consumption: " . $this->convert($this->getFinalMemoryUsage(), $this->convertTo) . $this->convertTo . "\n\n";
+        $text = "Base memory usage: " . $this->convert($this->getBaseMemoryUsage(), $this->convertTo) . $this->convertTo;
+        $text .= "\nFinal memory consumption: " . $this->convert($this->getFinalMemoryUsage(), $this->convertTo) . $this->convertTo;
 
         return $text;
     }
