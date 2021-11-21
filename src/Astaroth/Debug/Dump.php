@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
+use function is_array;
+
 class Dump
 {
     public function __construct
