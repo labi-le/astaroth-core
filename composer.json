@@ -7,9 +7,7 @@
       "email": "1a6i1e@gmail.com"
     }
   ],
-
   "license": "MIT",
-
   "minimum-stability": "stable",
   "require": {
     "php": ">=8.0",
@@ -26,11 +24,13 @@
     "doctrine/orm": ">=2.9.5",
     "symfony/cache": ">=v3.4.47"
   },
-
   "autoload": {
     "psr-4": {
       "Astaroth\\": "src/Astaroth"
-    }
+    },
+    "files": [
+      "src/Astaroth/Debug/functions.php"
+    ]
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
