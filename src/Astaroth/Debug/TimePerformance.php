@@ -4,26 +4,38 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
-class TimePerformance
+use Stringable;
+
+class TimePerformance implements Stringable
 {
-    /**
-     * @var callable
-     */
-    private $app;
+    private int|float $time_start;
+    private int|float $time_end;
 
     public function __construct(callable $app)
     {
-        $this->app = $app;
+        $this->time_start = microtime(true);
+        $app();
+        $this->time_end = microtime(true) - $this->time_start;
     }
 
-    public function getStat(): Dump
+    /**
+     * @return float|int
+     */
+    public function getTimeStart(): float|int
     {
-        $start = microtime(true);
-        ($this->app)();
-        $time = microtime(true) - $start;
+        return $this->time_start;
+    }
 
-        $text = "\n\nExecution time for this piece of code: $time ms\n\n";
+    /**
+     * @return float|int
+     */
+    public function getTimeEnd(): float|int
+    {
+        return $this->time_end;
+    }
 
-        return new Dump($text);
+    public function __toString()
+    {
+        return "Execution time for this piece of code: {$this->getTimeEnd()} ms";
     }
 }

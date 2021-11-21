@@ -4,28 +4,19 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
-class Memory
-{
-    /**
-     * @var callable
-     */
-    private $app;
+use Stringable;
 
+class Memory implements Stringable
+{
+
+    private int $final_memory_usage;
+
+    private int $base_memory_usage;
     public function __construct(callable $app, private string $convertTo = "M")
     {
-        $this->app = $app;
-    }
-
-    public function getStat(): Dump
-    {
-        $base_memory_usage = memory_get_usage(true);
-        ($this->app)();
-        $end = memory_get_usage(true);
-
-        $text = "\n\nInitial memory consumption: " . $this->convert($base_memory_usage, $this->convertTo) . $this->convertTo;
-        $text .= "\nFinal memory consumption: " . $this->convert($end, $this->convertTo) . $this->convertTo . "\n\n";
-
-        return new Dump($text);
+        $this->base_memory_usage = memory_get_usage(true);
+        $app();
+        $this->final_memory_usage = memory_get_usage(true);
     }
 
     /**
@@ -46,5 +37,29 @@ class Memory
             'G' => number_format($bytes / 1073741824, $decimal_places)
         ];
         return $formulas[$to] ?? "0";
+    }
+
+    /**
+     * @return int
+     */
+    public function getFinalMemoryUsage(): int
+    {
+        return $this->final_memory_usage;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBaseMemoryUsage(): int
+    {
+        return $this->base_memory_usage;
+    }
+
+    public function __toString()
+    {
+        $text = "\n\nBase memory usage: " . $this->convert($this->getBaseMemoryUsage(), $this->convertTo) . $this->convertTo;
+        $text .= "\nFinal memory consumption: " . $this->convert($this->getFinalMemoryUsage(), $this->convertTo) . $this->convertTo . "\n\n";
+
+        return $text;
     }
 }

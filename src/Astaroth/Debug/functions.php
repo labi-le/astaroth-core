@@ -9,12 +9,12 @@ function dump(mixed ...$mixed): Dump
     return new Dump($mixed);
 }
 
-function memory_stat(callable $app, string $convertTo = "M"): Dump
+function memory_stat(callable $app, string $convertTo = "M"): Memory
 {
-    return (new Memory($app, $convertTo))->getStat();
+    return new Memory($app, $convertTo);
 }
 
-function time_stat(callable $app): Dump
+function time_stat(callable $app): TimePerformance
 {
-    return (new TimePerformance($app))->getStat();
+    return new TimePerformance($app);
 }
