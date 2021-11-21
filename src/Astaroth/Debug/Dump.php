@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
-use Astaroth\Foundation\Utils;
-
 class Dump
 {
     public function __construct
@@ -17,7 +15,13 @@ class Dump
 
     public function toStdOut(): void
     {
-        Utils::var_dumpToStdout(...$this->data);
+        if (is_array($this->data) === false) {
+            $this->data = [$this->data];
+        }
+
+        foreach ($this->data as $out) {
+            file_put_contents('php://stdout', var_export($out, true));
+        }
     }
 
     public function toPrint(): void
