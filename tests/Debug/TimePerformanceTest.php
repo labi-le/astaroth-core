@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use function count;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsString;
+use function PHPUnit\Framework\assertNotNull;
 
 class TimePerformanceTest extends TestCase
 {
@@ -27,6 +28,6 @@ class TimePerformanceTest extends TestCase
             sleep(2);
         };
 
-        assertIsString((new TimePerformance($app))->getStat()->return());
+        assertNotNull((new TimePerformance($app))->getTimeEnd());
     }
 }

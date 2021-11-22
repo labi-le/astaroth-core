@@ -7,6 +7,7 @@ use Astaroth\Debug\Memory;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function count;
+use function PHPUnit\Framework\assertIsInt;
 
 class MemoryTest extends TestCase
 {
@@ -25,6 +26,6 @@ class MemoryTest extends TestCase
             assertEquals(10001, count($arr2));
         };
 
-        (new Memory($app))->getStat()->toStdOut();
+        assertIsInt((new Memory($app))->getFinalMemoryUsage());
     }
 }
