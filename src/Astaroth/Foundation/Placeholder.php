@@ -10,7 +10,7 @@ use UnhandledMatchError;
  * Garbage with which you can add placeholders to messages
  * @example hi %@name
  */
-final class Placeholder
+class Placeholder
 {
     private const PATTERN = "/%(?:@?last-|(?:@?ful{2}-|@?))name/";
 
