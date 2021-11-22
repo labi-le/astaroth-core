@@ -8,10 +8,9 @@ namespace Astaroth\Commands;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Utils;
-use Astaroth\Support\Facades\Create;
 use Astaroth\Support\Facades\Request;
-use Astaroth\VkUtils\Builders\Message;
 use Astaroth\VkUtils\Contracts\IBuilder;
+use Astaroth\Support\Facades\Message as MessageFacade;
 
 /**
  * Class BaseCommands
@@ -19,22 +18,20 @@ use Astaroth\VkUtils\Contracts\IBuilder;
  */
 abstract class BaseCommands
 {
+    private MessageFacade $message;
+
+    protected function __construct(MessageNew|MessageEvent $data = null)
+    {
+        $this->message = new MessageFacade($data?->getPeerId());
+    }
+
 
     /**
      * @throws \Throwable
      */
-    protected function message(int $peer_id, string $text = null, array $attachment = [], string $access_token = null): array
+    protected function message(string $text = null): MessageFacade
     {
-        $message = (new Message())
-            ->setPeerId($peer_id)
-            ->setMessage($text)
-            ->setAttachment(...$attachment);
-
-        if ($access_token) {
-            return Create::changeToken($access_token)->create($message);
-        }
-
-        return Create::new($message);
+        return $this->message->text($text);
     }
 
     /**
