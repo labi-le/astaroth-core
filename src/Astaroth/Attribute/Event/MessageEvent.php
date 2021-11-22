@@ -14,7 +14,7 @@ use Attribute;
  */
 class MessageEvent implements AttributeValidatorInterface
 {
-    private string $type;
+    private string $type = "";
 
     public function validate(): bool
     {
@@ -27,7 +27,10 @@ class MessageEvent implements AttributeValidatorInterface
      */
     public function setHaystack($haystack): static
     {
-        $this->type = $haystack->getType();
+        if(method_exists($haystack, "getType")) {
+            $this->type = $haystack->getType();
+        }
+
         return $this;
     }
 }
