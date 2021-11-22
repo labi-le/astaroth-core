@@ -12,24 +12,29 @@ use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\Payload;
 use Astaroth\Attribute\State;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Parser\DataTransferObject\ClassInfo;
+use ReflectionClass;
 
 class EventDispatcher
 {
+    /**
+     * @throws \ReflectionException
+     */
     public function __construct(
-        ClassInfo                       $classInfo,
-        private MessageEvent|MessageNew $validateData
+        ReflectionClass $classInfo,
+        private DataFetcher $data
     )
     {
-        (new MethodExecutor($classInfo->getName(), $classInfo->getMethods()))
+        (new Executor($classInfo))
             ->setCallableValidateAttribute($this->getValidateAttributeClosure())
-            ->addExtraParameters(new AdditionalParameter(
-                $this->validateData::class,
-                $this->validateData::class,
+            ->replaceObjects(new AdditionalParameter(
+                $this->data::class,
+                $this->data::class,
                 false,
-                $this->validateData
+                $this->data
             ))
             ->launch();
     }
@@ -42,11 +47,11 @@ class EventDispatcher
     {
         return function ($attribute) {
             if ($attribute instanceof AttributeValidatorInterface) {
-                if ($this->validateData instanceof MessageNew) {
-                    $this->messageNewValidate($attribute);
+                if ($this->data->getType() === Events::MESSAGE_NEW) {
+                    $this->messageNewValidate($attribute, $this->data->messageNew());
                 }
-                if ($this->validateData instanceof MessageNew) {
-                    $this->messageEventValidate($attribute);
+                if ($this->data->getType()  === Events::MESSAGE_EVENT) {
+                    $this->messageEventValidate($attribute, $this->data->messageEvent());
                 }
 
                 $this->anyEventValidate($attribute);
@@ -59,35 +64,35 @@ class EventDispatcher
         };
     }
 
-    private function messageNewValidate(AttributeValidatorInterface $attribute): void
+    private function messageNewValidate(AttributeValidatorInterface $attribute, MessageNew $data): void
     {
         if ($attribute::class === Message::class || $attribute::class === MessageRegex::class) {
-            $attribute->setHaystack($this->validateData->getText());
+            $attribute->setHaystack($data->getText());
         }
 
         if (($attribute::class === Attachment::class)) {
-            $attribute->setHaystack($this->validateData->getAttachments());
+            $attribute->setHaystack($data->getAttachments());
         }
 
         if (($attribute::class === Action::class)) {
-            $attribute->setHaystack($this->validateData->getAction());
+            $attribute->setHaystack($data->getAction());
         }
     }
 
-    private function messageEventValidate(AttributeValidatorInterface $attribute):void
+    private function messageEventValidate(AttributeValidatorInterface $attribute, MessageEvent $data):void
     {
         if ($attribute::class === Payload::class) {
-            $attribute->setHaystack($this->validateData->getPayload());
+            $attribute->setHaystack($data->getPayload());
         }
     }
 
     private function anyEventValidate(AttributeValidatorInterface $attribute): void
     {
         if ($attribute instanceof Debug || $attribute instanceof State) {
-            $attribute->setHaystack($this->validateData);
+            $attribute->setHaystack($this->data);
         }
         if ($attribute::class === ClientInfo::class) {
-            $attribute->setHaystack($this->validateData->getClientInfo());
+            $attribute->setHaystack($this->data->getClientInfo());
         }
     }
 
