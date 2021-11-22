@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Commands\BaseCommands;
+use Astaroth\Support\Facades\Request;
+use UnhandledMatchError;
 
 /**
  * Garbage with which you can add placeholders to messages
  * @example hi %@name
  */
-class Placeholder extends BaseCommands
+final class Placeholder
 {
     private const PATTERN = "/%(?:@?last-|(?:@?ful{2}-|@?))name/";
 
@@ -27,13 +28,13 @@ class Placeholder extends BaseCommands
 
     //TAG *******************************************************************
     private const NAME_TAG = self::PERCENT . "name";
-    private const MENTION_NAME_TAG = self::PERCENT .  self::MENTION . self::NAME;
+    private const MENTION_NAME_TAG = self::PERCENT . self::MENTION . self::NAME;
 
     private const FULL_NAME_TAG = self::PERCENT . "full-name";
-    private const MENTION_FULL_NAME_TAG = self::PERCENT .  self::MENTION . self::FULL_NAME;
+    private const MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME;
 
     private const LAST_NAME_TAG = self::PERCENT . "last-name";
-    private const MENTION_LAST_NAME_TAG = self::PERCENT .  self::MENTION . self::LAST_NAME;
+    private const MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME;
     //END TAG *******************************************************************
 
     private const PERCENT = "%";
@@ -79,7 +80,7 @@ class Placeholder extends BaseCommands
                         ? self::STAR_AND_ID . "$member_id($member_last_name)"
                         : self::STAR_AND_CLUB . "$member_id($member_name)",
 
-                    default => throw new \UnhandledMatchError("No valid placeholder found")
+                    default => throw new UnhandledMatchError("No valid placeholder found")
                 };
             },
             $this->getSubject());
@@ -91,9 +92,9 @@ class Placeholder extends BaseCommands
     private function iterateId(int $id): array|false
     {
         if ($id > 0) {
-            return current($this->usersGet([$id]));
+            return current(Request::call("users.get", ["user_ids" => $id, "name_case" => "nom"]));
         }
-        return current($this->groupsGetById([$id]));
+        return current(Request::call("groups.getById", ["group_ids" => $id]));
     }
 
     /**
