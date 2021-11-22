@@ -13,13 +13,26 @@ class MessageNewTest extends TestCase
 {
     public function testValidate()
     {
-        $ev = (new MessageNew())->setHaystack("message_new");
+        $obj = new class {
+            public function getType(): string
+            {
+                return "message_new";
+            }
+        };
+
+        $ev = (new MessageNew())->setHaystack($obj);
         assertTrue($ev->validate());
     }
 
     public function testSetHaystack()
     {
+        $obj = new class {
+            public function getType(): string
+            {
+                return "message_new";
+            }
+        };
         assertEquals(MessageNew::class,
-            (new MessageNew())->setHaystack("message_new")::class);
+            (new MessageNew())->setHaystack($obj)::class);
     }
 }

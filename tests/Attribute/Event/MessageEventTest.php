@@ -14,13 +14,27 @@ class MessageEventTest extends TestCase
 
     public function testValidate()
     {
-        $ev = (new MessageEvent())->setHaystack("message_event");
+        $obj = new class {
+            public function getType(): string
+            {
+                return "message_event";
+            }
+        };
+
+        $ev = (new MessageEvent())->setHaystack($obj);
         assertTrue($ev->validate());
     }
 
     public function testSetHaystack()
     {
+        $obj = new class {
+            public function getType(): string
+            {
+                return "message_event";
+            }
+        };
+
         assertEquals(MessageEvent::class,
-            (new MessageEvent())->setHaystack("message_event")::class);
+            (new MessageEvent())->setHaystack($obj)::class);
     }
 }
