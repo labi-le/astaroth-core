@@ -8,68 +8,61 @@ use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Event\MessageEvent;
 use Astaroth\Attribute\Event\MessageNew;
 use Astaroth\Attribute\State;
+use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\Parser\DataTransferObject\ClassInfo;
+use ReflectionAttribute;
+use ReflectionClass;
+use ReflectionException;
 
 class EventAttributeHandler
 {
     /**
-     * @param ClassInfo[] $instances
+     * @param string[] $classMap
      * @param DataFetcher $data
+     * @throws ReflectionException
      */
     public function __construct(
-        array       $instances,
+        array       $classMap,
         DataFetcher $data,
     )
     {
-        $this->handle($instances, $data);
-    }
+        foreach ($classMap as $class) {
+            $reflectionClass = new ReflectionClass($class);
 
-    /**
-     * AttributeOLD check and routing
-     * @param ClassInfo[] $classes
-     */
-    private function handle(array $classes, DataFetcher $data): void
-    {
-        foreach ($classes as $class) {
-            foreach ($class->getAttribute() as $attribute) {
-
-                /**
-                 * If the attribute is a Conversation or State object and the validation data is negative
-                 * @see Conversation
-                 * @see State
-                 */
-                if (
-                    ($attribute instanceof Conversation || $attribute instanceof State)
-                    && !$attribute->setHaystack($data)->validate()
-                ) {
-                    break;
-                }
-
-                /**
-                 * If the attribute is a MessageNew object
-                 * @see \Astaroth\Attribute\Event\MessageNew
-                 */
-                if (
-                    $attribute instanceof MessageNew &&
-                    $attribute->setHaystack($data->getType())->validate()
-                ) {
-                    new EventDispatcher($class, $data->messageNew());
-                }
-
-                /**
-                 * If the attribute is a MessageEvent object
-                 * @see \Astaroth\Attribute\Event\MessageEvent
-                 */
-                if (
-                    $attribute instanceof MessageEvent &&
-                    $attribute->setHaystack($data->getType())->validate()
-                ) {
-                    new EventDispatcher($class, $data->messageEvent());
-                }
-
+            if (
+                (
+                    $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
+                    ||
+                    $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
+                ) === false
+                ||
+                (
+                    $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
+                    ||
+                    $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
+                ) === false
+            ) {
+                break;
             }
+
+            new EventDispatcher($reflectionClass, $data);
         }
     }
 
+    /**
+     * @param ReflectionAttribute[] $reflectionAttributes
+     */
+    private function validateAttribute(array $reflectionAttributes, DataFetcher $data): ?bool
+    {
+        $validate = null;
+
+        foreach ($reflectionAttributes as $reflectionAttribute) {
+            /** @var AttributeValidatorInterface $conversation */
+            $conversation = $reflectionAttribute->newInstance();
+
+            $validate = $conversation->setHaystack($data)->validate();
+        }
+
+        return $validate;
+    }
 }
