@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Attribute\Event;
 
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\DataFetcher;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -20,9 +21,13 @@ class MessageNew implements AttributeValidatorInterface
         return $this->type === "message_new";
     }
 
+    /**
+     * @param DataFetcher $haystack
+     * @return $this
+     */
     public function setHaystack($haystack): static
     {
-        $this->type = $haystack;
+        $this->type = $haystack->getType();
         return $this;
     }
 }
