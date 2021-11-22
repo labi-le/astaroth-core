@@ -14,21 +14,18 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Parser\ReflectionParser;
 use Astaroth\Route\Attribute\AdditionalParameter;
-use Astaroth\Route\Attribute\MethodExecutor;
+use Astaroth\Route\Attribute\Executor;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertIsArray;
 
 #[TestEvent]
 class MethodExecutorTest extends TestCase
 {
-
-    private MethodExecutor $methodExecutor;
+    private Executor $methodExecutor;
     private MessageNew $data;
-
-    public function executableMethod(Description $description)
-    {
-    }
 
     protected function setUp(): void
     {
@@ -71,8 +68,7 @@ class MethodExecutorTest extends TestCase
 }';
 
         $this->data = (new DataFetcher(json_decode($data, false)))->messageNew();
-        $classInfo = ReflectionParser::setClassMap([__CLASS__])->parse();
-        $this->methodExecutor = new MethodExecutor(self::class, current($classInfo)->getMethods());
+        $this->methodExecutor = new Executor(new ReflectionClass(self::class));
 
         $this->methodExecutor
             ->setCallableValidateAttribute(function ($attribute) {
@@ -88,7 +84,7 @@ class MethodExecutorTest extends TestCase
                 return $attribute->validate();
 
             })
-            ->addParameters(new AdditionalParameter("data", $this->data::class, false, $this->data));
+            ->replaceObjects($this->data->messageNew());
     }
 
     #[Message("test")]
@@ -103,7 +99,7 @@ class MethodExecutorTest extends TestCase
     #[Description("desc2")]
     public function emptyMethod2(Debug $debug, Description $description)
     {
-        assertInstanceOf(MessageNew::class, $debug->getResult());
+        assertIsArray($debug->getResult());
         assertEquals("desc2", $description->getResult());
 
         $stack = [];
@@ -117,12 +113,5 @@ class MethodExecutorTest extends TestCase
     public function testLaunch()
     {
         $this->methodExecutor->launch();
-    }
-
-
-    public function testAddParameters()
-    {
-        $this->methodExecutor->addParameters(new AdditionalParameter("test", "test", false));
-        assertEquals($this->methodExecutor->getParameters()["test"]->getType(), "test");
     }
 }
