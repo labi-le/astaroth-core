@@ -8,9 +8,9 @@ namespace Astaroth\Route;
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\Parser\ReflectionParser;
 use Astaroth\Route\Attribute\EventAttributeHandler;
 use HaydenPierce\ClassFinder\ClassFinder;
+use Throwable;
 
 /**
  * Class Route
@@ -47,15 +47,12 @@ class Route
 
     /**
      * Routing data from VK
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(): void
     {
         $this->handler->listen(function (DataFetcher $data) {
-            new EventAttributeHandler(
-                ReflectionParser::setClassMap($this->getClassMap())->parse(),
-                $data
-            );
+            new EventAttributeHandler($this->getClassMap(), $data);
         });
     }
 }
