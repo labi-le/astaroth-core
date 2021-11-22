@@ -11,6 +11,7 @@ use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Session;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use function dirname;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
