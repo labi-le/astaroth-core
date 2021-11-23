@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Route\Attribute;
 
+require_once "testClass.php";
+
 use Astaroth\Attribute\Debug;
-use Astaroth\Attribute\Description;
-use Astaroth\Attribute\Event\MessageEvent;
-use Astaroth\Attribute\Event\MessageNew as TestEvent;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
 use Astaroth\Attribute\State;
@@ -16,10 +15,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Route\Attribute\Executor;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertIsArray;
 
-#[TestEvent]
 class MethodExecutorTest extends TestCase
 {
     private Executor $methodExecutor;
@@ -66,7 +62,7 @@ class MethodExecutorTest extends TestCase
 }';
 
         $this->data = (new DataFetcher(json_decode($data, false)))->messageNew();
-        $this->methodExecutor = new Executor(new ReflectionClass(self::class));
+        $this->methodExecutor = new Executor(new ReflectionClass(testClass::class));
 
         $this->methodExecutor
             ->setCallableValidateAttribute(function ($attribute) {
@@ -83,29 +79,6 @@ class MethodExecutorTest extends TestCase
 
             })
             ->replaceObjects($this->data->messageNew());
-    }
-
-    #[Message("test")]
-    #[Description("method to be implicitly executed")]
-    public function emptyMethod(MessageNew|MessageEvent $data, Description $description)
-    {
-        assertEquals("method to be implicitly executed", $description->getResult());
-        assertEquals("test", $data->getText());
-    }
-
-    #[Debug]
-    #[Description("desc2")]
-    public function emptyMethod2(Debug $debug, Description $description)
-    {
-        assertIsArray($debug->getResult());
-        assertEquals("desc2", $description->getResult());
-
-        $stack = [];
-        foreach (range(0, 10000) as $ignored) {
-            $stack[] = uniqid('', true);
-        }
-
-        assertEquals(10001, \count($stack));
     }
 
     public function testLaunch()
