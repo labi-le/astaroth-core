@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
-use Astaroth\Attribute\Action;
+use Astaroth\Attribute\MessageNewAction;
 use Astaroth\Attribute\Attachment;
 use Astaroth\Attribute\ClientInfo;
 use Astaroth\Attribute\Debug;
@@ -88,7 +88,7 @@ class EventDispatcher
             $attribute->setHaystack($data->getAttachments());
         }
 
-        if (($attribute::class === Action::class)) {
+        if (($attribute::class === MessageNewAction::class)) {
             $attribute->setHaystack($data->getAction());
         }
     }

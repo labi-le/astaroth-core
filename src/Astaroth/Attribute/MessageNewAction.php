@@ -15,7 +15,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  *
  * @see https://i.imgur.com/4YQWIZ4.png
  */
-final class Action implements AttributeValidatorInterface
+final class MessageNewAction implements AttributeValidatorInterface
 {
     private ?object $haystack;
 
@@ -77,7 +77,7 @@ final class Action implements AttributeValidatorInterface
         return false;
     }
 
-    public function setHaystack($haystack): Action
+    public function setHaystack($haystack): MessageNewAction
     {
         $this->haystack = $haystack;
         return $this;
