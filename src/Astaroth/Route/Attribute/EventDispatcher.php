@@ -24,21 +24,29 @@ class EventDispatcher
      * @throws \ReflectionException
      */
     public function __construct(
-        ReflectionClass $classInfo,
+        ReflectionClass     $classInfo,
         private DataFetcher $data
     )
     {
         (new Executor($classInfo))
             ->setCallableValidateAttribute($this->getValidateAttributeClosure())
-            ->replaceObjects(new AdditionalParameter(
-                $this->data::class,
-                $this->data::class,
-                false,
-                $this->data
-            ))
+            ->replaceObjects(self::fetchData($this->data))
             ->launch();
     }
 
+    private static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
+    {
+        if ($data->getType() === Events::MESSAGE_NEW) {
+            return $data->messageNew();
+        }
+
+        if ($data->getType() === Events::MESSAGE_EVENT) {
+            return $data->messageEvent();
+        }
+
+        return null;
+
+    }
 
     /**
      * @return \Closure
@@ -47,12 +55,8 @@ class EventDispatcher
     {
         return function ($attribute) {
             if ($attribute instanceof AttributeValidatorInterface) {
-                if ($this->data->getType() === Events::MESSAGE_NEW) {
-                    $this->messageNewValidate($attribute, $this->data->messageNew());
-                }
-                if ($this->data->getType()  === Events::MESSAGE_EVENT) {
-                    $this->messageEventValidate($attribute, $this->data->messageEvent());
-                }
+
+                $this->vkEventValidate($attribute, self::fetchData($this->data));
 
                 $this->anyEventValidate($attribute);
 
@@ -62,6 +66,16 @@ class EventDispatcher
 
             return false;
         };
+    }
+
+    private function vkEventValidate(AttributeValidatorInterface $attribute, MessageNew|MessageEvent|null $data): void
+    {
+        if ($data instanceof MessageNew) {
+            $this->messageNewValidate($attribute, $data);
+        }
+        if ($data instanceof MessageEvent) {
+            $this->messageEventValidate($attribute, $data);
+        }
     }
 
     private function messageNewValidate(AttributeValidatorInterface $attribute, MessageNew $data): void
@@ -79,7 +93,7 @@ class EventDispatcher
         }
     }
 
-    private function messageEventValidate(AttributeValidatorInterface $attribute, MessageEvent $data):void
+    private function messageEventValidate(AttributeValidatorInterface $attribute, MessageEvent $data): void
     {
         if ($attribute::class === Payload::class) {
             $attribute->setHaystack($data->getPayload());
