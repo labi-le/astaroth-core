@@ -41,7 +41,10 @@ final class Message
 
     public function attachments(string ...$attachments): Message
     {
-        $this->attachments[] = $attachments;
+        foreach ($attachments as $attachment) {
+            $this->attachments[] = $attachment;
+        }
+
         return $this;
     }
 
