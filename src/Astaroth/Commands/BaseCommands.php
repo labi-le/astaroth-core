@@ -20,7 +20,7 @@ abstract class BaseCommands
 {
     private MessageFacade $message;
 
-    protected function __construct(MessageNew|MessageEvent $data = null)
+    public function __construct(MessageNew|MessageEvent $data = null)
     {
         $this->message = new MessageFacade($data?->getPeerId());
     }
