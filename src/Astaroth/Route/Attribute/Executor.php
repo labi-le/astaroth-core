@@ -165,7 +165,6 @@ class Executor
      */
     private function normalizeNamedType(ReflectionNamedType $reflectionType, AdditionalParameter $additionalParameter): ?object
     {
-        $type = $reflectionType->getName();
         if ($reflectionType->getName() === $additionalParameter->getType()) {
             if ($additionalParameter->isNeedCreateInstance() === true) {
                 return $this->newInstance($additionalParameter->getType());
