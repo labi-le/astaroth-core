@@ -29,7 +29,7 @@ abstract class BaseCommands
     /**
      * @throws \Throwable
      */
-    protected function message(string $text = null): MessageFacade
+    protected function message(string $text = ""): MessageFacade
     {
         return $this->message->text($text);
     }

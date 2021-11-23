@@ -27,7 +27,7 @@ final class Message
      */
     private array $attachments = [];
 
-    public function text(string $message): Message
+    public function text(string $message = ""): Message
     {
         $this->text = $message;
         return $this;
