@@ -110,7 +110,7 @@ class Executor
         $methodParameters = [];
         foreach ($reflectionParameters as $schema) {
             foreach ($parameters as $extraParameter) {
-                if ($schema->getType()?->getName() === $extraParameter->getType()) {
+                if (($schema->getType() !== null) && $schema->getType()->getName() === $extraParameter->getType()) {
                     if ($extraParameter->isNeedCreateInstance() === true) {
                         $methodParameters[] = $this->newInstance($extraParameter->getType());
                     } else {
