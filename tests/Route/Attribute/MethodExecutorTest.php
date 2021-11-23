@@ -5,6 +5,7 @@ namespace Route\Attribute;
 
 use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Description;
+use Astaroth\Attribute\Event\MessageEvent;
 use Astaroth\Attribute\Event\MessageNew as TestEvent;
 use Astaroth\Attribute\Message;
 use Astaroth\Attribute\MessageRegex;
@@ -12,13 +13,10 @@ use Astaroth\Attribute\State;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Parser\ReflectionParser;
-use Astaroth\Route\Attribute\AdditionalParameter;
 use Astaroth\Route\Attribute\Executor;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertIsArray;
 
 #[TestEvent]
@@ -89,7 +87,7 @@ class MethodExecutorTest extends TestCase
 
     #[Message("test")]
     #[Description("method to be implicitly executed")]
-    public function emptyMethod(MessageNew $data, Description $description)
+    public function emptyMethod(MessageNew|MessageEvent $data, Description $description)
     {
         assertEquals("method to be implicitly executed", $description->getResult());
         assertEquals("test", $data->getText());
