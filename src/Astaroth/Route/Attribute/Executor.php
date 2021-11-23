@@ -12,6 +12,7 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 use function is_string;
 
@@ -110,7 +111,7 @@ class Executor
         $methodParameters = [];
         foreach ($reflectionParameters as $schema) {
             foreach ($parameters as $extraParameter) {
-                if (($schema->getType() !== null) && $schema->getType()->getName() === $extraParameter->getType()) {
+                if ($schema->getType() instanceOf ReflectionNamedType && $schema->getType()->getName() === $extraParameter->getType()) {
                     if ($extraParameter->isNeedCreateInstance() === true) {
                         $methodParameters[] = $this->newInstance($extraParameter->getType());
                     } else {
