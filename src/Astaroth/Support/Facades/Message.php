@@ -19,7 +19,7 @@ final class Message
     /**
      * @var string[]
      */
-    private array $attachments;
+    private array $attachments = [];
 
     public function text(string $message): Message
     {
