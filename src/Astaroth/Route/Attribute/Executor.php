@@ -14,6 +14,8 @@ use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
+use function is_object;
 use function is_string;
 
 class Executor
@@ -78,8 +80,10 @@ class Executor
     private function initializeParameters(array $parameters): void
     {
         foreach ($parameters as $parameter) {
-            isset($this->getReplaceableObjects()[$parameter->getType()?->getName()]) ?:
-                $this->addParameters($this->instantiateClass($parameter->getType()?->getName()));
+            if ($parameter->getType() === ReflectionNamedType::class) {
+                isset($this->getReplaceableObjects()[$parameter->getName()]) ?:
+                    $this->addParameters($this->instantiateClass($parameter->getName()));
+            }
         }
     }
 
@@ -94,6 +98,7 @@ class Executor
         if (is_string($reflectionClassOrClassName)) {
             $reflectionClassOrClassName = new ReflectionClass($reflectionClassOrClassName);
         }
+
         return $reflectionClassOrClassName->newInstance(
             ...$this->parameterNormalizer($reflectionClassOrClassName->getConstructor()?->getParameters(), $parameters)
         );
@@ -111,11 +116,19 @@ class Executor
         $methodParameters = [];
         foreach ($reflectionParameters as $schema) {
             foreach ($parameters as $extraParameter) {
-                if ($schema->getType() instanceOf ReflectionNamedType && $schema->getType()->getName() === $extraParameter->getType()) {
-                    if ($extraParameter->isNeedCreateInstance() === true) {
-                        $methodParameters[] = $this->newInstance($extraParameter->getType());
-                    } else {
-                        $methodParameters[] = $extraParameter->getInstance();
+                if ($schema->getType() !== null) {
+                    $normalized = false;
+
+                    if ($schema->getType() instanceof ReflectionUnionType) {
+                        $normalized = $this->normalizeUnionType($schema->getType()->getTypes(), $extraParameter);
+                    }
+
+                    if ($schema->getType() instanceof ReflectionNamedType) {
+                        $normalized = $this->normalizeNamedType($schema->getType(), $extraParameter);
+                    }
+
+                    if (is_object($normalized)) {
+                        $methodParameters[] = $normalized;
                     }
 
                 }
@@ -123,6 +136,40 @@ class Executor
         }
 
         return $methodParameters;
+    }
+
+    /**
+     * @param ReflectionNamedType[] $reflectionTypes
+     * @param AdditionalParameter $additionalParameter
+     * @return ?object
+     * @throws ReflectionException
+     */
+    private function normalizeUnionType(array $reflectionTypes, AdditionalParameter $additionalParameter): ?object
+    {
+        $parameters = [];
+        foreach ($reflectionTypes as $reflectionType) {
+            $parameters[] = $this->normalizeNamedType($reflectionType, $additionalParameter);
+        }
+
+        return current(array_filter($parameters)) ?: null;
+    }
+
+    /**
+     * @param ReflectionNamedType $reflectionType
+     * @param AdditionalParameter $additionalParameter
+     * @return ?object
+     * @throws ReflectionException
+     */
+    private function normalizeNamedType(ReflectionNamedType $reflectionType, AdditionalParameter $additionalParameter): ?object
+    {
+        if ($reflectionType->getName() === $additionalParameter->getType()) {
+            if ($additionalParameter->isNeedCreateInstance() === true) {
+                return $this->newInstance($additionalParameter->getType());
+            }
+            return $additionalParameter->getInstance();
+        }
+
+        return null;
     }
 
     /**
@@ -144,6 +191,7 @@ class Executor
         }
     }
 
+
     /**
      * @return AdditionalParameter[]
      */
@@ -151,7 +199,6 @@ class Executor
     {
         return $this->parameters;
     }
-
 
     private function addParameters(object ...$instances): void
     {
