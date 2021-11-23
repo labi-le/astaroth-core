@@ -44,6 +44,7 @@ class Executor
      */
     public function launch(): void
     {
+        $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
         foreach ($this->reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($method->getAttributes() as $attribute) {
                 //if the validation is successful, proceed to the execution of the method
@@ -57,7 +58,7 @@ class Executor
 
                     $method_return = $this->invoke
                     (
-                        $this->instantiateClass($this->reflectionClass, ...$parameters),
+                        $invokedClass,
                         $method,
                         //normalize the parameter list for the method
                         $this->parameterNormalizer($method->getParameters(), $parameters)
@@ -99,8 +100,10 @@ class Executor
             $reflectionClassOrClassName = new ReflectionClass($reflectionClassOrClassName);
         }
 
+        $constructor = $reflectionClassOrClassName->getConstructor();
+        $var = $this->parameterNormalizer($constructor ? $constructor->getParameters() : [], $parameters);
         return $reflectionClassOrClassName->newInstance(
-            ...$this->parameterNormalizer($reflectionClassOrClassName->getConstructor()?->getParameters(), $parameters)
+            ...$var
         );
     }
 
@@ -162,6 +165,7 @@ class Executor
      */
     private function normalizeNamedType(ReflectionNamedType $reflectionType, AdditionalParameter $additionalParameter): ?object
     {
+        $type = $reflectionType->getName();
         if ($reflectionType->getName() === $additionalParameter->getType()) {
             if ($additionalParameter->isNeedCreateInstance() === true) {
                 return $this->newInstance($additionalParameter->getType());
