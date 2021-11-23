@@ -5,23 +5,26 @@ declare(strict_types=1);
 namespace Route\Attribute;
 
 
+use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Description;
-use Astaroth\Attribute\Event\MessageEvent;
+use Astaroth\Attribute\Event\MessageEvent as MessageEvent;
 use Astaroth\Attribute\Event\MessageNew as TestEvent;
 use Astaroth\Attribute\Message;
+use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsObject;
 
+#[Conversation]
 #[TestEvent]
-class testClass
+class testClass extends BaseCommands
 {
-
     public function __construct(MessageNew|MessageEvent $dataConstruct = null)
     {
-        assertIsObject($dataConstruct);
+        parent::__construct($dataConstruct);
+        assertIsObject($this->data);
     }
 
     #[Message("test")]
