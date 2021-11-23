@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
+use Astaroth\VkUtils\Builders\Attachments\Message\AudioMessage;
+use Astaroth\VkUtils\Builders\Attachments\Message\PhotoMessages;
+use Astaroth\VkUtils\Builders\Attachments\Video;
 use Astaroth\VkUtils\Builders\Message as MessageBuilder;
+use Astaroth\VkUtils\Contracts\ICanBeSaved;
+use Exception;
+use function is_string;
 
 final class Message
 {
@@ -35,8 +41,43 @@ final class Message
 
     public function attachments(string ...$attachments): Message
     {
-        $this->attachments = $attachments;
+        $this->attachments[] = $attachments;
         return $this;
+    }
+
+    /**
+     * @param string|string[] ...$img
+     * @return $this
+     */
+    public function addImg(string|array $img): Message
+    {
+        return $this->addCustomUploadableAttachments(...self::genAttachObj($img, PhotoMessages::class));
+    }
+
+
+    /**
+     * @param string[]|string $value
+     * @param string $className
+     * @return ICanBeSaved[]
+     */
+    private static function genAttachObj(array|string $value, string $className): array
+    {
+        is_string($value) === false ?: $value = [$value];
+        return array_map(static fn(string $url) => new $className($url), $value);
+    }
+
+    /**
+     * @param string|string[] $video
+     * @return $this
+     */
+    public function addVoice(string|array $video): Message
+    {
+        return $this->addCustomUploadableAttachments(...self::genAttachObj($video, AudioMessage::class));
+    }
+
+    public function addCustomUploadableAttachments(ICanBeSaved ...$attachments): Message
+    {
+        return $this->attachments(...Upload::attachments(...$attachments));
     }
 
     public function send(int $id = null): array
