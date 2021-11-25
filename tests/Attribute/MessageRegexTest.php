@@ -19,7 +19,8 @@ class MessageRegexTest extends TestCase
 
     public function testValidate()
     {
-        $hs = (new MessageRegex("/(foo)(bar)(baz)/"))->setHaystack("foobarbaz");
+        $hs = (new MessageRegex('/\w{3,}/'))->setHaystack("uwuwu");
         assertTrue($hs->validate());
+        assertEquals($hs[0], "uwuwu");
     }
 }
