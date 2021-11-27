@@ -31,6 +31,9 @@ class Dump
         print_r($this->data);
     }
 
+    /**
+     * @psalm-suppress ForbiddenCode
+     */
     public function toVar_Dump(): void
     {
         var_dump($this->data);
