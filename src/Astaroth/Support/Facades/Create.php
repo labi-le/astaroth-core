@@ -11,6 +11,7 @@ use Astaroth\Foundation\Placeholder;
 use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
+use Throwable;
 
 /**
  * Class Create
@@ -22,7 +23,7 @@ final class Create
      * We check the message for placeholders and, if necessary, add
      * @param IBuilder ...$instances
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      */
     private static function messagePlaceholder(IBuilder ...$instances): array
     {
@@ -42,7 +43,7 @@ final class Create
      * Create instance
      * @param IBuilder ...$instance
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @psalm-suppress NullableReturnStatement
      */
     public static function new(IBuilder ...$instance): array
@@ -71,7 +72,7 @@ final class Create
     /**
      * @param IBuilder ...$instance
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function __invoke(IBuilder ...$instance): array
     {

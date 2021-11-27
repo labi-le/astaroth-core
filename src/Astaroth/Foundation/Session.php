@@ -72,6 +72,7 @@ class Session
      * Save data to session file
      * @param array $data
      * @return bool
+     * @noinspection JsonEncodingApiUsageInspection
      */
     private function saveToFile(array $data): bool
     {
@@ -102,6 +103,7 @@ class Session
     /**
      * Get data from session file
      * @return array
+     * @noinspection JsonEncodingApiUsageInspection
      */
     private function getStorageData(): array
     {

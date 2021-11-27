@@ -10,6 +10,7 @@ use Astaroth\Auth\ParameterMissingException;
 use Astaroth\Callback\Callback;
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\Longpoll\Longpoll;
+use Exception;
 
 class BotInstance
 {
@@ -19,7 +20,7 @@ class BotInstance
 
     /**
      * @implements HandlerInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function bootstrap(): HandlerInterface
     {
@@ -27,7 +28,7 @@ class BotInstance
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function selectStartupType(Configuration $configuration): HandlerInterface
     {
@@ -37,7 +38,7 @@ class BotInstance
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function callback(Configuration $configuration): HandlerInterface
     {

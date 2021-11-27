@@ -29,6 +29,7 @@ class EventAttributeHandler
         foreach ($classMap as $class) {
             $reflectionClass = new ReflectionClass($class);
 
+            /** @psalm-suppress InvalidArgument */
             if (
                 (
                     $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)

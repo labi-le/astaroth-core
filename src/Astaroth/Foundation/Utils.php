@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use Astaroth\Debug\Dump;
 use Astaroth\Support\Facades\Create;
 use Astaroth\VkUtils\Builders\Message;
+use Exception;
+use Throwable;
+use JsonException;
 
 class Utils
 {
@@ -13,7 +17,8 @@ class Utils
     /**
      * @param array $param
      * @return string|null
-     * @throws \JsonException
+     * @throws JsonException
+     * @noinspection JsonEncodingApiUsageInspection
      */
     public static function jsonOnline(array $param): ?string
     {
@@ -100,6 +105,9 @@ class Utils
     /**
      * Простой дебаг в stdout
      * Будет полезно для callback
+     * @deprecated
+     * @see Dump::toVar_Dump()
+     *
      * @param mixed ...$data
      */
     public static function var_dumpToStdout(mixed ...$data): void
@@ -110,14 +118,14 @@ class Utils
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public static function logToMessage(int $id, string $error_level, \Exception|string $e): void
+    public static function logToMessage(int $id, string $error_level, Exception|string $e): void
     {
         $message = new Message();
         $message->setPeerId($id);
 
-        if ($e instanceof \Exception) {
+        if ($e instanceof Exception) {
             $message->setMessage(
                 sprintf(
                     "Logger:\nError Level - %s\nError Code - %s\nMessage - %s",

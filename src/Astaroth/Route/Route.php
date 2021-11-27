@@ -9,6 +9,7 @@ namespace Astaroth\Route;
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Route\Attribute\EventAttributeHandler;
+use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Throwable;
 
@@ -37,7 +38,7 @@ class Route
      * Set class map
      * @param string $class_map
      * @return static
-     * @throws \Exception
+     * @throws Exception
      */
     public function setClassMap(string $class_map): static
     {

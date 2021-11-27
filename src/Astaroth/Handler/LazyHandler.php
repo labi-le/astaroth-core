@@ -8,6 +8,7 @@ namespace Astaroth\Handler;
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use Throwable;
 use function is_array;
 
 /**
@@ -23,6 +24,7 @@ class LazyHandler implements HandlerInterface
      * Normalize output data from VKontakte
      * @param object|array $data
      * @return DataFetcher
+     * @noinspection JsonEncodingApiUsageInspection
      */
     private function normalizeData(object|array $data): DataFetcher
     {
@@ -39,7 +41,7 @@ class LazyHandler implements HandlerInterface
      * Run instance
      * @implements HandlerInterface
      * @param callable $func
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function listen(callable $func): void
     {
