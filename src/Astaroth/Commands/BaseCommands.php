@@ -41,6 +41,7 @@ abstract class BaseCommands
      * @return array
      * @throws Throwable
      * @see https://vk.com/dev/messages.sendMessageEventAnswer
+     * @noinspection JsonEncodingApiUsageInspection
      */
     protected function sendMessageEventAnswer(MessageNew|MessageEvent $data, array $event): array
     {
