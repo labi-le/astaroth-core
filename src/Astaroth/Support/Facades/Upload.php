@@ -7,11 +7,12 @@ use Astaroth\Containers\UploaderContainer;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\VkUtils\Contracts\ICanBeSaved;
 use Astaroth\VkUtils\Uploader;
+use Exception;
 
 final class Upload
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(ICanBeSaved ...$instance): array
     {
@@ -21,7 +22,7 @@ final class Upload
     /**
      * @param ICanBeSaved ...$instance
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function attachments(ICanBeSaved ...$instance): array
     {
