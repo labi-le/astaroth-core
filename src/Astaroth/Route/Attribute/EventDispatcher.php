@@ -16,12 +16,14 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Closure;
 use ReflectionClass;
+use ReflectionException;
 
 class EventDispatcher
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function __construct(
         ReflectionClass     $classInfo,
@@ -49,9 +51,9 @@ class EventDispatcher
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
-    private function getValidateAttributeClosure(): \Closure
+    private function getValidateAttributeClosure(): Closure
     {
         return function ($attribute) {
             if ($attribute instanceof AttributeValidatorInterface) {
