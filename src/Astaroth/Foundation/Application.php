@@ -11,6 +11,8 @@ use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Throwable;
+use const PHP_SAPI;
 
 class Application
 {
@@ -28,7 +30,7 @@ class Application
      */
     public static function runningInConsole(): bool
     {
-        return \PHP_SAPI === "cli" || \PHP_SAPI === "phpdbg";
+        return PHP_SAPI === "cli" || PHP_SAPI === "phpdbg";
     }
 
     /**
@@ -43,7 +45,7 @@ class Application
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function run(string $envDir = null, string $type = Application::DEV): void
     {
