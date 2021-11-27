@@ -8,6 +8,7 @@ namespace Astaroth\Attribute;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
+use LogicException;
 use function array_key_exists;
 use function is_array;
 
@@ -57,7 +58,7 @@ final class Payload implements AttributeValidatorInterface
     private function keyExistValidate(array|string $payload, array $haystack): bool
     {
         if (is_array($payload)) {
-            throw new \LogicException("Instead of a key, an array is specified for validation of the KEY_EXISTS type\nTo find the error, use the attribute data shown below\n" . print_r($this->payload_or_key, true));
+            throw new LogicException("Instead of a key, an array is specified for validation of the KEY_EXISTS type\nTo find the error, use the attribute data shown below\n" . print_r($this->payload_or_key, true));
         }
         return array_key_exists($payload, $haystack);
     }
