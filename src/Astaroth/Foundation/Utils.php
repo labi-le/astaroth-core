@@ -9,6 +9,7 @@ use Astaroth\Support\Facades\Create;
 use Astaroth\VkUtils\Builders\Message;
 use Exception;
 use Throwable;
+use JsonException;
 
 class Utils
 {
@@ -16,7 +17,7 @@ class Utils
     /**
      * @param array $param
      * @return string|null
-     * @throws \JsonException
+     * @throws JsonException
      * @noinspection JsonEncodingApiUsageInspection
      */
     public static function jsonOnline(array $param): ?string
