@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
-class MessageNewActionTest extends TestCase
+class ActionTest extends TestCase
 {
     public function testSetHaystack()
     {
