@@ -23,6 +23,7 @@ class LazyHandler implements HandlerInterface
      * Normalize output data from VKontakte
      * @param object|array $data
      * @return DataFetcher
+     * @noinspection JsonEncodingApiUsageInspection
      */
     private function normalizeData(object|array $data): DataFetcher
     {
