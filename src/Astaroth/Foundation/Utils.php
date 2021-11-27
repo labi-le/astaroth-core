@@ -14,6 +14,7 @@ class Utils
      * @param array $param
      * @return string|null
      * @throws \JsonException
+     * @noinspection JsonEncodingApiUsageInspection
      */
     public static function jsonOnline(array $param): ?string
     {
