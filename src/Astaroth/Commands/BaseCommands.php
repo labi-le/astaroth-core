@@ -11,6 +11,7 @@ use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\Support\Facades\Message as MessageFacade;
+use Throwable;
 
 /**
  * Class BaseCommands
@@ -27,7 +28,7 @@ abstract class BaseCommands
 
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function message(string $text = ""): MessageFacade
     {
@@ -38,7 +39,7 @@ abstract class BaseCommands
      * @param MessageNew|MessageEvent $data
      * @param array $event
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/messages.sendMessageEventAnswer
      */
     protected function sendMessageEventAnswer(MessageNew|MessageEvent $data, array $event): array
@@ -58,7 +59,7 @@ abstract class BaseCommands
      * @param int|null $conversation_message_id
      * @param int|null $message_id
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/messages.edit
      */
     protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null): array
@@ -79,7 +80,7 @@ abstract class BaseCommands
      * @param int|null $peer_id
      * @param int[] $conversation_message_ids
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/messages.delete
      */
     protected function messagesDelete
@@ -107,7 +108,7 @@ abstract class BaseCommands
      * @param int $chat_id
      * @param int $id
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/messages.removeChatUser
      */
     protected function kick(int $chat_id, int $id): array
@@ -120,7 +121,7 @@ abstract class BaseCommands
      * @param string[] $fields
      * @param string $name_case
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/users.get
      */
     protected function usersGet(array $user_ids, array $fields = [], string $name_case = "nom"): array
@@ -138,7 +139,7 @@ abstract class BaseCommands
      * @param int[] $group_ids
      * @param string[] $fields
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/groups.getById
      */
     protected function groupsGetById(array $group_ids, array $fields = []): array
@@ -155,7 +156,7 @@ abstract class BaseCommands
      * @param string $url
      * @param bool $private
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      * @see https://vk.com/dev/utils.getShortLink
      */
     protected function utilsGetShortLink(string $url, bool $private = false): array
@@ -164,7 +165,7 @@ abstract class BaseCommands
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function logToMessage(int $id, string $error_level, \Exception|string $e): void
     {
