@@ -81,6 +81,7 @@ class Executor
     private function initializeParameters(array $parameters): void
     {
         foreach ($parameters as $parameter) {
+            /** @psalm-suppress TypeDoesNotContainType */
             if ($parameter->getType() === ReflectionNamedType::class) {
                 isset($this->getReplaceableObjects()[$parameter->getName()]) ?:
                     $this->addParameters($this->instantiateClass($parameter->getName()));
