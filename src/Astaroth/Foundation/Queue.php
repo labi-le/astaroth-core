@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use SplQueue;
+
 /**
  * Class Queue
  * Scene analog
@@ -14,7 +16,7 @@ class Queue
     public const CURRENT = "current_queue";
     public const COUNT = "count_queue";
 
-    public \SplQueue $queue;
+    public SplQueue $queue;
     private Session $session;
 
     /**
@@ -26,7 +28,7 @@ class Queue
      */
     public function __construct(Session $session, callable ...$queue)
     {
-        $this->queue = new \SplQueue();
+        $this->queue = new SplQueue();
         array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
 
         $this->session = $session;
