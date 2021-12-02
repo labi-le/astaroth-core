@@ -32,7 +32,7 @@ abstract class BaseCommands
      */
     protected function message(string $text = ""): MessageFacade
     {
-        return $this->message->text($text);
+        return clone $this->message->text($text);
     }
 
     /**
