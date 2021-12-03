@@ -28,6 +28,7 @@ class Memory implements Stringable
      *
      * @return string Returns only the number of units, not the type letter. Returns 0 if the $to unit type is out of scope.
      *
+     * @noinspection PhpSameParameterValueInspection
      */
     private function convert(int $bytes, string $to, int $decimal_places = 1): string
     {

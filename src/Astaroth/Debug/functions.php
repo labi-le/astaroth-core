@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
-function dump(mixed ...$mixed): Dump
+use JetBrains\PhpStorm\Pure;
+
+#[Pure] function dump(mixed ...$mixed): Dump
 {
     return new Dump($mixed);
 }

@@ -11,6 +11,7 @@ use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\Support\Facades\Message as MessageFacade;
+use JetBrains\PhpStorm\Pure;
 use Throwable;
 
 /**
@@ -21,7 +22,7 @@ abstract class BaseCommands
 {
     private MessageFacade $message;
 
-    public function __construct(protected MessageNew|MessageEvent|null $data = null)
+    #[Pure] public function __construct(protected MessageNew|MessageEvent|null $data = null)
     {
         $this->message = new MessageFacade($data?->getPeerId());
     }
