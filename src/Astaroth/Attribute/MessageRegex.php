@@ -9,6 +9,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
 use Exception;
 use JetBrains\PhpStorm\Language;
+use ReturnTypeWillChange;
 use function count;
 use function is_null;
 
@@ -60,7 +61,7 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess
         return isset($this->matches[$offset]);
     }
 
-    public function offsetGet($offset)
+    #[ReturnTypeWillChange] public function offsetGet($offset)
     {
         return $this->matches[$offset] ?? null;
     }
