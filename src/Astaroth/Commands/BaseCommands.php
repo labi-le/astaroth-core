@@ -11,6 +11,7 @@ use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\Support\Facades\Message as MessageFacade;
+use Exception;
 use JetBrains\PhpStorm\Pure;
 use Throwable;
 
@@ -37,14 +38,14 @@ abstract class BaseCommands
     }
 
     /**
-     * @param MessageNew|MessageEvent $data
+     * @param MessageEvent $data
      * @param array $event
      * @return array
      * @throws Throwable
      * @see https://vk.com/dev/messages.sendMessageEventAnswer
      * @noinspection JsonEncodingApiUsageInspection
      */
-    protected function sendMessageEventAnswer(MessageNew|MessageEvent $data, array $event): array
+    protected function sendMessageEventAnswer(MessageEvent $data, array $event): array
     {
         return Request::call("messages.sendMessageEventAnswer",
             [
@@ -169,7 +170,7 @@ abstract class BaseCommands
     /**
      * @throws Throwable
      */
-    protected function logToMessage(int $id, string $error_level, \Exception|string $e): void
+    protected function logToMessage(int $id, string $error_level, Exception|string $e): void
     {
         Utils::logToMessage($id, $error_level, $e);
     }
