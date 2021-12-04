@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class BuilderContainer
  * @package Astaroth\Containers
  */
-class BuilderContainer implements ContainerPlaceholderInterface
+final class BuilderContainer implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "builder";
 
