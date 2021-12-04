@@ -39,6 +39,7 @@ final class State implements AttributeValidatorInterface
      */
     public function validate(): bool
     {
+        /** @psalm-suppress PossiblyUndefinedMethod */
         $user_id = match ($this->haystack::class) {
             MessageNew::class => fn() => $this->haystack->getFromId(),
             MessageEvent::class => fn() => $this->haystack->getUserId(),
