@@ -30,10 +30,14 @@ class EventDispatcher
         private DataFetcher $data
     )
     {
-        (new Executor($classInfo))
-            ->setCallableValidateAttribute($this->getValidateAttributeClosure())
-            ->replaceObjects(self::fetchData($this->data))
-            ->launch();
+        $executor = (new Executor($classInfo))
+            ->setCallableValidateAttribute($this->getValidateAttributeClosure());
+
+        if ($data = self::fetchData($this->data)) {
+            $executor->replaceObjects($data);
+        }
+
+        $executor->launch();
     }
 
     private static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
