@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class UploaderContainer
  * @package Astaroth\Containers
  */
-class UploaderContainer implements ContainerPlaceholderInterface
+final class UploaderContainer implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "uploader";
 
