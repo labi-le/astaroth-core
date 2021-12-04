@@ -6,7 +6,7 @@ namespace Astaroth\Debug;
 
 use function is_array;
 
-class Dump
+final class Dump
 {
     public function __construct
     (
