@@ -25,7 +25,7 @@ final class MessageNew implements AttributeValidatorInterface
      * @param DataFetcher $haystack
      * @return $this
      */
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): MessageNew
     {
         if (method_exists($haystack, "getType")) {
             $this->type = $haystack->getType();
