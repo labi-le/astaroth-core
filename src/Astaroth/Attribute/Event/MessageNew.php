@@ -12,7 +12,7 @@ use Attribute;
 /**
  * AttributeOLD defining new message
  */
-class MessageNew implements AttributeValidatorInterface
+final class MessageNew implements AttributeValidatorInterface
 {
     private string $type = "";
 
