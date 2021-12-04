@@ -27,6 +27,7 @@ class EventAttributeHandler
     )
     {
         foreach ($classMap as $class) {
+            /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
             /** @psalm-suppress InvalidArgument */
