@@ -136,11 +136,7 @@ class Utils
             );
         } else {
             $message->setMessage(
-                sprintf(
-                    "Logger:\nError Level - %s\nMessage - %s",
-                    $error_level,
-                    $e
-                )
+                sprintf("Logger:\nError Level - %s\nMessage - %s", $error_level, $e)
             );
         }
 
