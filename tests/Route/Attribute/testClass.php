@@ -8,7 +8,7 @@ namespace Route\Attribute;
 use Astaroth\Attribute\Conversation;
 use Astaroth\Attribute\Debug;
 use Astaroth\Attribute\Description;
-use Astaroth\Attribute\Event\MessageEvent as MessageEvent;
+use Astaroth\Attribute\Event\MessageEvent;
 use Astaroth\Attribute\Event\MessageNew as TestEvent;
 use Astaroth\Attribute\Message;
 use Astaroth\Commands\BaseCommands;

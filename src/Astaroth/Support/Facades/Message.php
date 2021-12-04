@@ -76,11 +76,17 @@ final class Message
         return $this->addCustomUploadableAttachments(...self::genAttachObj($video, AudioMessage::class));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function addCustomUploadableAttachments(ICanBeSaved ...$attachments): Message
     {
         return $this->attachments(...Upload::attachments(...$attachments));
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function send(int $id = null): array
     {
         $message = (new MessageBuilder)

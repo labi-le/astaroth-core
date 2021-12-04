@@ -11,6 +11,8 @@ use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\Support\Facades\Message as MessageFacade;
+use Exception;
+use JetBrains\PhpStorm\Pure;
 use Throwable;
 
 /**
@@ -21,7 +23,7 @@ abstract class BaseCommands
 {
     private MessageFacade $message;
 
-    public function __construct(protected MessageNew|MessageEvent|null $data = null)
+    #[Pure] public function __construct(protected MessageNew|MessageEvent|null $data = null)
     {
         $this->message = new MessageFacade($data?->getPeerId());
     }
@@ -32,18 +34,18 @@ abstract class BaseCommands
      */
     protected function message(string $text = ""): MessageFacade
     {
-        return $this->message->text($text);
+        return clone $this->message->text($text);
     }
 
     /**
-     * @param MessageNew|MessageEvent $data
+     * @param MessageEvent $data
      * @param array $event
      * @return array
      * @throws Throwable
      * @see https://vk.com/dev/messages.sendMessageEventAnswer
      * @noinspection JsonEncodingApiUsageInspection
      */
-    protected function sendMessageEventAnswer(MessageNew|MessageEvent $data, array $event): array
+    protected function sendMessageEventAnswer(MessageEvent $data, array $event): array
     {
         return Request::call("messages.sendMessageEventAnswer",
             [
@@ -168,7 +170,7 @@ abstract class BaseCommands
     /**
      * @throws Throwable
      */
-    protected function logToMessage(int $id, string $error_level, \Exception|string $e): void
+    protected function logToMessage(int $id, string $error_level, Exception|string $e): void
     {
         Utils::logToMessage($id, $error_level, $e);
     }

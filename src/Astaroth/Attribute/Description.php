@@ -5,6 +5,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeReturnInterface;
 use Attribute;
+use JetBrains\PhpStorm\Pure;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class Description implements AttributeReturnInterface
@@ -22,7 +23,7 @@ final class Description implements AttributeReturnInterface
         return $this->description;
     }
 
-    public function getResult(): string
+    #[Pure] public function getResult(): string
     {
         return $this->getDescription();
     }

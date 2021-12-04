@@ -46,7 +46,7 @@ final class Conversation implements AttributeValidatorInterface
         $this->member_id = $member_id;
     }
 
-    public function validate(): bool
+    #[Pure] public function validate(): bool
     {
 
         $validate = match ($this->type) {

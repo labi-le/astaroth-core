@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
+use JetBrains\PhpStorm\Pure;
 use Stringable;
 
 class TimePerformance implements Stringable
@@ -34,7 +35,7 @@ class TimePerformance implements Stringable
         return $this->time_end;
     }
 
-    public function __toString()
+    #[Pure] public function __toString()
     {
         return "Execution time for this piece of code: {$this->getTimeEnd()} ms";
     }
