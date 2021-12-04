@@ -63,6 +63,10 @@ final class Payload implements AttributeValidatorInterface
         return array_key_exists($payload, $haystack);
     }
 
+    /**
+     * @param $haystack
+     * @return Payload
+     */
     public function setHaystack($haystack): Payload
     {
         $this->haystack = $haystack;
