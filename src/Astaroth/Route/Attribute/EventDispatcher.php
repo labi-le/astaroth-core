@@ -50,8 +50,9 @@ class EventDispatcher
             return $data->messageEvent();
         }
 
-        return null;
+        trigger_error($data->getType() . " not yet implemented, please create issue", E_USER_NOTICE);
 
+        return null;
     }
 
     /**
