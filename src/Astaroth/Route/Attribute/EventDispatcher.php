@@ -62,15 +62,12 @@ class EventDispatcher
     {
         return function ($attribute) {
             if ($attribute instanceof AttributeValidatorInterface) {
-
                 $this->vkEventValidate($attribute, self::fetchData($this->data));
-
                 $this->anyEventValidate($attribute);
 
                 return $attribute->validate();
 
             }
-
             return false;
         };
     }
