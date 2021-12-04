@@ -7,7 +7,6 @@ namespace Astaroth\Attribute;
 use ArrayAccess;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
-use Exception;
 use JetBrains\PhpStorm\Language;
 use ReturnTypeWillChange;
 use function count;
@@ -38,6 +37,10 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess
         return false;
     }
 
+    /**
+     * @param $haystack
+     * @return MessageRegex
+     */
     public function setHaystack($haystack): MessageRegex
     {
         $this->haystack = $haystack;

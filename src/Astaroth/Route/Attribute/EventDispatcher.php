@@ -30,10 +30,14 @@ class EventDispatcher
         private DataFetcher $data
     )
     {
-        (new Executor($classInfo))
-            ->setCallableValidateAttribute($this->getValidateAttributeClosure())
-            ->replaceObjects(self::fetchData($this->data))
-            ->launch();
+        $executor = (new Executor($classInfo))
+            ->setCallableValidateAttribute($this->getValidateAttributeClosure());
+
+        if ($data = self::fetchData($this->data)) {
+            $executor->replaceObjects($data);
+        }
+
+        $executor->launch();
     }
 
     private static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
@@ -46,8 +50,9 @@ class EventDispatcher
             return $data->messageEvent();
         }
 
-        return null;
+        trigger_error($data->getType() . " not yet implemented, please create issue", E_USER_NOTICE);
 
+        return null;
     }
 
     /**
@@ -57,15 +62,12 @@ class EventDispatcher
     {
         return function ($attribute) {
             if ($attribute instanceof AttributeValidatorInterface) {
-
                 $this->vkEventValidate($attribute, self::fetchData($this->data));
-
                 $this->anyEventValidate($attribute);
 
                 return $attribute->validate();
 
             }
-
             return false;
         };
     }

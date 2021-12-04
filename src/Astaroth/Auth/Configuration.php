@@ -12,38 +12,40 @@ use Dotenv\Exception\ValidationException;
 use Exception;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class Configuration
+final class Configuration
 {
     private array $config;
 
-    public const YES = "yes";
-    public const NO = "no";
+    public const
+        YES = "yes",
+        NO = "no",
 
-    public const DEBUG = "DEBUG";
-    public const CACHE_PATH = "CACHE_PATH";
+        DEBUG = "DEBUG",
 
-    public const CALLBACK = "CALLBACK";
-    public const LONGPOLL = "LONGPOLL";
+        CACHE_PATH = "CACHE_PATH",
 
-    public const TYPE = "TYPE";
-    public const ACCESS_TOKEN = "ACCESS_TOKEN";
-    public const API_VERSION = "API_VERSION";
-    public const CONFIRMATION_KEY = "CONFIRMATION_KEY";
-    public const SECRET_KEY = "SECRET_KEY";
-    public const HANDLE_REPEATED_REQUESTS = "HANDLE_REPEATED_REQUESTS";
+        CALLBACK = "CALLBACK",
+        LONGPOLL = "LONGPOLL",
 
-    public const APP_NAMESPACE = "APP_NAMESPACE";
-    public const ENTITY_PATH = "ENTITY_PATH";
+        TYPE = "TYPE",
+        ACCESS_TOKEN = "ACCESS_TOKEN",
+        API_VERSION = "API_VERSION",
+        CONFIRMATION_KEY = "CONFIRMATION_KEY",
+        SECRET_KEY = "SECRET_KEY",
+        HANDLE_REPEATED_REQUESTS = "HANDLE_REPEATED_REQUESTS",
 
-    public const DATABASE_DRIVER = "DATABASE_DRIVER";
-    public const DATABASE_NAME = "DATABASE_NAME";
-    public const DATABASE_USER = "DATABASE_USER";
-    public const DATABASE_PASSWORD = "DATABASE_PASSWORD";
-    public const DATABASE_URL = "DATABASE_URL";
-    public const DATABASE_HOST = "DATABASE_HOST";
-    public const DATABASE_PORT = "DATABASE_PORT";
+        APP_NAMESPACE = "APP_NAMESPACE",
+        ENTITY_PATH = "ENTITY_PATH",
 
-    public const COUNT_PARALLEL_OPERATIONS = "COUNT_PARALLEL_OPERATIONS";
+        DATABASE_DRIVER = "DATABASE_DRIVER",
+        DATABASE_NAME = "DATABASE_NAME",
+        DATABASE_USER = "DATABASE_USER",
+        DATABASE_PASSWORD = "DATABASE_PASSWORD",
+        DATABASE_URL = "DATABASE_URL",
+        DATABASE_HOST = "DATABASE_HOST",
+        DATABASE_PORT = "DATABASE_PORT",
+
+        COUNT_PARALLEL_OPERATIONS = "COUNT_PARALLEL_OPERATIONS";
 
     /**
      * Configuration file structure
@@ -82,19 +84,22 @@ class Configuration
      */
     private function __construct(?string $dir, string $type)
     {
-        $this->config = match ($type) {
-            Application::DEV => $this->parseDevEnv($dir),
-            Application::PRODUCTION => $this->parseProdEnv()
-        };
+        if ($type === Application::DEV && $dir !== null) {
+            $this->config = $this->parseDevEnv($dir);
+        }
+
+        if ($type === Application::PRODUCTION) {
+            $this->config = $this->parseProdEnv();
+        }
     }
 
     /**
      * @throws Exception
      */
     #[ExpectedValues(values: [Application::DEV, Application::PRODUCTION])]
-    public static function set(?string $dir, string $type = Application::DEV): static
+    public static function set(?string $dir, string $type = Application::DEV): Configuration
     {
-        return new static($dir, $type);
+        return new Configuration($dir, $type);
     }
 
 

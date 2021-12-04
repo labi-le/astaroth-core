@@ -28,8 +28,8 @@ final class State implements AttributeValidatorInterface
     public function __construct
     (
         private string $state_name,
-        #[ExpectedValues(values: [self::CHAT, self::PEER, self::USER])]
-        private int    $member_type = State::USER
+                       #[ExpectedValues(values: [self::CHAT, self::PEER, self::USER])]
+                       private int $member_type = State::USER
     )
     {
     }
@@ -39,14 +39,15 @@ final class State implements AttributeValidatorInterface
      */
     public function validate(): bool
     {
+        /** @psalm-suppress PossiblyUndefinedMethod */
         $user_id = match ($this->haystack::class) {
             MessageNew::class => fn() => $this->haystack->getFromId(),
             MessageEvent::class => fn() => $this->haystack->getUserId(),
         };
 
         $member_id = match ($this->member_type) {
-            self::USER => $user_id(),
-            self::CHAT => $this->haystack->getChatId(),
+            self::USER => (int)$user_id(),
+            self::CHAT => (int)$this->haystack->getChatId(),
             self::PEER => $this->haystack->getPeerId(),
         };
 

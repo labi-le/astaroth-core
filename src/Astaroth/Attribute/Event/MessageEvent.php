@@ -12,7 +12,7 @@ use Attribute;
 /**
  * AttributeOLD defining new message
  */
-class MessageEvent implements AttributeValidatorInterface
+final class MessageEvent implements AttributeValidatorInterface
 {
     private string $type = "";
 
@@ -23,11 +23,11 @@ class MessageEvent implements AttributeValidatorInterface
 
     /**
      * @param DataFetcher $haystack
-     * @return $this
+     * @return MessageEvent
      */
-    public function setHaystack($haystack): static
+    public function setHaystack($haystack): MessageEvent
     {
-        if(method_exists($haystack, "getType")) {
+        if (method_exists($haystack, "getType")) {
             $this->type = $haystack->getType();
         }
 

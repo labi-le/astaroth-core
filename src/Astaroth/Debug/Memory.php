@@ -6,7 +6,7 @@ namespace Astaroth\Debug;
 
 use Stringable;
 
-class Memory implements Stringable
+final class Memory implements Stringable
 {
 
     private int $final_memory_usage;

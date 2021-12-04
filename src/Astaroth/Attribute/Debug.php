@@ -18,15 +18,15 @@ final class Debug implements AttributeReturnInterface, AttributeValidatorInterfa
 {
     private mixed $haystack;
 
-    public function __construct()
-    {
-    }
-
     public function validate(): bool
     {
         return true;
     }
 
+    /**
+     * @param $haystack
+     * @return Debug
+     */
     public function setHaystack($haystack): Debug
     {
         $this->haystack = $haystack;

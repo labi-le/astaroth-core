@@ -77,6 +77,10 @@ final class Action implements AttributeValidatorInterface
         return false;
     }
 
+    /**
+     * @param $haystack
+     * @return Action
+     */
     public function setHaystack($haystack): Action
     {
         $this->haystack = $haystack;

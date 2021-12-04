@@ -42,6 +42,10 @@ final class Message implements AttributeValidatorInterface
         ))->compare();
     }
 
+    /**
+     * @param $haystack
+     * @return Message
+     */
     public function setHaystack($haystack): Message
     {
         $this->haystack = $haystack;

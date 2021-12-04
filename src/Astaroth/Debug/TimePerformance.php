@@ -7,7 +7,7 @@ namespace Astaroth\Debug;
 use JetBrains\PhpStorm\Pure;
 use Stringable;
 
-class TimePerformance implements Stringable
+final class TimePerformance implements Stringable
 {
     private int|float $time_start;
     private int|float $time_end;

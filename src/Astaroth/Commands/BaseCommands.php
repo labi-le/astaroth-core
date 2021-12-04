@@ -32,7 +32,7 @@ abstract class BaseCommands
     /**
      * @throws Throwable
      */
-    protected function message(string $text = ""): MessageFacade
+    final protected function message(string $text = ""): MessageFacade
     {
         return clone $this->message->text($text);
     }
@@ -45,7 +45,7 @@ abstract class BaseCommands
      * @see https://vk.com/dev/messages.sendMessageEventAnswer
      * @noinspection JsonEncodingApiUsageInspection
      */
-    protected function sendMessageEventAnswer(MessageEvent $data, array $event): array
+    final protected function sendMessageEventAnswer(MessageEvent $data, array $event): array
     {
         return Request::call("messages.sendMessageEventAnswer",
             [
@@ -65,7 +65,7 @@ abstract class BaseCommands
      * @throws Throwable
      * @see https://vk.com/dev/messages.edit
      */
-    protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null): array
+    final protected function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null): array
     {
         $params = $message->getParams();
         $params["peer_id"] = $params["peer_ids"];
@@ -86,7 +86,7 @@ abstract class BaseCommands
      * @throws Throwable
      * @see https://vk.com/dev/messages.delete
      */
-    protected function messagesDelete
+    final protected function messagesDelete
     (
         array $message_ids = [],
         bool  $spam = false,
@@ -114,7 +114,7 @@ abstract class BaseCommands
      * @throws Throwable
      * @see https://vk.com/dev/messages.removeChatUser
      */
-    protected function kick(int $chat_id, int $id): array
+    final protected function kick(int $chat_id, int $id): array
     {
         return Request::call("messages.removeChatUser", ["chat_id" => $chat_id, "member_id" => $id]);
     }
@@ -127,7 +127,7 @@ abstract class BaseCommands
      * @throws Throwable
      * @see https://vk.com/dev/users.get
      */
-    protected function usersGet(array $user_ids, array $fields = [], string $name_case = "nom"): array
+    final protected function usersGet(array $user_ids, array $fields = [], string $name_case = "nom"): array
     {
         return Request::call("users.get",
             [
@@ -145,7 +145,7 @@ abstract class BaseCommands
      * @throws Throwable
      * @see https://vk.com/dev/groups.getById
      */
-    protected function groupsGetById(array $group_ids, array $fields = []): array
+    final protected function groupsGetById(array $group_ids, array $fields = []): array
     {
         return Request::call("groups.getById",
             [
@@ -162,7 +162,7 @@ abstract class BaseCommands
      * @throws Throwable
      * @see https://vk.com/dev/utils.getShortLink
      */
-    protected function utilsGetShortLink(string $url, bool $private = false): array
+    final protected function utilsGetShortLink(string $url, bool $private = false): array
     {
         return Request::call("utils.getShortLink", ["url" => $url, "private" => $private]);
     }
@@ -170,7 +170,7 @@ abstract class BaseCommands
     /**
      * @throws Throwable
      */
-    protected function logToMessage(int $id, string $error_level, Exception|string $e): void
+    final protected function logToMessage(int $id, string $error_level, Exception|string $e): void
     {
         Utils::logToMessage($id, $error_level, $e);
     }

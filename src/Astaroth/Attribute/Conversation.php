@@ -104,7 +104,7 @@ final class Conversation implements AttributeValidatorInterface
 
     /**
      * @param DataFetcher $haystack
-     * @return $this
+     * @return Conversation
      */
     public function setHaystack($haystack): Conversation
     {
