@@ -12,7 +12,7 @@ use Dotenv\Exception\ValidationException;
 use Exception;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class Configuration
+final class Configuration
 {
     private array $config;
 
