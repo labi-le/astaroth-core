@@ -45,6 +45,13 @@ final class Payload implements AttributeValidatorInterface
         return false;
     }
 
+    /**
+     * @param array|string $payload
+     * @param array $haystack
+     * @return bool
+     *
+     * @psalm-suppress PossiblyInvalidArgument
+     */
     private function containsValidate(array|string $payload, array $haystack): bool
     {
         return array_intersect($payload, $haystack) !== [];
