@@ -23,7 +23,7 @@ final class MessageEvent implements AttributeValidatorInterface
 
     /**
      * @param DataFetcher $haystack
-     * @return $this
+     * @return MessageEvent
      */
     public function setHaystack($haystack): MessageEvent
     {
