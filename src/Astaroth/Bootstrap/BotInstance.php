@@ -12,7 +12,7 @@ use Astaroth\Contracts\HandlerInterface;
 use Astaroth\Longpoll\Longpoll;
 use Exception;
 
-class BotInstance
+final class BotInstance
 {
     public function __construct(private Configuration $container)
     {
