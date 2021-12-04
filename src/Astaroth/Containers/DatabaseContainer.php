@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class DatabaseContainer
  * @package Astaroth\Containers
  */
-class DatabaseContainer implements ContainerPlaceholderInterface
+final class DatabaseContainer implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "db";
 
