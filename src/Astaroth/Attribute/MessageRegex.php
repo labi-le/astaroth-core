@@ -7,7 +7,6 @@ namespace Astaroth\Attribute;
 use ArrayAccess;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
-use Exception;
 use JetBrains\PhpStorm\Language;
 use ReturnTypeWillChange;
 use function count;
