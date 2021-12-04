@@ -37,6 +37,10 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess
         return false;
     }
 
+    /**
+     * @param $haystack
+     * @return MessageRegex
+     */
     public function setHaystack($haystack): MessageRegex
     {
         $this->haystack = $haystack;
