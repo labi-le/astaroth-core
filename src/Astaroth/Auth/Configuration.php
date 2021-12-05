@@ -172,12 +172,7 @@ final class Configuration
      */
     public function getApiVersion(): string
     {
-        $key = $this->getConfig(self::API_VERSION);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::API_VERSION . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::API_VERSION);
     }
 
     /**
