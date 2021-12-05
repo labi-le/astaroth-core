@@ -329,12 +329,11 @@ final class Configuration
 
     public function getCountParallelOperations(): int
     {
-        $key = $this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
-        if (empty($key)) {
+        try {
+            return (int)$this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
+        } catch (ParameterMissingException) {
             return 0;
         }
-
-        return (int)$key;
     }
 
 
