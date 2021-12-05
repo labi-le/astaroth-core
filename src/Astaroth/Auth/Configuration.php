@@ -195,17 +195,24 @@ final class Configuration
 
     /**
      * @return string[]
+     * @throws ParameterMissingException
      */
     public function getEntityPath(): array
     {
         return array_map("trim", explode(',', $this->getConfig(self::ENTITY_PATH)));
     }
 
+    /**
+     * @throws ParameterMissingException
+     */
     public function isHandleRepeatedRequest(): bool
     {
         return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
     }
 
+    /**
+     * @throws ParameterMissingException
+     */
     public function isDebug(): bool
     {
         return $this->getConfig(self::DEBUG) === self::YES;
