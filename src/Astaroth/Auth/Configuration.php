@@ -259,12 +259,11 @@ final class Configuration
 
     public function getDatabaseDriver(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_DRIVER);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_DRIVER);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseHost(): ?string
