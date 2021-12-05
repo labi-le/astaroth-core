@@ -187,12 +187,13 @@ final class Configuration
         return array_map("trim", explode(',', $this->getConfig(self::ENTITY_PATH)));
     }
 
-    /**
-     * @throws ParameterMissingException
-     */
     public function isHandleRepeatedRequest(): bool
     {
-        return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
+        try {
+            return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
+        } catch (ParameterMissingException) {
+            return false;
+        }
     }
 
     public function isDebug(): bool
