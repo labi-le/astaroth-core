@@ -341,12 +341,13 @@ final class Configuration
     /**
      * @param mixed $key
      * @return mixed
+     * @throws ParameterMissingException
      */
     private function getConfig(mixed $key = null): mixed
     {
         if ($key === null) {
             return $this->config;
         }
-        return $this->config[$key] ?? null;
+        return $this->config[$key] ?? throw new ParameterMissingException("Missing parameter $key from environment");
     }
 }
