@@ -317,11 +317,11 @@ final class Configuration
 
 
     /**
-     * @param mixed $key
+     * @param ?string $key
      * @return mixed
      * @throws ParameterMissingException
      */
-    private function getConfig(mixed $key = null): mixed
+    private function getConfig(string $key = null): mixed
     {
         if ($key === null) {
             return $this->config;
