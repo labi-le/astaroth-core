@@ -195,12 +195,13 @@ final class Configuration
         return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
     }
 
-    /**
-     * @throws ParameterMissingException
-     */
     public function isDebug(): bool
     {
-        return $this->getConfig(self::DEBUG) === self::YES;
+        try {
+            return $this->getConfig(self::DEBUG) === self::YES;
+        } catch (ParameterMissingException) {
+            return false;
+        }
     }
 
     /**
