@@ -210,12 +210,7 @@ final class Configuration
      */
     public function getType(): string
     {
-        $key = $this->getConfig(self::TYPE);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::TYPE . " from environment\n set " . self::CALLBACK . " or " . self::LONGPOLL);
-        }
-
-        return $key;
+        return $this->getConfig(self::TYPE);
     }
 
     public function getCachePath(): string
