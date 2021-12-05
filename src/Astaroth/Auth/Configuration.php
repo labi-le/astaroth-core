@@ -226,12 +226,11 @@ final class Configuration
 
     public function getCachePath(): string
     {
-        $path = $this->getConfig(self::CACHE_PATH);
-        if (empty($path)) {
+        try {
+            return $this->getConfig(self::CACHE_PATH);
+        } catch (ParameterMissingException) {
             return sys_get_temp_dir();
         }
-
-        return $path;
     }
 
     /**
