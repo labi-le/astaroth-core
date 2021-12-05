@@ -159,12 +159,7 @@ final class Configuration
      */
     public function getAccessToken(): string
     {
-        $key = $this->getConfig(self::ACCESS_TOKEN);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::ACCESS_TOKEN . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::ACCESS_TOKEN);
     }
 
     /**
