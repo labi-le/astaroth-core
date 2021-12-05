@@ -185,12 +185,7 @@ final class Configuration
      */
     public function getAppNamespace(): string
     {
-        $key = $this->getConfig(self::APP_NAMESPACE);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::APP_NAMESPACE . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::APP_NAMESPACE);
     }
 
     /**
