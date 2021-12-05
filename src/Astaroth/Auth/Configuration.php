@@ -269,12 +269,11 @@ final class Configuration
 
     public function getDatabaseHost(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_HOST);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_HOST);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabasePort(): ?string
