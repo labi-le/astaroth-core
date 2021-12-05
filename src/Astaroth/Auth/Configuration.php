@@ -319,12 +319,11 @@ final class Configuration
 
     public function getDatabasePassword(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_PASSWORD);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_PASSWORD);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getCountParallelOperations(): int
