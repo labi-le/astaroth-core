@@ -289,12 +289,11 @@ final class Configuration
 
     public function getDatabaseUrl(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_URL);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_URL);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseUser(): ?string
