@@ -234,14 +234,12 @@ final class Configuration
         return $path;
     }
 
+    /**
+     * @throws ParameterMissingException
+     */
     public function getCallbackSecretKey(): ?string
     {
-        $key = $this->getConfig(self::SECRET_KEY);
-        if (empty($key)) {
-            return null;
-        }
-
-        return $key;
+        return $this->getConfig(self::SECRET_KEY);
     }
 
     /**
