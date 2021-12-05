@@ -279,12 +279,11 @@ final class Configuration
 
     public function getDatabasePort(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_PORT);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_PORT);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseUrl(): ?string
