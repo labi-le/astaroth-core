@@ -309,12 +309,11 @@ final class Configuration
 
     public function getDatabaseName(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_NAME);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_NAME);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabasePassword(): ?string
