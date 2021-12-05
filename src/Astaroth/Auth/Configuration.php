@@ -299,12 +299,11 @@ final class Configuration
 
     public function getDatabaseUser(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_USER);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_USER);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseName(): ?string
