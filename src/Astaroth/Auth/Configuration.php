@@ -323,6 +323,11 @@ final class Configuration
     public function getCountParallelOperations(): int
     {
         try {
+            //fork processes not work well on web servers
+            if ($this->getType() === self::CALLBACK) {
+                return 0;
+            }
+
             return (int)$this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
         } catch (ParameterMissingException) {
             return 0;
