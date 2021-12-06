@@ -7,6 +7,8 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageEvent;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 use LogicException;
@@ -77,7 +79,10 @@ final class Payload implements AttributeValidatorInterface, AttributeOptionalInt
      */
     public function setHaystack($haystack): Payload
     {
-        $this->haystack = $haystack?->getPayload();
+        if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent){
+            $this->haystack = $haystack->getPayload();
+        }
+
         return $this;
     }
 }

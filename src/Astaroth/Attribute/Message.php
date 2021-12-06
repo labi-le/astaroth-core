@@ -17,7 +17,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 final class Message implements AttributeValidatorInterface, AttributeOptionalInterface
 {
-    private string $haystack;
+    private string $haystack = "";
 
     public const STRICT = 0;
     public const CONTAINS = 1;

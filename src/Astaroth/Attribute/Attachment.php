@@ -17,7 +17,7 @@ use function count;
  */
 final class Attachment implements AttributeValidatorInterface, AttributeOptionalInterface
 {
-    private array $haystack;
+    private array $haystack = [];
 
     public function __construct(
         #[ExpectedValues(values: [

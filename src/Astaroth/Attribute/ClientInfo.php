@@ -26,7 +26,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeOptional
     public const INTENT_SUBSCRIBE = "intent_subscribe";
     public const INTENT_UNSUBSCRIBE = "intent_unsubscribe";
 
-    private ?object $client_info;
+    private ?object $client_info = null;
 
     /**
      * By default, a regular keyboard is installed that supports everything

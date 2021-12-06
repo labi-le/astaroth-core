@@ -20,7 +20,7 @@ use function is_null;
  */
 final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeOptionalInterface
 {
-    private string $haystack;
+    private string $haystack = "";
     private string $pattern;
 
     private array $matches = [];

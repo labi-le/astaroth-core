@@ -19,7 +19,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 final class Action implements AttributeValidatorInterface, AttributeOptionalInterface
 {
-    private ?object $haystack;
+    private ?object $haystack = null;
 
     public const CHAT_INVITE_USER = "chat_invite_user";
     public const CHAT_KICK_USER = "chat_kick_user";

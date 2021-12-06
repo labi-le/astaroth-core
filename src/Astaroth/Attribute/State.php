@@ -64,7 +64,10 @@ final class State implements AttributeValidatorInterface, AttributeOptionalInter
      */
     public function setHaystack($haystack): State
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent) {
+            $this->haystack = $haystack;
+        }
+
         return $this;
     }
 }

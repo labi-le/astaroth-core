@@ -29,7 +29,7 @@ final class Conversation implements AttributeValidatorInterface, AttributeOption
      */
     public array $member_id = [];
 
-    private null|MessageNew|MessageEvent $haystack;
+    private null|MessageNew|MessageEvent $haystack = null;
 
     /**
      * Conversation constructor.
@@ -112,7 +112,10 @@ final class Conversation implements AttributeValidatorInterface, AttributeOption
      */
     public function setHaystack($haystack): Conversation
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageEvent || $haystack instanceof MessageNew) {
+            $this->haystack = $haystack;
+        }
+
         return $this;
     }
 }
