@@ -24,12 +24,12 @@ final class Payload implements AttributeValidatorInterface, AttributeOptionalInt
     public const STRICT = 1;
     public const CONTAINS = 2;
 
-    private array|null $haystack;
+    private ?array $haystack = null;
 
     public function __construct(
         private array|string $payload_or_key,
-        #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::KEY_EXIST])]
-        private int $validation = Payload::STRICT)
+                             #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::KEY_EXIST])]
+                             private int $validation = Payload::STRICT)
     {
     }
 
@@ -77,7 +77,7 @@ final class Payload implements AttributeValidatorInterface, AttributeOptionalInt
      */
     public function setHaystack($haystack): Payload
     {
-        $this->haystack = $haystack;
+        $this->haystack = $haystack?->getPayload();
         return $this;
     }
 }

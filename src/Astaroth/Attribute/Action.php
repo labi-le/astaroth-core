@@ -6,6 +6,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -38,19 +39,18 @@ final class Action implements AttributeValidatorInterface, AttributeOptionalInte
      * @see https://i.imgur.com/S4vcS9w.png
      */
     public function __construct(
-        #[ExpectedValues(values:
-            [
-                self::CHAT_PHOTO_UPDATE,
-                self::CHAT_PIN_MESSAGE,
-                self::CHAT_UNPIN_MESSAGE,
-                self::CHAT_PHOTO_REMOVE,
-                self::CHAT_INVITE_USER_BY_LINK,
-                self::CHAT_INVITE_USER,
-                self::CHAT_KICK_USER,
-                self::CHAT_CREATE,
-                self::CHAT_TITLE_UPDATE,
-                self::CONVERSATION_STYLE_UPDATE,
-            ]
+        #[ExpectedValues(values: [
+            self::CHAT_PHOTO_UPDATE,
+            self::CHAT_PIN_MESSAGE,
+            self::CHAT_UNPIN_MESSAGE,
+            self::CHAT_PHOTO_REMOVE,
+            self::CHAT_INVITE_USER_BY_LINK,
+            self::CHAT_INVITE_USER,
+            self::CHAT_KICK_USER,
+            self::CHAT_CREATE,
+            self::CHAT_TITLE_UPDATE,
+            self::CONVERSATION_STYLE_UPDATE,
+        ]
         )]
         private string $type,
         private array $anyData = []
@@ -84,7 +84,10 @@ final class Action implements AttributeValidatorInterface, AttributeOptionalInte
      */
     public function setHaystack($haystack): Action
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew) {
+            $this->haystack = $haystack->getAction();
+        }
+
         return $this;
     }
 }

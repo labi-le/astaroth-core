@@ -7,6 +7,7 @@ namespace Astaroth\Attribute;
 use ArrayAccess;
 use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\Language;
 use ReturnTypeWillChange;
@@ -44,7 +45,10 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
      */
     public function setHaystack($haystack): MessageRegex
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew) {
+            $this->haystack = $haystack->getText();
+        }
+
         return $this;
     }
 

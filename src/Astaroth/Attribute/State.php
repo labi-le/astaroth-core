@@ -6,8 +6,6 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
-use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Support\Facades\Session;
@@ -24,7 +22,7 @@ final class State implements AttributeValidatorInterface, AttributeOptionalInter
     //reserved
     public const RESERVED_NAME = "__state";
 
-    private MessageNew|MessageEvent $haystack;
+    private null|MessageNew|MessageEvent $haystack;
 
     public function __construct
     (
@@ -40,36 +38,33 @@ final class State implements AttributeValidatorInterface, AttributeOptionalInter
      */
     public function validate(): bool
     {
-        /** @psalm-suppress PossiblyUndefinedMethod */
-        $user_id = match ($this->haystack::class) {
-            MessageNew::class => fn() => $this->haystack->getFromId(),
-            MessageEvent::class => fn() => $this->haystack->getUserId(),
-        };
+        if ($this->haystack) {
+            /** @psalm-suppress PossiblyUndefinedMethod */
+            $user_id = match ($this->haystack::class) {
+                MessageNew::class => fn() => $this->haystack?->getFromId(),
+                MessageEvent::class => fn() => $this->haystack?->getUserId(),
+            };
 
-        $member_id = match ($this->member_type) {
-            self::USER => (int)$user_id(),
-            self::CHAT => (int)$this->haystack->getChatId(),
-            self::PEER => $this->haystack->getPeerId(),
-        };
+            $member_id = match ($this->member_type) {
+                self::USER => (int)$user_id(),
+                self::CHAT => (int)$this->haystack->getChatId(),
+                self::PEER => $this->haystack->getPeerId(),
+            };
 
-        return (bool)(new Session($member_id, self::RESERVED_NAME))->get($this->state_name);
+            return (bool)(new Session($member_id, self::RESERVED_NAME))->get($this->state_name);
+        }
+
+        return false;
     }
 
     /**
      * @inheritDoc
-     * @param MessageNew|MessageEvent|DataFetcher $haystack
+     * @param $haystack
      * @return State
      */
     public function setHaystack($haystack): State
     {
-        if ($haystack instanceof DataFetcher) {
-            $this->haystack = match ($haystack->getType()) {
-                Events::MESSAGE_NEW => $haystack->messageNew(),
-                Events::MESSAGE_EVENT => $haystack->messageEvent(),
-            };
-        } else {
-            $this->haystack = $haystack;
-        }
+        $this->haystack = $haystack;
         return $this;
     }
 }

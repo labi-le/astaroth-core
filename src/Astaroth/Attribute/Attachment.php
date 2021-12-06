@@ -6,6 +6,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 use function count;
@@ -62,7 +63,10 @@ final class Attachment implements AttributeValidatorInterface, AttributeOptional
      */
     public function setHaystack($haystack): Attachment
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew) {
+            $this->haystack = $haystack->getAttachments() ?? [];
+        }
+
         return $this;
     }
 }

@@ -6,6 +6,7 @@ namespace Astaroth\Attribute;
 
 use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\TextMatcher;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -27,10 +28,9 @@ final class Message implements AttributeValidatorInterface, AttributeOptionalInt
     public function __construct
     (
         private string $message,
-        #[ExpectedValues(values:
-            [self::STRICT, self::CONTAINS, self::START_AS, self::END_AS, self::SIMILAR_TO]
-        )]
-        private int    $validation = Message::STRICT)
+                       #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::START_AS, self::END_AS, self::SIMILAR_TO]
+                       )]
+                       private int $validation = Message::STRICT)
     {
     }
 
@@ -49,7 +49,10 @@ final class Message implements AttributeValidatorInterface, AttributeOptionalInt
      */
     public function setHaystack($haystack): Message
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew) {
+            $this->haystack = $haystack->getText();
+        }
+
         return $this;
     }
 }
