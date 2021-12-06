@@ -15,7 +15,7 @@ class ActionTest extends TestCase
     {
         $payload = new Action(Action::CHAT_INVITE_USER, ["418618" => 12]);
 
-        assertEquals(Action::class, $payload->setHaystack(require __DIR__ . "/data.php")::class);
+        assertEquals(Action::class, $payload->setHaystack((require __DIR__ . "/data.php")->messageNew())::class);
     }
 
     public function testValidate()
