@@ -15,13 +15,13 @@ class PayloadTest extends TestCase
     {
         $payload = new Payload("bar", Payload::KEY_EXIST);
 
-        assertEquals(Payload::class, $payload->setHaystack(["foo"])::class);
+        assertEquals(Payload::class, $payload->setHaystack((require __DIR__ . "/data.php")->messageNew())::class);
     }
 
     public function testValidate()
     {
         $payload = new Payload("foo", Payload::KEY_EXIST);
-        $payload->setHaystack(["foo" => "bar"]);
+        $payload->setHaystack((require __DIR__ . "/data.php")->messageNew());
         assertTrue($payload->validate());
     }
 }
