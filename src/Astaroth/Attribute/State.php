@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Enums\Events;
@@ -14,7 +15,7 @@ use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-final class State implements AttributeValidatorInterface
+final class State implements AttributeValidatorInterface, AttributeOptionalInterface
 {
     public const USER = 0;
     public const CHAT = 1;

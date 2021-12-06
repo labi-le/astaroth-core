@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
-use Astaroth\Attribute\Conversation;
-use Astaroth\Attribute\Event\MessageEvent;
-use Astaroth\Attribute\Event\MessageNew;
-use Astaroth\Attribute\State;
+use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 
@@ -41,19 +38,39 @@ class EventAttributeHandler
 
     private function classValidateAttr(ReflectionClass $reflectionClass, DataFetcher $data): bool
     {
-        $validate = false;
+        $mandatoryValidation = false;
+        $optionalValidation = null;
+
         foreach ($reflectionClass->getAttributes() as $reflectionAttribute) {
             $attribute = $reflectionAttribute->newInstance();
 
-            if ($attribute instanceof AttributeValidatorInterface) {
-                $validate = $attribute->setHaystack($data)->validate();
+            if ($attribute instanceof AttributeValidatorInterface && $attribute->setHaystack($data)) {
+
+                if ($attribute instanceof AttributeRequiredInterface) {
+                    $mandatoryValidation = $attribute->validate();
+                }
+
+                if ($attribute instanceof AttributeOptionalInterface) {
+                    $optionalValidation = $attribute->validate();
+                }
+
             } else {
                 throw new \LogicException(
-                    $reflectionAttribute->getName(). ' not implement '. AttributeValidatorInterface::class
+                    sprintf("%s not implement %s, %s, %s",
+                        $reflectionAttribute->getName(),
+                        AttributeValidatorInterface::class,
+                        AttributeRequiredInterface::class,
+                        AttributeOptionalInterface::class
+                    )
                 );
             }
         }
 
-        return $validate;
+        //if there are no optional attributes
+        if ($optionalValidation === null) {
+            return $mandatoryValidation;
+        }
+
+        return $mandatoryValidation && $optionalValidation;
     }
 }

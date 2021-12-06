@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -16,7 +17,7 @@ use function is_array;
 /**
  * Attribute that determines the click on the button (payload)
  */
-final class Payload implements AttributeValidatorInterface
+final class Payload implements AttributeValidatorInterface, AttributeOptionalInterface
 {
 
     public const KEY_EXIST = 0;

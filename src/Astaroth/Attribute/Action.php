@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -15,7 +16,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  *
  * @see https://i.imgur.com/4YQWIZ4.png
  */
-final class Action implements AttributeValidatorInterface
+final class Action implements AttributeValidatorInterface, AttributeOptionalInterface
 {
     private ?object $haystack;
 

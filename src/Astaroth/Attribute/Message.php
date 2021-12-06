@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\TextMatcher;
 use Attribute;
@@ -13,7 +14,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 /**
  * Attribute defining the message
  */
-final class Message implements AttributeValidatorInterface
+final class Message implements AttributeValidatorInterface, AttributeOptionalInterface
 {
     private string $haystack;
 

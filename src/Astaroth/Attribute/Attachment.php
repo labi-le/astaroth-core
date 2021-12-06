@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -13,7 +14,7 @@ use function count;
 /**
  * Attribute defining the message
  */
-final class Attachment implements AttributeValidatorInterface
+final class Attachment implements AttributeValidatorInterface, AttributeOptionalInterface
 {
     private array $haystack;
 
