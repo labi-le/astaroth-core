@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\Foundation\Utils;
@@ -14,7 +15,7 @@ use Attribute;
  * Attribute that always fires
  * It will be useful for dump
  */
-final class Debug implements AttributeReturnInterface, AttributeValidatorInterface
+final class Debug implements AttributeReturnInterface, AttributeValidatorInterface, AttributeOptionalInterface
 {
     private mixed $haystack;
 

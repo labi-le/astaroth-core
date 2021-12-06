@@ -44,6 +44,7 @@ class Executor
      */
     public function launch(): void
     {
+        /** @psalm-suppress PossiblyInvalidArgument */
         $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
         foreach ($this->reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($method->getAttributes() as $attribute) {
@@ -98,6 +99,7 @@ class Executor
     private function instantiateClass(ReflectionClass|string $reflectionClassOrClassName, ...$parameters): object
     {
         if (is_string($reflectionClassOrClassName)) {
+            /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClassOrClassName = new ReflectionClass($reflectionClassOrClassName);
         }
 
@@ -241,6 +243,7 @@ class Executor
     }
 
     /**
+     * @psalm-suppress ArgumentTypeCoercion
      * @throws ReflectionException
      */
     private function newInstance(string $class, ...$parameters): object

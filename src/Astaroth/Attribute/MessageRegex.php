@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Astaroth\Attribute;
 
 use ArrayAccess;
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\Language;
 use ReturnTypeWillChange;
@@ -16,9 +18,9 @@ use function is_null;
 /**
  * Attribute defining the message
  */
-final class MessageRegex implements AttributeValidatorInterface, ArrayAccess
+final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeOptionalInterface
 {
-    private string $haystack;
+    private string $haystack = "";
     private string $pattern;
 
     private array $matches = [];
@@ -43,7 +45,10 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess
      */
     public function setHaystack($haystack): MessageRegex
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew) {
+            $this->haystack = $haystack->getText();
+        }
+
         return $this;
     }
 

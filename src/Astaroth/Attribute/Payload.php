@@ -5,7 +5,10 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageEvent;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 use LogicException;
@@ -16,19 +19,19 @@ use function is_array;
 /**
  * Attribute that determines the click on the button (payload)
  */
-final class Payload implements AttributeValidatorInterface
+final class Payload implements AttributeValidatorInterface, AttributeOptionalInterface
 {
 
     public const KEY_EXIST = 0;
     public const STRICT = 1;
     public const CONTAINS = 2;
 
-    private array|null $haystack;
+    private ?array $haystack = null;
 
     public function __construct(
         private array|string $payload_or_key,
-        #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::KEY_EXIST])]
-        private int $validation = Payload::STRICT)
+                             #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::KEY_EXIST])]
+                             private int $validation = Payload::STRICT)
     {
     }
 
@@ -76,7 +79,10 @@ final class Payload implements AttributeValidatorInterface
      */
     public function setHaystack($haystack): Payload
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent){
+            $this->haystack = $haystack->getPayload();
+        }
+
         return $this;
     }
 }

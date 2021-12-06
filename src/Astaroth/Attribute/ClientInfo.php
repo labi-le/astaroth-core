@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\DataFetcher;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -13,7 +15,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  * Attribute defining the message keyboard info
  * keyboard available on the current client, etc.
  */
-final class ClientInfo implements AttributeValidatorInterface
+final class ClientInfo implements AttributeValidatorInterface, AttributeOptionalInterface
 {
     public const TEXT = "text";
     public const VKPAY = "vkpay";
@@ -24,7 +26,7 @@ final class ClientInfo implements AttributeValidatorInterface
     public const INTENT_SUBSCRIBE = "intent_subscribe";
     public const INTENT_UNSUBSCRIBE = "intent_unsubscribe";
 
-    private object $client_info;
+    private ?object $client_info = null;
 
     /**
      * By default, a regular keyboard is installed that supports everything
@@ -67,22 +69,26 @@ final class ClientInfo implements AttributeValidatorInterface
 
     public function validate(): bool
     {
-        if (($this->button_actions !== []) && array_intersect_key(
-                $this->button_actions,
-                $this->client_info->button_actions) === []) {
-            return false;
+        if ($this->client_info) {
+            if (($this->button_actions !== []) && array_intersect_key(
+                    $this->button_actions,
+                    $this->client_info->button_actions) === []) {
+                return false;
+            }
+
+            if ($this->client_info->keyboard !== $this->keyboard) {
+                return false;
+            }
+            if ($this->client_info->inline_keyboard !== $this->inline_keyboard) {
+                return false;
+            }
+            if ($this->client_info->carousel !== $this->carousel) {
+                return false;
+            }
+            return $this->client_info->lang_id === $this->lang_id;
         }
 
-        if ($this->client_info->keyboard !== $this->keyboard) {
-            return false;
-        }
-        if ($this->client_info->inline_keyboard !== $this->inline_keyboard) {
-            return false;
-        }
-        if ($this->client_info->carousel !== $this->carousel) {
-            return false;
-        }
-        return $this->client_info->lang_id === $this->lang_id;
+        return false;
     }
 
     /**
@@ -91,7 +97,10 @@ final class ClientInfo implements AttributeValidatorInterface
      */
     public function setHaystack($haystack): ClientInfo
     {
-        $this->client_info = $haystack;
+        if ($haystack instanceof DataFetcher) {
+            $this->client_info = $haystack->getClientInfo();
+        }
+
         return $this;
     }
 }

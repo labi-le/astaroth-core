@@ -106,7 +106,7 @@ class Utils
      * Простой дебаг в stdout
      * Будет полезно для callback
      * @deprecated
-     * @see Dump::toVar_Dump()
+     * @see Dump::toStdOut()
      *
      * @param mixed ...$data
      */

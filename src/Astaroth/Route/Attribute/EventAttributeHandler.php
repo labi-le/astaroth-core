@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
-use Astaroth\Attribute\Conversation;
-use Astaroth\Attribute\Event\MessageEvent;
-use Astaroth\Attribute\Event\MessageNew;
-use Astaroth\Attribute\State;
+use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 
@@ -30,41 +27,50 @@ class EventAttributeHandler
             /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
-            /** @psalm-suppress InvalidArgument */
-            if (
-                (
-                    $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
-                    ||
-                    $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
-                ) === false
-                ||
-                (
-                    $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
-                    ||
-                    $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
-                ) === false
-            ) {
+            if ($this->classValidateAttr($reflectionClass, $data) === false) {
                 break;
             }
 
             new EventDispatcher($reflectionClass, $data);
         }
+
     }
 
-    /**
-     * @param ReflectionAttribute[] $reflectionAttributes
-     */
-    private function validateAttribute(array $reflectionAttributes, DataFetcher $data): ?bool
+    private function classValidateAttr(ReflectionClass $reflectionClass, DataFetcher $data): bool
     {
-        $validate = null;
+        $mandatoryValidation = false;
+        $optionalValidation = null;
 
-        foreach ($reflectionAttributes as $reflectionAttribute) {
-            /** @var AttributeValidatorInterface $conversation */
-            $conversation = $reflectionAttribute->newInstance();
+        foreach ($reflectionClass->getAttributes() as $reflectionAttribute) {
+            $attribute = $reflectionAttribute->newInstance();
 
-            $validate = $conversation->setHaystack($data)->validate();
+            if ($attribute instanceof AttributeValidatorInterface && $attribute->setHaystack($data)) {
+
+                if ($attribute instanceof AttributeRequiredInterface) {
+                    $mandatoryValidation = $attribute->validate();
+                }
+
+                if ($attribute instanceof AttributeOptionalInterface) {
+                    $optionalValidation = $attribute->validate();
+                }
+
+            } else {
+                throw new \LogicException(
+                    sprintf("%s not implement %s, %s, %s",
+                        $reflectionAttribute->getName(),
+                        AttributeValidatorInterface::class,
+                        AttributeRequiredInterface::class,
+                        AttributeOptionalInterface::class
+                    )
+                );
+            }
         }
 
-        return $validate;
+        //if there are no optional attributes
+        if ($optionalValidation === null) {
+            return $mandatoryValidation;
+        }
+
+        return $mandatoryValidation && $optionalValidation;
     }
 }

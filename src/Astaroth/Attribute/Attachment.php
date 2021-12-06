@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
+use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 use function count;
@@ -13,9 +15,9 @@ use function count;
 /**
  * Attribute defining the message
  */
-final class Attachment implements AttributeValidatorInterface
+final class Attachment implements AttributeValidatorInterface, AttributeOptionalInterface
 {
-    private array $haystack;
+    private array $haystack = [];
 
     public function __construct(
         #[ExpectedValues(values: [
@@ -61,7 +63,10 @@ final class Attachment implements AttributeValidatorInterface
      */
     public function setHaystack($haystack): Attachment
     {
-        $this->haystack = $haystack;
+        if ($haystack instanceof MessageNew) {
+            $this->haystack = $haystack->getAttachments() ?? [];
+        }
+
         return $this;
     }
 }

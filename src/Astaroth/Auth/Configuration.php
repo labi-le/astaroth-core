@@ -51,14 +51,18 @@ final class Configuration
      * Configuration file structure
      */
     private const ENV_STRUCTURE =
-        [
-            self::DEBUG,
-            self::CACHE_PATH,
+        self::REQUIRED_ENV_STRUCTURE +
+        self::ADDITIONAL_ENV_STRUCTURE +
+        self::REQUIRED_CALLBACK_ENV_STRUCTURE;
 
-            self::APP_NAMESPACE,
-            self::ENTITY_PATH,
-            self::ACCESS_TOKEN,
-            self::TYPE,
+
+    /**
+     * Configuration file structure
+     */
+    private const ADDITIONAL_ENV_STRUCTURE =
+        [
+            self::DEBUG, //default false
+            self::CACHE_PATH, //default sys_get_temp_dir()
 
             self::DATABASE_DRIVER,
             self::DATABASE_NAME,
@@ -68,13 +72,25 @@ final class Configuration
             self::DATABASE_HOST,
             self::DATABASE_PORT,
 
+            self::HANDLE_REPEATED_REQUESTS, //default false
+            self::COUNT_PARALLEL_OPERATIONS //default 0
+        ];
+
+
+    private const REQUIRED_ENV_STRUCTURE =
+        [
+            self::APP_NAMESPACE,
+            self::ENTITY_PATH,
+            self::ACCESS_TOKEN,
+            self::TYPE,
+
             self::API_VERSION,
+        ];
+
+    private const REQUIRED_CALLBACK_ENV_STRUCTURE =
+        [
             self::CONFIRMATION_KEY,
             self::SECRET_KEY,
-
-            self::HANDLE_REPEATED_REQUESTS,
-
-            self::COUNT_PARALLEL_OPERATIONS
         ];
 
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
@@ -107,7 +123,9 @@ final class Configuration
     {
         $env = [];
         foreach (self::ENV_STRUCTURE as $key) {
-            $env[$key] = getenv($key);
+            if ($_env = getenv($key)) {
+                $env[$key] = $_env;
+            }
         }
         return $env;
     }
@@ -132,7 +150,7 @@ final class Configuration
     private function validation(Dotenv $dotenv): void
     {
         try {
-            $dotenv->required(self::ENV_STRUCTURE);
+            $dotenv->required(self::REQUIRED_ENV_STRUCTURE);
         } catch (ValidationException $e) {
             throw new ParameterMissingException($e->getMessage());
         }
@@ -159,12 +177,7 @@ final class Configuration
      */
     public function getAccessToken(): string
     {
-        $key = $this->getConfig(self::ACCESS_TOKEN);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::ACCESS_TOKEN . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::ACCESS_TOKEN);
     }
 
     /**
@@ -172,12 +185,7 @@ final class Configuration
      */
     public function getApiVersion(): string
     {
-        $key = $this->getConfig(self::API_VERSION);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::API_VERSION . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::API_VERSION);
     }
 
     /**
@@ -185,16 +193,12 @@ final class Configuration
      */
     public function getAppNamespace(): string
     {
-        $key = $this->getConfig(self::APP_NAMESPACE);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::APP_NAMESPACE . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::APP_NAMESPACE);
     }
 
     /**
      * @return string[]
+     * @throws ParameterMissingException
      */
     public function getEntityPath(): array
     {
@@ -203,12 +207,20 @@ final class Configuration
 
     public function isHandleRepeatedRequest(): bool
     {
-        return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
+        try {
+            return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
+        } catch (ParameterMissingException) {
+            return false;
+        }
     }
 
     public function isDebug(): bool
     {
-        return $this->getConfig(self::DEBUG) === self::YES;
+        try {
+            return $this->getConfig(self::DEBUG) === self::YES;
+        } catch (ParameterMissingException) {
+            return false;
+        }
     }
 
     /**
@@ -216,32 +228,25 @@ final class Configuration
      */
     public function getType(): string
     {
-        $key = $this->getConfig(self::TYPE);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::TYPE . " from environment\n set " . self::CALLBACK . " or " . self::LONGPOLL);
-        }
-
-        return $key;
+        return $this->getConfig(self::TYPE);
     }
 
     public function getCachePath(): string
     {
-        $path = $this->getConfig(self::CACHE_PATH);
-        if (empty($path)) {
+        try {
+            return $this->getConfig(self::CACHE_PATH);
+        } catch (ParameterMissingException) {
             return sys_get_temp_dir();
         }
-
-        return $path;
     }
 
     public function getCallbackSecretKey(): ?string
     {
-        $key = $this->getConfig(self::SECRET_KEY);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::SECRET_KEY);
+        } catch (ParameterMissingException $e) {
             return null;
         }
-
-        return $key;
     }
 
     /**
@@ -249,104 +254,103 @@ final class Configuration
      */
     public function getCallbackConfirmationKey(): string
     {
-        $key = $this->getConfig(self::CONFIRMATION_KEY);
-        if (empty($key)) {
-            return throw new ParameterMissingException("Missing parameter " . self::CONFIRMATION_KEY . " from environment");
-        }
-
-        return $key;
+        return $this->getConfig(self::CONFIRMATION_KEY);
     }
 
     public function getDatabaseDriver(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_DRIVER);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_DRIVER);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseHost(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_HOST);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_HOST);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabasePort(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_PORT);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_PORT);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseUrl(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_URL);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_URL);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseUser(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_USER);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_USER);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabaseName(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_NAME);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_NAME);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getDatabasePassword(): ?string
     {
-        $key = $this->getConfig(self::DATABASE_PASSWORD);
-        if (empty($key)) {
+        try {
+            return $this->getConfig(self::DATABASE_PASSWORD);
+        } catch (ParameterMissingException) {
             return null;
         }
-
-        return $key;
     }
 
     public function getCountParallelOperations(): int
     {
-        $key = $this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
-        if (empty($key)) {
+        try {
+            //fork processes not work well on web servers
+            if ($this->getType() === self::CALLBACK) {
+                return 0;
+            }
+
+            return (int)$this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
+        } catch (ParameterMissingException) {
             return 0;
         }
-
-        return (int)$key;
     }
 
 
     /**
-     * @param mixed $key
+     * @param ?string $key
      * @return mixed
+     * @throws ParameterMissingException
      */
-    private function getConfig(mixed $key = null): mixed
+    private function getConfig(string $key = null): mixed
     {
         if ($key === null) {
             return $this->config;
         }
-        return $this->config[$key] ?? null;
+
+        $value = $this->config[$key] ?? null;
+        if (!$value) {
+            throw new ParameterMissingException("Missing parameter $key from environment");
+        }
+
+        return $value;
     }
 }

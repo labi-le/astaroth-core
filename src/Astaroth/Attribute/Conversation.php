@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute;
 
+use Astaroth\Contracts\AttributeOptionalInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
-use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\DataFetcher\Enums\Events;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
@@ -19,7 +18,7 @@ use function in_array;
 /**
  * An attribute that determines whether a dialogue is a conversation, a personal message, or it doesn't matter.
  */
-final class Conversation implements AttributeValidatorInterface
+final class Conversation implements AttributeValidatorInterface, AttributeOptionalInterface
 {
     public const ALL = 6;
     public const CHAT = 12;
@@ -30,7 +29,7 @@ final class Conversation implements AttributeValidatorInterface
      */
     public array $member_id = [];
 
-    private MessageNew|MessageEvent $haystack;
+    private null|MessageNew|MessageEvent $haystack = null;
 
     /**
      * Conversation constructor.
@@ -48,20 +47,25 @@ final class Conversation implements AttributeValidatorInterface
 
     #[Pure] public function validate(): bool
     {
+        if ($this->haystack) {
 
-        $validate = match ($this->type) {
-            self::PERSONAL_DIALOG => $this->personalDialogValidate($this->haystack),
-            self::ALL => $this->allDialogValidate($this->haystack),
-            self::CHAT => $this->chatValidate($this->haystack)
-        };
+            $validate = match ($this->type) {
+                self::PERSONAL_DIALOG => $this->personalDialogValidate($this->haystack),
+                self::ALL => $this->allDialogValidate($this->haystack),
+                self::CHAT => $this->chatValidate($this->haystack)
+            };
 
-        //if the ID array is not specified in the attribute, then we check if the type matches
-        if ($this->member_id === []) {
-            return $validate["type"];
+            //if the ID array is not specified in the attribute, then we check if the type matches
+            if ($this->member_id === []) {
+                return $validate["type"];
+            }
+
+            //condition opposite to above condition
+            return in_array($validate["id"], $this->member_id, true) && $validate["type"];
         }
 
-        //condition opposite to above condition
-        return in_array($validate["id"], $this->member_id, true) && $validate["type"];
+        return false;
+
     }
 
     #[Pure] #[ArrayShape(["type" => "bool", "id" => "int"])]
@@ -103,15 +107,15 @@ final class Conversation implements AttributeValidatorInterface
     }
 
     /**
-     * @param DataFetcher $haystack
+     * @param $haystack
      * @return Conversation
      */
     public function setHaystack($haystack): Conversation
     {
-        $this->haystack = match ($haystack->getType()) {
-            Events::MESSAGE_NEW => $haystack->messageNew(),
-            Events::MESSAGE_EVENT => $haystack->messageEvent(),
-        };
+        if ($haystack instanceof MessageEvent || $haystack instanceof MessageNew) {
+            $this->haystack = $haystack;
+        }
+
         return $this;
     }
 }

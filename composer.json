@@ -26,7 +26,7 @@
     "doctrine/orm": ">=2.10",
 
     "symfony/dependency-injection": "^5",
-    "symfony/cache": ">=v3.4.47"
+    "symfony/cache": ">=v3"
   },
   "autoload": {
     "psr-4": {
@@ -37,6 +37,7 @@
     ]
   },
   "require-dev": {
+    "roave/security-advisories": "dev-latest",
     "phpunit/phpunit": "^9.5",
     "jetbrains/phpstorm-attributes": "^1.0"
   }
