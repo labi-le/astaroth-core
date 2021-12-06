@@ -15,13 +15,13 @@ class ActionTest extends TestCase
     {
         $payload = new Action(Action::CHAT_INVITE_USER, ["418618" => 12]);
 
-        assertEquals(Action::class, $payload->setHaystack((require __DIR__ . "/data.php")->messageNew())::class);
+        assertEquals(Action::class, $payload->setHaystack((require __DIR__ . "/../data.php")->messageNew())::class);
     }
 
     public function testValidate()
     {
         $payload = new Action(Action::CHAT_INVITE_USER, ["member_id" => -190405359]);
 
-        assertTrue($payload->setHaystack((require __DIR__ . "/data.php")->messageNew())->validate());
+        assertTrue($payload->setHaystack((require __DIR__ . "/../data.php")->messageNew())->validate());
     }
 }

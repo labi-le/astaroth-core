@@ -13,13 +13,13 @@ class MessageRegexTest extends TestCase
 {
     public function testSetHaystack()
     {
-        $hs = (new MessageRegex("/(foo)(bar)(baz)/"))->setHaystack((require __DIR__ . "/data.php")->messageNew());
+        $hs = (new MessageRegex("/(foo)(bar)(baz)/"))->setHaystack(((require __DIR__ . "/../data.php"))->messageNew());
         assertEquals(MessageRegex::class, $hs::class);
     }
 
     public function testValidate()
     {
-        $hs = (new MessageRegex('/\w{3,}/'))->setHaystack((require __DIR__ . "/data.php")->messageNew());
+        $hs = (new MessageRegex('/\w{3,}/'))->setHaystack(((require __DIR__ . "/../data.php"))->messageNew());
         assertTrue($hs->validate());
         assertEquals($hs[0], "uwuwu");
     }

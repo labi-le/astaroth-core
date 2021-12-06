@@ -32,7 +32,7 @@ class EventDispatcher
         $executor->launch();
     }
 
-    private static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
+    public static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
     {
         if ($data->getType() === Events::MESSAGE_NEW) {
             return $data->messageNew();

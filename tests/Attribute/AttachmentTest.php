@@ -15,7 +15,7 @@ class AttachmentTest extends TestCase
     public function testSetHaystack()
     {
         $hs = (new Attachment(Attachment::PHOTO, 2))
-            ->setHaystack((require __DIR__ . "/data.php")->messageNew());
+            ->setHaystack((require __DIR__ . "/../data.php")->messageNew());
 
         assertEquals(Attachment::class, $hs::class);
     }
@@ -23,7 +23,7 @@ class AttachmentTest extends TestCase
     public function testValidate()
     {
         $hs = (new Attachment(Attachment::PHOTO, 2))
-            ->setHaystack((require __DIR__ . "/data.php")->messageNew());
+            ->setHaystack((require __DIR__ . "/../data.php")->messageNew());
 
         assertTrue($hs->validate());
     }

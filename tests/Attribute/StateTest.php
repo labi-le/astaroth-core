@@ -22,7 +22,7 @@ class StateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->data = require __DIR__ . "/data.php";
+        $this->data = (require __DIR__ . "/../data.php");
 
         $this->session = new Session(259166248, State::RESERVED_NAME, sys_get_temp_dir());
         $this->session->put("example", true);

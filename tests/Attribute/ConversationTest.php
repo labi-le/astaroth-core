@@ -14,16 +14,16 @@ class ConversationTest extends TestCase
 {
     public function testValidate()
     {
-        $hs = new Conversation(Conversation::PERSONAL_DIALOG, 259166248);
-        $hs->setHaystack(require __DIR__ . "data.php");
+        $hs = new Conversation(Conversation::CHAT, 1);
+        $hs->setHaystack((require __DIR__ . "/../data.php")->messageNew());
 
         assertTrue($hs->validate());
     }
 
     public function testSetHaystack()
     {
-        $hs = new Conversation(Conversation::PERSONAL_DIALOG, 259166248);
-        $hs->setHaystack(require __DIR__ . "data.php");
+        $hs = new Conversation(Conversation::CHAT, 1);
+        $hs->setHaystack((require __DIR__ . "/../data.php")->messageNew());
 
         assertEquals($hs::class, $hs::class);
     }
