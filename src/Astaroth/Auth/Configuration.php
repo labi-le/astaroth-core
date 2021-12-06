@@ -51,14 +51,18 @@ final class Configuration
      * Configuration file structure
      */
     private const ENV_STRUCTURE =
-        [
-            self::DEBUG,
-            self::CACHE_PATH,
+        self::REQUIRED_ENV_STRUCTURE +
+        self::ADDITIONAL_ENV_STRUCTURE +
+        self::REQUIRED_CALLBACK_ENV_STRUCTURE;
 
-            self::APP_NAMESPACE,
-            self::ENTITY_PATH,
-            self::ACCESS_TOKEN,
-            self::TYPE,
+
+    /**
+     * Configuration file structure
+     */
+    private const ADDITIONAL_ENV_STRUCTURE =
+        [
+            self::DEBUG, //default false
+            self::CACHE_PATH, //default sys_get_temp_dir()
 
             self::DATABASE_DRIVER,
             self::DATABASE_NAME,
@@ -68,13 +72,25 @@ final class Configuration
             self::DATABASE_HOST,
             self::DATABASE_PORT,
 
+            self::HANDLE_REPEATED_REQUESTS, //default false
+            self::COUNT_PARALLEL_OPERATIONS //default 0
+        ];
+
+
+    private const REQUIRED_ENV_STRUCTURE =
+        [
+            self::APP_NAMESPACE,
+            self::ENTITY_PATH,
+            self::ACCESS_TOKEN,
+            self::TYPE,
+
             self::API_VERSION,
+        ];
+
+    private const REQUIRED_CALLBACK_ENV_STRUCTURE =
+        [
             self::CONFIRMATION_KEY,
             self::SECRET_KEY,
-
-            self::HANDLE_REPEATED_REQUESTS,
-
-            self::COUNT_PARALLEL_OPERATIONS
         ];
 
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
@@ -107,7 +123,9 @@ final class Configuration
     {
         $env = [];
         foreach (self::ENV_STRUCTURE as $key) {
-            $env[$key] = getenv($key);
+            if ($_env = getenv($key)) {
+                $env[$key] = $_env;
+            }
         }
         return $env;
     }
@@ -132,7 +150,7 @@ final class Configuration
     private function validation(Dotenv $dotenv): void
     {
         try {
-            $dotenv->required(self::ENV_STRUCTURE);
+            $dotenv->required(self::REQUIRED_ENV_STRUCTURE);
         } catch (ValidationException $e) {
             throw new ParameterMissingException($e->getMessage());
         }
@@ -321,6 +339,12 @@ final class Configuration
         if ($key === null) {
             return $this->config;
         }
-        return $this->config[$key] ?? throw new ParameterMissingException("Missing parameter $key from environment");
+
+        $value = $this->config[$key] ?? null;
+        if (!$value) {
+            throw new ParameterMissingException("Missing parameter $key from environment");
+        }
+
+        return $value;
     }
 }
