@@ -27,8 +27,9 @@ class EventAttributeHandler
             /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
+            //if the validation of the top-level class attributes is false, then we validate another class
             if ($this->classValidateAttr($reflectionClass, $data) === false) {
-                break;
+                continue;
             }
 
             new EventDispatcher($reflectionClass, $data);
