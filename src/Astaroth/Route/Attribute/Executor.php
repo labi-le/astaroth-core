@@ -44,6 +44,7 @@ class Executor
      */
     public function launch(): void
     {
+        /** @psalm-suppress PossiblyInvalidArgument */
         $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
         foreach ($this->reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($method->getAttributes() as $attribute) {
