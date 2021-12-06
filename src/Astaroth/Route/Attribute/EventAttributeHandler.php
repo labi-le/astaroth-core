@@ -33,28 +33,11 @@ class EventAttributeHandler
             if (
                 (
                     $this->eventAttrValidate($reflectionClass, $data) ||
-                    $this->customAttrValidate($reflectionClass, $data)
+                    $this->customOptionalAttrValidate($reflectionClass, $data)
                 ) === false
             ) {
                 break;
             }
-//
-//            /** @psalm-suppress InvalidArgument */
-//            if (
-//                (
-//                    $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
-//                    ||
-//                    $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
-//                ) === false
-//                ||
-//                (
-//                    $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
-//                    ||
-//                    $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
-//                ) === false
-//            ) {
-//                break;
-//            }
 
             new EventDispatcher($reflectionClass, $data);
         }
@@ -68,10 +51,15 @@ class EventAttributeHandler
         $validate = null;
 
         foreach ($reflectionAttributes as $reflectionAttribute) {
-            /** @var AttributeValidatorInterface $conversation */
-            $conversation = $reflectionAttribute->newInstance();
+            $attribute = $reflectionAttribute->newInstance();
 
-            $validate = $conversation->setHaystack($data)->validate();
+            if ($attribute instanceof AttributeValidatorInterface) {
+                $validate = $attribute->setHaystack($data)->validate();
+            } else {
+                throw new \LogicException(
+                    $reflectionAttribute->getName(). ' not implement '. AttributeValidatorInterface::class
+                );
+            }
         }
 
         return $validate;
@@ -89,27 +77,24 @@ class EventAttributeHandler
     private function eventAttrValidate(ReflectionClass $reflectionClass, DataFetcher $data): bool
     {
         return
-            (
-                $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
-                ||
-                $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
-            );
+            $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
+            ?? $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
+            ?? false;
     }
 
     /**
      * @param ReflectionClass $reflectionClass
      * @param DataFetcher $data
-     * @return bool
+     * @return bool|null
      *
      * @psalm-suppress InvalidArgument
      */
-    private function customAttrValidate(ReflectionClass $reflectionClass, DataFetcher $data): bool
+    private function customOptionalAttrValidate(ReflectionClass $reflectionClass, DataFetcher $data): ?bool
     {
+        ///more attr...
         return
-            (
-                $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
-                ||
-                $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
-            );
+            $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
+            ?? $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
+            ?? true;
     }
 }
