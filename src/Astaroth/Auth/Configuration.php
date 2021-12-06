@@ -240,12 +240,13 @@ final class Configuration
         }
     }
 
-    /**
-     * @throws ParameterMissingException
-     */
     public function getCallbackSecretKey(): ?string
     {
-        return $this->getConfig(self::SECRET_KEY);
+        try {
+            return $this->getConfig(self::SECRET_KEY);
+        } catch (ParameterMissingException $e) {
+            return null;
+        }
     }
 
     /**
