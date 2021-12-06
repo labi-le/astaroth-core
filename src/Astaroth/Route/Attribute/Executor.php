@@ -99,6 +99,7 @@ class Executor
     private function instantiateClass(ReflectionClass|string $reflectionClassOrClassName, ...$parameters): object
     {
         if (is_string($reflectionClassOrClassName)) {
+            /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClassOrClassName = new ReflectionClass($reflectionClassOrClassName);
         }
 
