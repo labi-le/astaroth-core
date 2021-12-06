@@ -100,6 +100,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeOptional
         if ($haystack instanceof DataFetcher) {
             $this->client_info = $haystack->getClientInfo();
         }
+
         return $this;
     }
 }

@@ -37,7 +37,7 @@ $data = '{
                 "intent_unsubscribe"
             ],
             "keyboard": true,
-            "inline_keyboard": true,
+            "inline_keyboard": false,
             "carousel": true,
             "lang_id": 0
         }
