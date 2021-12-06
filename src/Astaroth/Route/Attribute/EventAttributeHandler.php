@@ -30,22 +30,31 @@ class EventAttributeHandler
             /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
-            /** @psalm-suppress InvalidArgument */
             if (
                 (
-                    $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
-                    ||
-                    $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
-                ) === false
-                ||
-                (
-                    $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
-                    ||
-                    $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
+                    $this->eventAttrValidate($reflectionClass, $data) ||
+                    $this->customAttrValidate($reflectionClass, $data)
                 ) === false
             ) {
                 break;
             }
+//
+//            /** @psalm-suppress InvalidArgument */
+//            if (
+//                (
+//                    $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
+//                    ||
+//                    $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
+//                ) === false
+//                ||
+//                (
+//                    $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
+//                    ||
+//                    $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
+//                ) === false
+//            ) {
+//                break;
+//            }
 
             new EventDispatcher($reflectionClass, $data);
         }
@@ -66,5 +75,41 @@ class EventAttributeHandler
         }
 
         return $validate;
+    }
+
+    /**
+     * @param ReflectionClass $reflectionClass
+     * @param DataFetcher $data
+     * @return bool
+     *
+     * @see Conversation, State
+     *
+     * @psalm-suppress InvalidArgument
+     */
+    private function eventAttrValidate(ReflectionClass $reflectionClass, DataFetcher $data): bool
+    {
+        return
+            (
+                $this->validateAttribute($reflectionClass->getAttributes(MessageNew::class), $data)
+                ||
+                $this->validateAttribute($reflectionClass->getAttributes(MessageEvent::class), $data)
+            );
+    }
+
+    /**
+     * @param ReflectionClass $reflectionClass
+     * @param DataFetcher $data
+     * @return bool
+     *
+     * @psalm-suppress InvalidArgument
+     */
+    private function customAttrValidate(ReflectionClass $reflectionClass, DataFetcher $data): bool
+    {
+        return
+            (
+                $this->validateAttribute($reflectionClass->getAttributes(Conversation::class), $data)
+                ||
+                $this->validateAttribute($reflectionClass->getAttributes(State::class), $data)
+            );
     }
 }
