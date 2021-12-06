@@ -243,6 +243,7 @@ class Executor
     }
 
     /**
+     * @psalm-suppress ArgumentTypeCoercion
      * @throws ReflectionException
      */
     private function newInstance(string $class, ...$parameters): object
