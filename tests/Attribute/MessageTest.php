@@ -13,13 +13,13 @@ class MessageTest extends TestCase
 {
     public function testSetHaystack()
     {
-        $hs = (new Message("aboba", Message::STRICT))->setHaystack("aboba");
+        $hs = (new Message("uwuwu", Message::STRICT))->setHaystack((require __DIR__ . "/data.php")->messageNew());
         assertEquals(Message::class, $hs::class);
     }
 
     public function testValidate()
     {
-        $hs = (new Message("aboba", Message::STRICT))->setHaystack("aboba");
+        $hs = (new Message("uwuwu", Message::STRICT))->setHaystack((require __DIR__ . "/data.php")->messageNew());
         assertTrue($hs->validate());
     }
 }
