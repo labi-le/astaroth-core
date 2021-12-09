@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute\ClassAttribute\Event;
 
-use Astaroth\Contracts\AttributeRequiredInterface;
+use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Attribute;
@@ -13,7 +13,7 @@ use Attribute;
 /**
  * AttributeOLD defining new message
  */
-final class MessageEvent implements AttributeValidatorInterface, AttributeRequiredInterface
+final class MessageEvent implements AttributeValidatorInterface, AttributeMethodInterface
 {
     private string $type = "";
 

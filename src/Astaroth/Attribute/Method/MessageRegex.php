@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Attribute\Method;
 
 use ArrayAccess;
-use Astaroth\Contracts\AttributeRequiredInterface;
+use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
@@ -18,7 +18,7 @@ use function is_null;
 /**
  * Attribute defining the message
  */
-final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeRequiredInterface
+final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeMethodInterface
 {
     private string $haystack = "";
     private string $pattern;

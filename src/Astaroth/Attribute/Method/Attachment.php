@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeRequiredInterface;
+use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
@@ -15,7 +15,7 @@ use function count;
 /**
  * Attribute defining the message
  */
-final class Attachment implements AttributeValidatorInterface, AttributeRequiredInterface
+final class Attachment implements AttributeValidatorInterface, AttributeMethodInterface
 {
     private array $haystack = [];
 
