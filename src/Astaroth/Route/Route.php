@@ -18,7 +18,7 @@ use Throwable;
  * Class Route
  * @package Astaroth\Route
  */
-class Route
+final class Route
 {
     private static array $class_map;
 

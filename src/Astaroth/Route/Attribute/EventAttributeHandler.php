@@ -15,7 +15,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
-class EventAttributeHandler
+final class EventAttributeHandler
 {
     private null|MessageEvent|MessageNew $data;
 

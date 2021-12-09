@@ -11,7 +11,7 @@ use Exception;
 use Throwable;
 use JsonException;
 
-class Utils
+final class Utils
 {
 
     /**

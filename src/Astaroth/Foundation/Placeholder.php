@@ -3,38 +3,38 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Support\Facades\Request;
 use UnhandledMatchError;
 
 /**
- * Garbage with which you can add placeholders to messages
- * @example hi %@name
+ * Class with which you can add placeholders to messages
  */
-class Placeholder
+final class Placeholder
 {
     private const PATTERN = "/%(?:@?last-|(?:@?ful{2}-|@?))name/";
 
 
     //VK NAME *******************************************
     public const NAME = "name";
-    public const LAST_NAME = "last_name";
-    public const FIRST_NAME = "first_name";
+    public const LAST_NAME_VK = "last_name";
+    public const FIRST_NAME_VK = "first_name";
     public const ID = "id";
     public const CLUB = "club";
 
-    public const FULL_NAME = "full-name";
+
+    public const FULL_NAME_PH = "full-name";
+    public const LAST_NAME_PH = "last-name";
 
     //END VK NAME *******************************************
 
     //TAG *******************************************************************
-    private const NAME_TAG = self::PERCENT . "name";
+    private const NAME_TAG = self::PERCENT . self::NAME;
     private const MENTION_NAME_TAG = self::PERCENT . self::MENTION . self::NAME;
 
-    private const FULL_NAME_TAG = self::PERCENT . "full-name";
-    private const MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME;
+    private const FULL_NAME_TAG = self::PERCENT . self::FULL_NAME_PH;
+    private const MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME_PH;
 
-    private const LAST_NAME_TAG = self::PERCENT . "last-name";
-    private const MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME;
+    private const LAST_NAME_TAG = self::PERCENT . self::LAST_NAME_PH;
+    private const MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME_PH;
     //END TAG *******************************************************************
 
     private const PERCENT = "%";
@@ -45,6 +45,17 @@ class Placeholder
     private const STAR_AND_CLUB = self::STAR . self::CLUB;
 
 
+    /**
+     * @param string $subject
+     *
+     * @example Name with mention %@name
+     * @example FirstName LastName %full-name
+     * @example FirstName LastName mention %@full-name
+     * @example LastName %last-name
+     * @example LastName mention %@last-name
+     * @example hi %@name
+     * @example FirstName  %name
+     */
     public function __construct(private string $subject)
     {
     }
@@ -55,10 +66,10 @@ class Placeholder
     public function replace(int $id): string
     {
         $member = $this->iterateId($id);
-        $member_id = $member[self::ID];
+        $member_id = $id;
 
-        $member_name = $member[self::FIRST_NAME] ?? $member[self::NAME];
-        $member_last_name = $member[self::LAST_NAME] ?? "";
+        $member_name = $member[self::FIRST_NAME_VK] ?? $member[self::NAME];
+        $member_last_name = $member[self::LAST_NAME_VK] ?? "";
 
         $member_full_name = \trim("$member_name $member_last_name");
 
@@ -68,17 +79,17 @@ class Placeholder
                     self::NAME_TAG => $member_name,
                     self::MENTION_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_name)"
-                        : self::STAR_AND_CLUB . "$member_id($member_name)",
+                        : self::STAR_AND_CLUB . \abs($member_id) . "($member_name)",
 
                     self::FULL_NAME_TAG => $member_full_name,
                     self::MENTION_FULL_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_full_name)"
-                        : self::STAR_AND_CLUB . "$member_id($member_name)",
+                        : self::STAR_AND_CLUB . \abs($member_id) . "($member_name)",
 
                     self::LAST_NAME_TAG => $id > 0 ? $member_last_name : $member_name,
                     self::MENTION_LAST_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_last_name)"
-                        : self::STAR_AND_CLUB . "$member_id($member_name)",
+                        : self::STAR_AND_CLUB . \abs($member_id) . "($member_name)",
 
                     default => throw new UnhandledMatchError("No valid placeholder found")
                 };
@@ -89,12 +100,26 @@ class Placeholder
     /**
      * @throws \Throwable
      */
-    private function iterateId(int $id): array|false
+    private function iterateId(int $id): array
     {
+        /** @noinspection RegExpRedundantEscape */
+        \preg_match(
+            '/\<foaf\:name\>(.*)\<\/foaf\:name\>/m',
+            \file_get_contents("https://vk.com/foaf.php?id=$id"),
+            $data
+        );
+        $site = mb_convert_encoding($data[1], "UTF-8", "windows-1251");
+
+
         if ($id > 0) {
-            return \current(Request::call("users.get", ["user_ids" => $id, "name_case" => "nom"]));
+            $e = \explode(" ", $site);
+            return [
+                self::FIRST_NAME_VK => $e[0],
+                self::LAST_NAME_VK => $e[1],
+            ];
         }
-        return \current(Request::call("groups.getById", ["group_ids" => $id]));
+
+        return [self::NAME => $site];
     }
 
     /**

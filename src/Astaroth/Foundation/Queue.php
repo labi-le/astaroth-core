@@ -11,7 +11,7 @@ use SplQueue;
  * Scene analog
  * @package Astaroth\Foundation
  */
-class Queue
+final class Queue
 {
     public const CURRENT = "current_queue";
     public const COUNT = "count_queue";

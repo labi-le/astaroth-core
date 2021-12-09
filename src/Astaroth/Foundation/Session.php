@@ -9,7 +9,7 @@ namespace Astaroth\Foundation;
  * Simple database for recording states
  * @package Astaroth\Foundation
  */
-class Session
+final class Session
 {
     public const FILE_EXTENSION = ".json";
     /**

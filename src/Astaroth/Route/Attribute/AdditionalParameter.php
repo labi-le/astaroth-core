@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
-class AdditionalParameter
+final class AdditionalParameter
 {
     public function __construct
     (

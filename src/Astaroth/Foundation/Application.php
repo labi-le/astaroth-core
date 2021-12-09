@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Throwable;
 use const PHP_SAPI;
 
-class Application
+final class Application
 {
     public const VERSION = 2;
 
