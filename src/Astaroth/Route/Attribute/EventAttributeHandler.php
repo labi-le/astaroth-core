@@ -23,12 +23,28 @@ class EventAttributeHandler
         DataFetcher $data,
     )
     {
+
+//todo speed feature
+//        Fork::new()
+//            ->concurrent(100)
+//            ->run(...array_map(fn(string $class) => function () use ($class, $data) {
+//                $reflectionClass = new ReflectionClass($class);
+//
+//                //if the validation of the top-level class attributes is false, then we validate another class
+//                if ($this->classValidateAttr($reflectionClass, $data) === false) {
+//                    die;
+//                }
+//
+//                return new EventDispatcher($reflectionClass, $data);
+//            }, $classMap));
+
         foreach ($classMap as $class) {
             /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
+            //if the validation of the top-level class attributes is false, then we validate another class
             if ($this->classValidateAttr($reflectionClass, $data) === false) {
-                break;
+                continue;
             }
 
             new EventDispatcher($reflectionClass, $data);
