@@ -123,7 +123,7 @@ final class Configuration
     {
         $env = [];
         foreach (self::ENV_STRUCTURE as $key) {
-            if ($_env = getenv($key)) {
+            if ($_env = \getenv($key)) {
                 $env[$key] = $_env;
             }
         }
@@ -160,14 +160,14 @@ final class Configuration
                 ->required(self::TYPE)
                 ->assert(static function ($type) {
                     return $type === self::CALLBACK || $type === self::LONGPOLL;
-                }, (string)getenv(self::TYPE));
+                }, (string)\getenv(self::TYPE));
 
         } catch (ValidationException) {
             throw new ParameterMissingException("Bot operation type is not specified");
         }
 
 
-        if ((getenv(self::TYPE) === self::CALLBACK) && empty(getenv(self::CONFIRMATION_KEY))) {
+        if ((\getenv(self::TYPE) === self::CALLBACK) && empty(\getenv(self::CONFIRMATION_KEY))) {
             throw new ParameterMissingException("Not specified " . self::CONFIRMATION_KEY);
         }
     }
@@ -202,7 +202,7 @@ final class Configuration
      */
     public function getEntityPath(): array
     {
-        return array_map("trim", explode(',', $this->getConfig(self::ENTITY_PATH)));
+        return \array_map("\\trim", \explode(',', $this->getConfig(self::ENTITY_PATH)));
     }
 
     public function isHandleRepeatedRequest(): bool
@@ -236,7 +236,7 @@ final class Configuration
         try {
             return $this->getConfig(self::CACHE_PATH);
         } catch (ParameterMissingException) {
-            return sys_get_temp_dir();
+            return \sys_get_temp_dir();
         }
     }
 

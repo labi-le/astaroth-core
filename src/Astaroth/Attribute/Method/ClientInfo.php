@@ -70,7 +70,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeRequired
     public function validate(): bool
     {
         if ($this->client_info) {
-            if (($this->button_actions !== []) && array_intersect_key(
+            if (($this->button_actions !== []) && \array_intersect_key(
                     $this->button_actions,
                     $this->client_info->button_actions) === []) {
                 return false;

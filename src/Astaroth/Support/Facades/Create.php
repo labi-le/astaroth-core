@@ -27,7 +27,7 @@ final class Create
      */
     private static function messagePlaceholder(IBuilder ...$instances): array
     {
-        return array_map(static function (IBuilder $instance) {
+        return \array_map(static function (IBuilder $instance) {
             if ($instance instanceof IMessageBuilder) {
                 $message = $instance->getParams()["message"];
                 $id = $instance->getParams()["peer_ids"] > 2e9 ? $instance->getParams()["user_ids"] : $instance->getParams()["peer_ids"];

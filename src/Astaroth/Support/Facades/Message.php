@@ -64,7 +64,7 @@ final class Message
     private static function genAttachObj(array|string $value, string $className): array
     {
         is_string($value) === false ?: $value = [$value];
-        return array_map(static fn(string $url) => new $className($url), $value);
+        return \array_map(static fn(string $url) => new $className($url), $value);
     }
 
     /**

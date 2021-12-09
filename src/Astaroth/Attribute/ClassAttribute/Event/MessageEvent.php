@@ -28,7 +28,7 @@ final class MessageEvent implements AttributeValidatorInterface, AttributeRequir
      */
     public function setHaystack($haystack): MessageEvent
     {
-        if (method_exists($haystack, "getType")) {
+        if (\method_exists($haystack, "getType")) {
             $this->type = $haystack->getType();
         }
 

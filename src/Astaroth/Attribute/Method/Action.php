@@ -69,10 +69,10 @@ final class Action implements AttributeValidatorInterface, AttributeOptionalInte
                 return true;
             }
 
-            $key = key($this->anyData);
+            $key = \key($this->anyData);
 
-            return property_exists($this->haystack, $key)
-                && $this->haystack->$key === current($this->anyData);
+            return \property_exists($this->haystack, $key)
+                && $this->haystack->$key === \current($this->anyData);
         }
 
         return false;

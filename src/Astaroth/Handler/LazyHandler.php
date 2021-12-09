@@ -29,8 +29,8 @@ class LazyHandler implements HandlerInterface
     private function normalizeData(object|array $data): DataFetcher
     {
         if (is_array($data)) {
-            $toJson = json_encode($data);
-            $toObject = json_decode($toJson, false);
+            $toJson = \json_encode($data);
+            $toObject = \json_decode($toJson, false);
             return new DataFetcher($toObject);
         }
         return new DataFetcher($data);

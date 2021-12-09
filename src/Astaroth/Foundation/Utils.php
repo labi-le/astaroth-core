@@ -22,24 +22,24 @@ class Utils
      */
     public static function jsonOnline(array $param): ?string
     {
-        $ch = curl_init("https://jsoneditoronline.herokuapp.com/v1/docs/");
-        curl_setopt_array($ch,
+        $ch = \curl_init("https://jsoneditoronline.herokuapp.com/v1/docs/");
+        \curl_setopt_array($ch,
             [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HTTPHEADER =>
+                \CURLOPT_RETURNTRANSFER => true,
+                \CURLOPT_HTTPHEADER =>
                     [
                         "Content-Type:application/json"
                     ],
-                CURLOPT_CUSTOMREQUEST => "PUT",
-                CURLOPT_POSTFIELDS =>
-                    json_encode([
-                        "name" => uniqid("", true),
-                        "data" => json_encode($param, JSON_THROW_ON_ERROR)
+                \CURLOPT_CUSTOMREQUEST => "PUT",
+                \CURLOPT_POSTFIELDS =>
+                    \json_encode([
+                        "name" => \uniqid("", true),
+                        "data" => \json_encode($param, \JSON_THROW_ON_ERROR)
                     ])
             ]);
 
-        $data = @json_decode(curl_exec($ch), true);
-        curl_close($ch);
+        $data = @\json_decode(\curl_exec($ch), true);
+        \curl_close($ch);
 
         return $data["ok"] === true ? "https://jsoneditoronline.org/?id=" . $data["id"] : null;
     }
@@ -76,7 +76,7 @@ class Utils
      */
     public static function removeFirstWord($text): string|bool
     {
-        return strstr($text, " ");
+        return \strstr($text, " ");
     }
 
     /**
@@ -87,8 +87,8 @@ class Utils
      */
     public static function multiExplode(array $delimiters, string $haystack): array|bool
     {
-        $ready = str_replace($delimiters, $delimiters[0], $haystack);
-        return explode($delimiters[0], $ready);
+        $ready = \str_replace($delimiters, $delimiters[0], $haystack);
+        return \explode($delimiters[0], $ready);
     }
 
     /**
@@ -98,7 +98,7 @@ class Utils
      */
     public static function regexId(string $string): array|bool
     {
-        preg_match_all('/\[(?:id|club)(\d*)\|.*?]/', $string, $match);
+        \preg_match_all('/\[(?:id|club)(\d*)\|.*?]/', $string, $match);
         return $match[1];
     }
 
@@ -113,7 +113,7 @@ class Utils
     public static function var_dumpToStdout(mixed ...$data): void
     {
         foreach ($data as $out) {
-            file_put_contents('php://stdout', print_r($out, true));
+            \file_put_contents('php://stdout', \print_r($out, true));
         }
     }
 
@@ -127,7 +127,7 @@ class Utils
 
         if ($e instanceof Exception) {
             $message->setMessage(
-                sprintf(
+                \sprintf(
                     "Logger:\nError Level - %s\nError Code - %s\nMessage - %s",
                     $error_level,
                     $e->getCode(),
@@ -135,7 +135,7 @@ class Utils
                 )
             );
         } else {
-            $message->setMessage(sprintf("Logger:\nError Level - %s\nMessage - %s", $error_level, $e));
+            $message->setMessage(\sprintf("Logger:\nError Level - %s\nMessage - %s", $error_level, $e));
         }
 
         Create::new($message);

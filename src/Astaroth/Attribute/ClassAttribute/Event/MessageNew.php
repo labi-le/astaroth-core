@@ -28,7 +28,7 @@ final class MessageNew implements AttributeValidatorInterface, AttributeRequired
      */
     public function setHaystack($haystack): MessageNew
     {
-        if (method_exists($haystack, "getType")) {
+        if (\method_exists($haystack, "getType")) {
             $this->type = $haystack->getType();
         }
         return $this;

@@ -59,7 +59,7 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
     {
         /** @var string[] $matches */
         $matches = [];
-        @preg_match($this->pattern, $this->haystack, $matches);
+        @\preg_match($this->pattern, $this->haystack, $matches);
 
         return $matches;
     }

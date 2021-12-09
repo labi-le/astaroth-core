@@ -38,7 +38,7 @@ final class ApiRequest
                 "event_id" => $data->getEventId(),
                 "user_id" => $data->getUserId(),
                 "peer_id" => $data->getPeerId(),
-                "event_data" => json_encode($event)
+                "event_data" => \json_encode($event)
             ]);
     }
 
@@ -84,8 +84,8 @@ final class ApiRequest
     ): array
     {
         $params = [];
-        $params["message_ids"] = implode(",", $message_ids);
-        $params["conversation_message_ids"] = implode(",", $conversation_message_ids);
+        $params["message_ids"] = \implode(",", $message_ids);
+        $params["conversation_message_ids"] = \implode(",", $conversation_message_ids);
         $params["peer_id"] = $peer_id;
         $params["spam"] = $spam;
         $params["group_id"] = $group_id;
@@ -120,8 +120,8 @@ final class ApiRequest
     {
         return $this->customRequest("users.get",
             [
-                "user_ids" => implode(",", $user_ids),
-                "fields" => implode(",", $fields),
+                "user_ids" => \implode(",", $user_ids),
+                "fields" => \implode(",", $fields),
                 "name_case" => $name_case
             ]
         );
@@ -139,8 +139,8 @@ final class ApiRequest
     {
         return $this->customRequest("groups.getById",
             [
-                "group_ids" => implode(",", $group_ids),
-                "fields" => implode(",", $fields)
+                "group_ids" => \implode(",", $group_ids),
+                "fields" => \implode(",", $fields)
             ]
         );
     }

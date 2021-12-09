@@ -60,11 +60,11 @@ class Placeholder
         $member_name = $member[self::FIRST_NAME] ?? $member[self::NAME];
         $member_last_name = $member[self::LAST_NAME] ?? "";
 
-        $member_full_name = trim("$member_name $member_last_name");
+        $member_full_name = \trim("$member_name $member_last_name");
 
-        return preg_replace_callback(self::PATTERN,
+        return \preg_replace_callback(self::PATTERN,
             static function ($match) use ($id, $member_id, $member_name, $member_last_name, $member_full_name) {
-                return match (current($match)) {
+                return match (\current($match)) {
                     self::NAME_TAG => $member_name,
                     self::MENTION_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_name)"
@@ -92,9 +92,9 @@ class Placeholder
     private function iterateId(int $id): array|false
     {
         if ($id > 0) {
-            return current(Request::call("users.get", ["user_ids" => $id, "name_case" => "nom"]));
+            return \current(Request::call("users.get", ["user_ids" => $id, "name_case" => "nom"]));
         }
-        return current(Request::call("groups.getById", ["group_ids" => $id]));
+        return \current(Request::call("groups.getById", ["group_ids" => $id]));
     }
 
     /**
