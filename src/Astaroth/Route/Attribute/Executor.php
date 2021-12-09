@@ -16,7 +16,7 @@ use ReflectionUnionType;
 use function is_object;
 use function is_string;
 
-class Executor
+final class Executor
 {
     /** @var AdditionalParameter[] */
     private array $replaceableObjects = [];

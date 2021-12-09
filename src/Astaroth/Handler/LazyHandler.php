@@ -15,7 +15,7 @@ use function is_array;
  * Class LazyHandler
  * @package Astaroth\Handler
  */
-class LazyHandler implements HandlerInterface
+final class LazyHandler implements HandlerInterface
 {
 
     public function __construct(private HandlerInterface $botInstance){}

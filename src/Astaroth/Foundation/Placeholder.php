@@ -10,7 +10,7 @@ use UnhandledMatchError;
  * Garbage with which you can add placeholders to messages
  * @example hi %@name
  */
-class Placeholder
+final class Placeholder
 {
     private const PATTERN = "/%(?:@?last-|(?:@?ful{2}-|@?))name/";
 
@@ -54,7 +54,7 @@ class Placeholder
      */
     public function replace(int $id): string
     {
-        $member = $this->iterateId($id);
+        $member = $this->iterateId($id) ?: [];
         $member_id = $member[self::ID];
 
         $member_name = $member[self::FIRST_NAME] ?? $member[self::NAME];

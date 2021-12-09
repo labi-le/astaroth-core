@@ -7,7 +7,7 @@ namespace Astaroth\Route;
 use JetBrains\PhpStorm\NoReturn;
 use function is_callable;
 
-class ReturnResultHandler
+final class ReturnResultHandler
 {
     public function __construct(mixed $result = null)
     {
