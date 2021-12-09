@@ -23,9 +23,6 @@ class ConversationTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        $hs = new Conversation(Conversation::CHAT, 1);
-        $hs->setHaystack((require self::DATA_DIR)->messageNew());
-
-        assertEquals($hs::class, $hs::class);
+        $this->testValidate();
     }
 }

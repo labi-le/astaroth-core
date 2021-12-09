@@ -6,7 +6,6 @@ namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Message;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class MessageTest extends TestCase
@@ -15,8 +14,7 @@ class MessageTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        $hs = (new Message("uwuwu", Message::STRICT))->setHaystack((require self::DATA_DIR)->messageNew());
-        assertEquals(Message::class, $hs::class);
+        $this->testValidate();
     }
 
     public function testValidate(): void

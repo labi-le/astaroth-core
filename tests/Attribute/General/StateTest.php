@@ -37,16 +37,7 @@ class StateTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        $hs = (new State("button_set", State::USER))->setHaystack($this->data);
-        assertEquals(State::class, $hs::class);
-
-        $hs = (new State("button_set", State::USER))->setHaystack($this->data->messageNew());
-        assertEquals(State::class, $hs::class);
-
-        $hs = (new State("button_set", State::USER))->setHaystack($this->data->messageEvent());
-        assertEquals(State::class, $hs::class);
-
-
+        $this->testValidate();
     }
 
     /**

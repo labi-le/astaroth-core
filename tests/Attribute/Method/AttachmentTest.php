@@ -6,7 +6,6 @@ namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Attachment;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class AttachmentTest extends TestCase
@@ -15,10 +14,7 @@ class AttachmentTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        $hs = (new Attachment(Attachment::PHOTO, 2))
-            ->setHaystack((require self::DATA_DIR)->messageNew());
-
-        assertEquals(Attachment::class, $hs::class);
+        $this->testValidate();
     }
 
     public function testValidate(): void

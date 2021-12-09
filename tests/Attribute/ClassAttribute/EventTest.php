@@ -23,7 +23,6 @@ class EventTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        assertEquals(Events::MESSAGE_NEW,
-            (new Event(Events::MESSAGE_NEW))->setHaystack(require self::DATA_DIR));
+        $this->testValidate();
     }
 }
