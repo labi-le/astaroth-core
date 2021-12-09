@@ -12,19 +12,14 @@ use function PHPUnit\Framework\assertTrue;
 class ApplicationTest extends TestCase
 {
 
-    public function testRunningInConsole()
+    public function testRunningInConsole(): void
     {
         assertTrue(Application::runningInConsole());
     }
 
-    public function testGetContainer()
+    public function testGetContainer(): void
     {
         assertTrue(Application::getContainer() instanceof ContainerInterface);
     }
 
-    public function testRun()
-    {
-//        (new Application())->run(dirname(__DIR__));
-        assertTrue(true);
-    }
 }

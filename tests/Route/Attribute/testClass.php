@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Route\Attribute;
 
 
-use Astaroth\Attribute\Conversation;
-use Astaroth\Attribute\Debug;
-use Astaroth\Attribute\Description;
-use Astaroth\Attribute\Event\MessageEvent;
-use Astaroth\Attribute\Event\MessageNew as TestEvent;
-use Astaroth\Attribute\Message;
+use Astaroth\Attribute\ClassAttribute\Conversation;
+use Astaroth\Attribute\ClassAttribute\Event\MessageEvent;
+use Astaroth\Attribute\ClassAttribute\Event\MessageNew as TestEvent;
+use Astaroth\Attribute\General\Description;
+use Astaroth\Attribute\Method\Debug;
+use Astaroth\Attribute\Method\Message;
 use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
 use function PHPUnit\Framework\assertEquals;
@@ -29,24 +29,28 @@ class testClass extends BaseCommands
 
     #[Message("test")]
     #[Description("method to be implicitly executed")]
-    public function emptyMethod(MessageNew|MessageEvent $dataEmptyMethod, Description $description)
+    public function emptyMethod(MessageNew|MessageEvent $dataEmptyMethod, Description $description): bool
     {
         assertEquals("method to be implicitly executed", $description->getResult());
         assertEquals("test", $dataEmptyMethod->getText());
+
+        return true;
     }
 
     #[Debug]
     #[Description("desc2")]
-    public function emptyMethod2(Debug $debug, Description $description)
+    public function emptyMethod2(Debug $debug, Description $description): bool
     {
         assertIsArray($debug->getResult());
         assertEquals("desc2", $description->getResult());
 
         $stack = [];
-        foreach (range(0, 10000) as $ignored) {
-            $stack[] = uniqid('', true);
+        foreach (\range(0, 10000) as $ignored) {
+            $stack[] = \uniqid('', true);
         }
 
         assertEquals(10001, \count($stack));
+
+        return true;
     }
 }

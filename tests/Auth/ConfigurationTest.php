@@ -4,112 +4,132 @@ declare(strict_types=1);
 namespace Auth;
 
 use Astaroth\Auth\Configuration;
-use Astaroth\Foundation\Application;
+use Astaroth\Auth\ParameterMissingException;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
 
 class ConfigurationTest extends TestCase
 {
     private Configuration $configuration;
 
+    /**
+     * @throws \Exception
+     */
     protected function setUp(): void
     {
-        $this->configuration = Configuration::set(\dirname(__DIR__), Application::DEV);
+        $this->configuration = Configuration::set(\dirname(__DIR__));
     }
 
-    public function testGetApiVersion()
+    /**
+     * @throws ParameterMissingException
+     */
+    public function testGetApiVersion(): void
     {
         assertEquals($this->configuration->getApiVersion(), "5.131");
     }
 
-    public function testIsHandleRepeatedRequest()
+    public function testIsHandleRepeatedRequest(): void
     {
         assertEquals($this->configuration->isHandleRepeatedRequest(), false);
     }
 
-    public function testGetAppNamespace()
+    /**
+     * @throws ParameterMissingException
+     */
+    public function testGetAppNamespace(): void
     {
         assertEquals($this->configuration->getAppNamespace(), "App\Command");
     }
 
-    public function testGetDatabaseHost()
+    public function testGetDatabaseHost(): void
     {
         assertEquals($this->configuration->getDatabaseHost(), "127.0.0.1");
     }
 
-    public function testGetDatabaseDriver()
+    public function testGetDatabaseDriver(): void
     {
         assertEquals($this->configuration->getDatabaseDriver(), "pdo_mysql");
     }
 
-    public function testGetDatabaseUser()
+    public function testGetDatabaseUser(): void
     {
         assertEquals($this->configuration->getDatabaseUser(), "test");
     }
 
-    public function testGetCountParallelOperations()
+    public function testGetCountParallelOperations(): void
     {
         assertEquals($this->configuration->getCountParallelOperations(), 3);
     }
 
-    public function testGetDatabaseUrl()
+    public function testGetDatabaseUrl(): void
     {
         assertEquals($this->configuration->getDatabaseUrl(), "mysql://user:secret@localhost/mydb");
 
     }
 
-    public function testGetCallbackSecretKey()
+    public function testGetCallbackSecretKey(): void
     {
         assertEquals($this->configuration->getCallbackSecretKey(), "1234567890qwertyuiop");
     }
 
-    public function testGetAccessToken()
+    /**
+     * @throws ParameterMissingException
+     */
+    public function testGetAccessToken(): void
     {
-        assertEquals($this->configuration->getAccessToken(), "PUT_TOKEN_FOR_TEST");
+        assertEquals($this->configuration->getAccessToken(), "PUT_TOKEN");
     }
 
-    public function testGetEntityPath()
+    /**
+     * @throws ParameterMissingException
+     */
+    public function testGetEntityPath(): void
     {
         assertEquals($this->configuration->getEntityPath(), ["./App/Entity"]);
     }
 
-    public function testGetType()
+    /**
+     * @throws ParameterMissingException
+     */
+    public function testGetType(): void
     {
         assertEquals($this->configuration->getType(), "LONGPOLL");
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         assertEquals($this->configuration::class, Configuration::class);
     }
 
-    public function testGetDatabasePort()
+    public function testGetDatabasePort(): void
     {
         assertEquals($this->configuration->getDatabasePort(), "3386");
     }
 
-    public function testGetCallbackConfirmationKey()
+    /**
+     * @throws ParameterMissingException
+     */
+    public function testGetCallbackConfirmationKey(): void
     {
         assertEquals($this->configuration->getCallbackConfirmationKey(), "2f21ed85");
     }
 
-    public function testGetDatabasePassword()
+    public function testGetDatabasePassword(): void
     {
         assertEquals($this->configuration->getDatabasePassword(), "12345678");
     }
 
-    public function testIsDebug()
+    public function testIsDebug(): void
     {
         assertEquals($this->configuration->isDebug(), true);
     }
 
-    public function testGetCachePath()
+    public function testGetCachePath(): void
     {
-        assertEquals($this->configuration->getCachePath(), sys_get_temp_dir());
+        assertEquals($this->configuration->getCachePath(), \sys_get_temp_dir());
     }
 
-    public function testGetDatabaseName()
+    public function testGetDatabaseName(): void
     {
         assertEquals($this->configuration->getDatabaseName(), "database");
     }

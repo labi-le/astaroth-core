@@ -18,7 +18,7 @@ class SessionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->session = new Session(self::ID, self::TYPE, sys_get_temp_dir());
+        $this->session = new Session(self::ID, self::TYPE, \sys_get_temp_dir());
     }
 
     protected function tearDown(): void
@@ -26,25 +26,25 @@ class SessionTest extends TestCase
         $this->session->purge(false);
     }
 
-    public function testChangeType()
+    public function testChangeType(): void
     {
         $this->session->changeType("aboba");
 
         assertEquals("aboba", $this->session->getType());
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->session->put("foo", "bar");
         assertEquals("bar", $this->session->get("foo"));
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $this->testGet();
     }
 
-    public function testRemoveKey()
+    public function testRemoveKey(): void
     {
         $key = "saswdeudbinfoesfdwuawidojwadwadwahoidjwd9j";
         $this->session->put($key, true);
@@ -56,7 +56,7 @@ class SessionTest extends TestCase
         assertEquals(null, $this->session->get($key));
     }
 
-    public function testPurge()
+    public function testPurge(): void
     {
         $this->testPut();
         $this->session->purge(true);

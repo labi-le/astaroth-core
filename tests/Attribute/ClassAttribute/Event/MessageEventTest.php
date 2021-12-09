@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Attribute\Event;
+namespace Attribute\ClassAttribute\Event;
 
-use Astaroth\Attribute\Event\MessageEvent;
+use Astaroth\Attribute\ClassAttribute\Event\MessageEvent;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class MessageEventTest extends TestCase
 {
-
-    public function testValidate()
+    public function testValidate(): void
     {
         $obj = new class {
             public function getType(): string
@@ -25,7 +24,7 @@ class MessageEventTest extends TestCase
         assertTrue($ev->validate());
     }
 
-    public function testSetHaystack()
+    public function testSetHaystack(): void
     {
         $obj = new class {
             public function getType(): string
