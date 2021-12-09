@@ -12,29 +12,18 @@ use function PHPUnit\Framework\assertTrue;
 
 class EventTest extends TestCase
 {
+    private const DATA_DIR = __DIR__ . "/../../data.php";
+
     public function testValidate(): void
     {
-        $obj = new class {
-            public function getType(): string
-            {
-                return Events::MESSAGE_EVENT;
-            }
-        };
 
-        $ev = (new Event(Events::MESSAGE_EVENT))->setHaystack($obj);
+        $ev = (new Event(Events::MESSAGE_NEW))->setHaystack(require self::DATA_DIR);
         assertTrue($ev->validate());
     }
 
     public function testSetHaystack(): void
     {
-        $obj = new class {
-            public function getType(): string
-            {
-                return "message_event";
-            }
-        };
-
-        assertEquals(EventTest::class,
-            (new Event(Events::MESSAGE_EVENT))->setHaystack($obj)::class);
+        assertEquals(Events::MESSAGE_NEW,
+            (new Event(Events::MESSAGE_NEW))->setHaystack(require self::DATA_DIR));
     }
 }
