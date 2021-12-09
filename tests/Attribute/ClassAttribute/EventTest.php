@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Attribute\ClassAttribute\Event;
+namespace Attribute\ClassAttribute;
 
-use Astaroth\Attribute\ClassAttribute\Event\MessageEvent;
+use Astaroth\Attribute\ClassAttribute\Event;
+use Astaroth\Foundation\Enums\Events;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
-class MessageEventTest extends TestCase
+class EventTest extends TestCase
 {
     public function testValidate(): void
     {
         $obj = new class {
             public function getType(): string
             {
-                return "message_event";
+                return Events::MESSAGE_EVENT;
             }
         };
 
-        $ev = (new MessageEvent())->setHaystack($obj);
+        $ev = (new Event(Events::MESSAGE_EVENT))->setHaystack($obj);
         assertTrue($ev->validate());
     }
 
@@ -33,7 +34,7 @@ class MessageEventTest extends TestCase
             }
         };
 
-        assertEquals(MessageEvent::class,
-            (new MessageEvent())->setHaystack($obj)::class);
+        assertEquals(EventTest::class,
+            (new Event(Events::MESSAGE_EVENT))->setHaystack($obj)::class);
     }
 }

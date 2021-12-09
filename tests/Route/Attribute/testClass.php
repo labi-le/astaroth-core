@@ -6,22 +6,22 @@ namespace Route\Attribute;
 
 
 use Astaroth\Attribute\ClassAttribute\Conversation;
-use Astaroth\Attribute\ClassAttribute\Event\MessageEvent;
-use Astaroth\Attribute\ClassAttribute\Event\MessageNew as TestEvent;
+use Astaroth\Attribute\ClassAttribute\Event;
 use Astaroth\Attribute\General\Description;
 use Astaroth\Attribute\Method\Debug;
 use Astaroth\Attribute\Method\Message;
 use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Foundation\Enums\Events;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsObject;
 
 #[Conversation]
-#[TestEvent]
+#[Event(Events::MESSAGE_NEW)]
 class testClass extends BaseCommands
 {
-    public function __construct(MessageNew|MessageEvent $dataConstruct = null)
+    public function __construct(MessageNew|Event $dataConstruct = null)
     {
         parent::__construct($dataConstruct);
         assertIsObject($this->data);
@@ -29,7 +29,7 @@ class testClass extends BaseCommands
 
     #[Message("test")]
     #[Description("method to be implicitly executed")]
-    public function emptyMethod(MessageNew|MessageEvent $dataEmptyMethod, Description $description): bool
+    public function emptyMethod(MessageNew|Event $dataEmptyMethod, Description $description): bool
     {
         assertEquals("method to be implicitly executed", $description->getResult());
         assertEquals("test", $dataEmptyMethod->getText());
