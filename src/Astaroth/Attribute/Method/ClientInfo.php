@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Attribute;
@@ -15,7 +15,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  * Attribute defining the message keyboard info
  * keyboard available on the current client, etc.
  */
-final class ClientInfo implements AttributeValidatorInterface, AttributeOptionalInterface
+final class ClientInfo implements AttributeValidatorInterface, AttributeMethodInterface
 {
     public const TEXT = "text";
     public const VKPAY = "vkpay";
@@ -70,7 +70,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeOptional
     public function validate(): bool
     {
         if ($this->client_info) {
-            if (($this->button_actions !== []) && array_intersect_key(
+            if (($this->button_actions !== []) && \array_intersect_key(
                     $this->button_actions,
                     $this->client_info->button_actions) === []) {
                 return false;

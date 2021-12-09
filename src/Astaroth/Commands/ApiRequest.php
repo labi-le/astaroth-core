@@ -17,7 +17,7 @@ final class ApiRequest
     /**
      * @throws Throwable
      */
-    private function call(string $method, $params): array
+    public function customRequest(string $method, $params): array
     {
         return Request::call($method, $params, $this->accessToken);
     }
@@ -33,12 +33,12 @@ final class ApiRequest
      */
     public function sendMessageEventAnswer(MessageEvent $data, array $event): array
     {
-        return $this->call("messages.sendMessageEventAnswer",
+        return $this->customRequest("messages.sendMessageEventAnswer",
             [
                 "event_id" => $data->getEventId(),
                 "user_id" => $data->getUserId(),
                 "peer_id" => $data->getPeerId(),
-                "event_data" => json_encode($event)
+                "event_data" => \json_encode($event)
             ]);
     }
 
@@ -58,7 +58,7 @@ final class ApiRequest
         $params["conversation_message_id"] = $conversation_message_id;
         $params["message_id"] = $message_id;
 
-        return $this->call("messages.edit", $params);
+        return $this->customRequest("messages.edit", $params);
     }
 
     /**
@@ -84,14 +84,14 @@ final class ApiRequest
     ): array
     {
         $params = [];
-        $params["message_ids"] = implode(",", $message_ids);
-        $params["conversation_message_ids"] = implode(",", $conversation_message_ids);
+        $params["message_ids"] = \implode(",", $message_ids);
+        $params["conversation_message_ids"] = \implode(",", $conversation_message_ids);
         $params["peer_id"] = $peer_id;
         $params["spam"] = $spam;
         $params["group_id"] = $group_id;
         $params["delete_for_all"] = $delete_for_all;
 
-        return $this->call("messages.delete", $params);
+        return $this->customRequest("messages.delete", $params);
     }
 
     /**
@@ -104,7 +104,7 @@ final class ApiRequest
      */
     public function kick(int $chat_id, int $id): array
     {
-        return $this->call("messages.removeChatUser", ["chat_id" => $chat_id, "member_id" => $id]);
+        return $this->customRequest("messages.removeChatUser", ["chat_id" => $chat_id, "member_id" => $id]);
     }
 
     /**
@@ -118,10 +118,10 @@ final class ApiRequest
      */
     public function usersGet(array $user_ids, array $fields = [], string $name_case = "nom"): array
     {
-        return $this->call("users.get",
+        return $this->customRequest("users.get",
             [
-                "user_ids" => implode(",", $user_ids),
-                "fields" => implode(",", $fields),
+                "user_ids" => \implode(",", $user_ids),
+                "fields" => \implode(",", $fields),
                 "name_case" => $name_case
             ]
         );
@@ -137,10 +137,10 @@ final class ApiRequest
      */
     public function groupsGetById(array $group_ids, array $fields = []): array
     {
-        return $this->call("groups.getById",
+        return $this->customRequest("groups.getById",
             [
-                "group_ids" => implode(",", $group_ids),
-                "fields" => implode(",", $fields)
+                "group_ids" => \implode(",", $group_ids),
+                "fields" => \implode(",", $fields)
             ]
         );
     }
@@ -154,6 +154,6 @@ final class ApiRequest
      */
     public function utilsGetShortLink(string $url, bool $private = false): array
     {
-        return $this->call("utils.getShortLink", ["url" => $url, "private" => $private]);
+        return $this->customRequest("utils.getShortLink", ["url" => $url, "private" => $private]);
     }
 }

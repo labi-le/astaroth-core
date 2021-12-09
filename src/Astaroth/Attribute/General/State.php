@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\General;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -13,7 +13,7 @@ use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-final class State implements AttributeValidatorInterface, AttributeOptionalInterface
+final class State implements AttributeValidatorInterface, AttributeMethodInterface
 {
     public const USER = 0;
     public const CHAT = 1;

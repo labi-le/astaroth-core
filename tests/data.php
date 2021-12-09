@@ -47,4 +47,4 @@ $data = '{
     "event_id": "2ca14315a711218d7392a46b44e22e74ad6273c3"
 }';
 
-return (new DataFetcher(json_decode($data, false)));
+return (new DataFetcher(json_decode($data, false, 512, JSON_THROW_ON_ERROR)));

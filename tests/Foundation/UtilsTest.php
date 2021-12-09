@@ -12,12 +12,12 @@ use function PHPUnit\Framework\assertEquals;
 class UtilsTest extends TestCase
 {
 
-    public function testTransliteration()
+    public function testTransliteration(): void
     {
         assertEquals("aboba", Utils::transliteration("абоба"));
     }
 
-    public function testMultiExplode()
+    public function testMultiExplode(): void
     {
         $data = Utils::multiExplode([",", ";"], "i,love;php");
         assertArrayHasKey(0, $data);
@@ -25,7 +25,7 @@ class UtilsTest extends TestCase
         assertArrayHasKey(2, $data);
     }
 
-    public function testRegexId()
+    public function testRegexId(): void
     {
         $str = "[id1|durov] [id418618|lbl] foo bar";
         $data = Utils::regexId($str);
@@ -34,7 +34,7 @@ class UtilsTest extends TestCase
         assertArrayHasKey(1, $data);
     }
 
-    public function testRemoveFirstWord()
+    public function testRemoveFirstWord(): void
     {
         $str = "i love world"; //12 symbol
 

@@ -12,14 +12,14 @@ use function PHPUnit\Framework\assertIsInt;
 class MemoryTest extends TestCase
 {
 
-    public function testGetStat()
+    public function testGetStat(): void
     {
         $app = static function () {
             $arr = [];
             $arr2 = [];
-            foreach (range(0, 10000) as $ignored) {
-                $arr[] = mt_rand();
-                $arr2[] = uniqid('', true);
+            foreach (\range(0, 10000) as $ignored) {
+                $arr[] = \mt_rand();
+                $arr2[] = \uniqid('', true);
             }
 
             assertEquals(10001, count($arr));

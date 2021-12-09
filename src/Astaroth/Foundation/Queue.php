@@ -29,7 +29,7 @@ class Queue
     public function __construct(Session $session, callable ...$queue)
     {
         $this->queue = new SplQueue();
-        array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
+        \array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
 
         $this->session = $session;
 

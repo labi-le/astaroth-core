@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Attribute;
+namespace Attribute\General;
 
-use Astaroth\Attribute\State;
+use Astaroth\Attribute\General\State;
 use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Foundation\FacadePlaceholder;
@@ -17,14 +17,16 @@ use function PHPUnit\Framework\assertTrue;
 
 class StateTest extends TestCase
 {
+    private const DATA_DIR = __DIR__ . "/../../data.php";
+
     private DataFetcher $data;
     private Session $session;
 
     protected function setUp(): void
     {
-        $this->data = (require __DIR__ . "/../data.php");
+        $this->data = require self::DATA_DIR;
 
-        $this->session = new Session(259166248, State::RESERVED_NAME, sys_get_temp_dir());
+        $this->session = new Session(259166248, State::RESERVED_NAME, \sys_get_temp_dir());
         $this->session->put("example", true);
     }
 
@@ -33,7 +35,7 @@ class StateTest extends TestCase
         $this->session->purge(false);
     }
 
-    public function testSetHaystack()
+    public function testSetHaystack(): void
     {
         $hs = (new State("button_set", State::USER))->setHaystack($this->data);
         assertEquals(State::class, $hs::class);
@@ -47,9 +49,13 @@ class StateTest extends TestCase
 
     }
 
-    public function testValidate()
+    /**
+     * @throws \Exception
+     */
+    public function testValidate(): void
     {
-        FacadePlaceholder::getInstance(new ContainerBuilder(), Configuration::set(dirname(__DIR__)));
+        //cache directory
+        FacadePlaceholder::getInstance(new ContainerBuilder(), Configuration::set(dirname(__DIR__, 2)));
 
         $hs = (new State("example", State::USER))->setHaystack($this->data->messageNew());
         assertTrue($hs->validate());

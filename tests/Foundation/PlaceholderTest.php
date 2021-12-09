@@ -11,7 +11,10 @@ use function PHPUnit\Framework\assertEquals;
 class PlaceholderTest extends TestCase
 {
 
-    public function testReplace()
+    /**
+     * @throws \Throwable
+     */
+    public function testReplace(): void
     {
         $mock = $this
             ->createMock(Placeholder::class);

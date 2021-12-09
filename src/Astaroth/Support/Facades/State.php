@@ -13,7 +13,7 @@ final class State
 
     private static function _add(int $member_id, string $state_name): bool
     {
-        return (new Session($member_id, \Astaroth\Attribute\State::RESERVED_NAME))
+        return (new Session($member_id, \Astaroth\Attribute\General\State::RESERVED_NAME))
             ->put($state_name, true);
     }
 
@@ -29,7 +29,7 @@ final class State
 
     public static function remove(int $member_id, string $state_name): bool
     {
-        return (new Session($member_id, \Astaroth\Attribute\State::RESERVED_NAME))
+        return (new Session($member_id, \Astaroth\Attribute\General\State::RESERVED_NAME))
             ->removeKey($state_name);
     }
 }

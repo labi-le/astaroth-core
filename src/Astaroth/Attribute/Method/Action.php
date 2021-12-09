@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
@@ -17,7 +17,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  *
  * @see https://i.imgur.com/4YQWIZ4.png
  */
-final class Action implements AttributeValidatorInterface, AttributeOptionalInterface
+final class Action implements AttributeValidatorInterface, AttributeClassInterface
 {
     private ?object $haystack = null;
 
@@ -69,10 +69,10 @@ final class Action implements AttributeValidatorInterface, AttributeOptionalInte
                 return true;
             }
 
-            $key = key($this->anyData);
+            $key = \key($this->anyData);
 
-            return property_exists($this->haystack, $key)
-                && $this->haystack->$key === current($this->anyData);
+            return \property_exists($this->haystack, $key)
+                && $this->haystack->$key === \current($this->anyData);
         }
 
         return false;

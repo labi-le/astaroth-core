@@ -10,7 +10,6 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Utils;
 use Astaroth\Support\Facades\Message as MessageFacade;
 use Exception;
-use JetBrains\PhpStorm\Pure;
 use Throwable;
 
 /**

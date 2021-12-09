@@ -2,28 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Attribute;
+namespace Attribute\Method;
 
-use Astaroth\Attribute\Attachment;
+use Astaroth\Attribute\Method\Attachment;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class AttachmentTest extends TestCase
 {
+    private const DATA_DIR = __DIR__ . "/../../data.php";
 
-    public function testSetHaystack()
+    public function testSetHaystack(): void
     {
         $hs = (new Attachment(Attachment::PHOTO, 2))
-            ->setHaystack((require __DIR__ . "/../data.php")->messageNew());
+            ->setHaystack((require self::DATA_DIR)->messageNew());
 
         assertEquals(Attachment::class, $hs::class);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $hs = (new Attachment(Attachment::PHOTO, 2))
-            ->setHaystack((require __DIR__ . "/../data.php")->messageNew());
+            ->setHaystack((require self::DATA_DIR)->messageNew());
 
         assertTrue($hs->validate());
     }
