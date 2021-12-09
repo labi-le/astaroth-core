@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
-use Astaroth\Foundation\Utils;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
@@ -15,7 +14,7 @@ use Attribute;
  * Attribute that always fires
  * It will be useful for dump
  */
-final class Debug implements AttributeReturnInterface, AttributeValidatorInterface, AttributeOptionalInterface
+final class Debug implements AttributeReturnInterface, AttributeValidatorInterface, AttributeRequiredInterface
 {
     private mixed $haystack;
 

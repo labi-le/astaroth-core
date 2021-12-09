@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Attribute;
@@ -15,7 +15,7 @@ use JetBrains\PhpStorm\ExpectedValues;
  * Attribute defining the message keyboard info
  * keyboard available on the current client, etc.
  */
-final class ClientInfo implements AttributeValidatorInterface, AttributeOptionalInterface
+final class ClientInfo implements AttributeValidatorInterface, AttributeRequiredInterface
 {
     public const TEXT = "text";
     public const VKPAY = "vkpay";

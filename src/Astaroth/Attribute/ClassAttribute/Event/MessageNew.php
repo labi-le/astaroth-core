@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute\Event;
+namespace Astaroth\Attribute\ClassAttribute\Event;
 
 use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;

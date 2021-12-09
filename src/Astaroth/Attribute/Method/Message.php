@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\TextMatcher;
@@ -15,7 +15,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 /**
  * Attribute defining the message
  */
-final class Message implements AttributeValidatorInterface, AttributeOptionalInterface
+final class Message implements AttributeValidatorInterface, AttributeRequiredInterface
 {
     private string $haystack = "";
 
@@ -38,7 +38,7 @@ final class Message implements AttributeValidatorInterface, AttributeOptionalInt
     {
         return (new TextMatcher(
             $this->message,
-            mb_strtolower($this->haystack),
+            \mb_strtolower($this->haystack),
             $this->validation
         ))->compare();
     }

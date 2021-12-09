@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -19,7 +19,7 @@ use function is_array;
 /**
  * Attribute that determines the click on the button (payload)
  */
-final class Payload implements AttributeValidatorInterface, AttributeOptionalInterface
+final class Payload implements AttributeValidatorInterface, AttributeRequiredInterface
 {
 
     public const KEY_EXIST = 0;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Attribute;
+namespace Astaroth\Attribute\ClassAttribute;
 
-use Astaroth\Contracts\AttributeOptionalInterface;
+use Astaroth\Contracts\AttributeRequiredInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
@@ -18,7 +18,7 @@ use function in_array;
 /**
  * An attribute that determines whether a dialogue is a conversation, a personal message, or it doesn't matter.
  */
-final class Conversation implements AttributeValidatorInterface, AttributeOptionalInterface
+final class Conversation implements AttributeValidatorInterface, AttributeRequiredInterface
 {
     public const ALL = 6;
     public const CHAT = 12;
