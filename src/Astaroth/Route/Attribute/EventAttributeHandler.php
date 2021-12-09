@@ -52,6 +52,14 @@ class EventAttributeHandler
 
     }
 
+    /**
+     * Validating top-level attributes
+     * @see https://i.imgur.com/zcylScY.png
+     *
+     * @param ReflectionClass $reflectionClass
+     * @param DataFetcher $data
+     * @return bool
+     */
     private function classValidateAttr(ReflectionClass $reflectionClass, DataFetcher $data): bool
     {
         $mandatoryValidation = false;
