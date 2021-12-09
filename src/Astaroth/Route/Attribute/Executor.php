@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
-use Astaroth\Attribute\Debug;
+use Astaroth\Attribute\Method\Debug;
 use Astaroth\Contracts\AttributeReturnInterface;
-use Astaroth\Route\ReturnResultHandler;
-use Closure;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
@@ -25,16 +23,16 @@ class Executor
 
     /** @var AdditionalParameter[] */
     private array $parameters = [];
-    private Closure $callableValidateAttribute;
 
 
     /**
      * General event coordinator
      * @param ReflectionClass $reflectionClass
-     *
+     * @param ReflectionMethod[] $reflectionMethods
      */
     public function __construct(
         private ReflectionClass $reflectionClass,
+        private array $reflectionMethods = []
     )
     {
     }
@@ -42,36 +40,32 @@ class Executor
     /**
      * @throws ReflectionException
      */
-    public function launch(): void
+    public function launch(callable $methodResponseHandler = null): void
     {
         /** @psalm-suppress PossiblyInvalidArgument */
         $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
-        foreach ($this->reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            foreach ($method->getAttributes() as $attribute) {
-                //if the validation is successful, proceed to the execution of the method
-                if ($this->validateAttribute($attribute)) {
-                    //passing attributes to parameters (if their type is explicitly specified in user-method)
-                    $this->addReplaceableAttributes($method->getAttributes());
 
-                    $this->initializeParameters($method->getParameters());
+        foreach ($this->reflectionMethods as $method) {
 
-                    $parameters = array_merge($this->getParameters(), $this->getReplaceableObjects());
+            $this->addReplaceableAttributes($method->getAttributes());
+            $this->initializeParameters($method->getParameters());
 
-                    $method_return = $this->invoke
-                    (
-                        $invokedClass,
-                        $method,
-                        //normalize the parameter list for the method
-                        $this->parameterNormalizer($method->getParameters(), $parameters)
-                    );
+            $parameters = \array_merge($this->getParameters(), $this->getReplaceableObjects());
 
-                    /** We process the result returned by the method */
-                    new ReturnResultHandler($method_return);
+            $method_return = $this->invoke
+            (
+                $invokedClass,
+                $method,
+                //normalize the parameter list for the method
+                $this->parameterNormalizer($method->getParameters(), $parameters)
+            );
 
-                    $this->clearStack();
-                    break;
-                }
+            /** We process the result returned by the method */
+            if ($methodResponseHandler !== null){
+                $methodResponseHandler($method_return);
             }
+
+            $this->clearStack();
         }
     }
 
@@ -157,7 +151,7 @@ class Executor
             $parameters[] = $this->normalizeNamedType($reflectionType, $additionalParameter);
         }
 
-        return current(array_filter($parameters)) ?: null;
+        return \current(\array_filter($parameters)) ?: null;
     }
 
     /**
@@ -192,7 +186,7 @@ class Executor
 
             //for debug
             if ($attribute instanceof Debug) {
-                $this->replaceObjects($attribute->setHaystack(debug_backtrace()));
+                $this->replaceObjects($attribute->setHaystack(\debug_backtrace()));
             }
         }
     }
@@ -201,7 +195,7 @@ class Executor
     /**
      * @return AdditionalParameter[]
      */
-    public function getParameters(): array
+    private function getParameters(): array
     {
         return $this->parameters;
     }
@@ -266,16 +260,6 @@ class Executor
         return $method->invoke($object, ...$parameters);
     }
 
-    public function setCallableValidateAttribute(Closure $closure): static
-    {
-        $this->callableValidateAttribute = $closure;
-        return $this;
-    }
-
-    public function validateAttribute(ReflectionAttribute $attribute): bool
-    {
-        return (bool)($this->callableValidateAttribute)($attribute->newInstance());
-    }
 
     private function clearStack(): void
     {
