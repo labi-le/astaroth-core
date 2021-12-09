@@ -6,7 +6,6 @@ namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Action;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class ActionTest extends TestCase
@@ -15,9 +14,7 @@ class ActionTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        $payload = new Action(Action::CHAT_INVITE_USER, ["418618" => 12]);
-
-        assertEquals(Action::class, $payload->setHaystack((require self::DATA_DIR)->messageNew())::class);
+        $this->testValidate();
     }
 
     public function testValidate(): void

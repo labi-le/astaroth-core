@@ -6,7 +6,6 @@ namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\ClientInfo;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class ClientInfoTest extends TestCase
@@ -15,7 +14,7 @@ class ClientInfoTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        assertEquals((new ClientInfo)->setHaystack((require self::DATA_DIR))::class, ClientInfo::class);
+        $this->testValidate();
     }
 
     public function testValidate(): void

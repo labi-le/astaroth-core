@@ -15,8 +15,7 @@ class MessageRegexTest extends TestCase
 
     public function testSetHaystack(): void
     {
-        $hs = (new MessageRegex("/(foo)(bar)(baz)/"))->setHaystack((require self::DATA_DIR)->messageNew());
-        assertEquals(MessageRegex::class, $hs::class);
+        $this->testValidate();
     }
 
     public function testValidate(): void
