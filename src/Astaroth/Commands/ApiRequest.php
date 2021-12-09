@@ -17,7 +17,7 @@ final class ApiRequest
     /**
      * @throws Throwable
      */
-    private function call(string $method, $params): array
+    public function call(string $method, $params): array
     {
         return Request::call($method, $params, $this->accessToken);
     }
