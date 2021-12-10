@@ -248,7 +248,7 @@ final class Configuration
     {
         try {
             return $this->getConfig(self::SECRET_KEY);
-        } catch (ParameterMissingException $e) {
+        } catch (ParameterMissingException) {
             return null;
         }
     }
