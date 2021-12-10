@@ -8,6 +8,9 @@ use Astaroth\VkUtils\Builders\Attachments\Message\AudioMessage;
 use Astaroth\VkUtils\Builders\Attachments\Message\PhotoMessages;
 use Astaroth\VkUtils\Builders\Message as MessageBuilder;
 use Astaroth\VkUtils\Contracts\ICanBeSaved;
+use Exception;
+use Throwable;
+use function array_map;
 use function is_string;
 
 final class Message
@@ -49,6 +52,7 @@ final class Message
     /**
      * @param string|string[] ...$img
      * @return $this
+     * @throws Exception
      */
     public function addImg(string|array $img): Message
     {
@@ -60,16 +64,20 @@ final class Message
      * @param string[]|string $value
      * @param string $className
      * @return ICanBeSaved[]
+     *
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress MoreSpecificReturnType
      */
     private static function genAttachObj(array|string $value, string $className): array
     {
         is_string($value) === false ?: $value = [$value];
-        return \array_map(static fn(string $url) => new $className($url), $value);
+        return array_map(static fn(string $url) => new $className($url), $value);
     }
 
     /**
      * @param string|string[] $video
      * @return $this
+     * @throws Exception
      */
     public function addVoice(string|array $video): Message
     {
@@ -77,7 +85,7 @@ final class Message
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function addCustomUploadableAttachments(ICanBeSaved ...$attachments): Message
     {
@@ -85,7 +93,8 @@ final class Message
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
+     * @psalm-suppress PossiblyNullArgument
      */
     public function send(int $id = null): array
     {

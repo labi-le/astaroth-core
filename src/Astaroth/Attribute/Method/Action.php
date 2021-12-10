@@ -9,6 +9,9 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
+use function current;
+use function key;
+use function property_exists;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -69,10 +72,10 @@ final class Action implements AttributeValidatorInterface, AttributeClassInterfa
                 return true;
             }
 
-            $key = \key($this->anyData);
+            $key = key($this->anyData);
 
-            return \property_exists($this->haystack, $key)
-                && $this->haystack->$key === \current($this->anyData);
+            return property_exists($this->haystack, $key)
+                && $this->haystack->$key === current($this->anyData);
         }
 
         return false;

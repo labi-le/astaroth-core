@@ -6,6 +6,7 @@ namespace Foundation;
 
 use Astaroth\Foundation\Placeholder;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 use function PHPUnit\Framework\assertEquals;
 
 class PlaceholderTest extends TestCase
@@ -16,7 +17,7 @@ class PlaceholderTest extends TestCase
     /**
      * Class with which you can add placeholders to messages
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @example FirstName - %name
      * @example Name with mention "%@name"

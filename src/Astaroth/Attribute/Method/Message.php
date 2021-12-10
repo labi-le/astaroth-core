@@ -10,6 +10,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\TextMatcher;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
+use function mb_strtolower;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -38,7 +39,7 @@ final class Message implements AttributeValidatorInterface, AttributeMethodInter
     {
         return (new TextMatcher(
             $this->message,
-            \mb_strtolower($this->haystack),
+            mb_strtolower($this->haystack),
             $this->validation
         ))->compare();
     }

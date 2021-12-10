@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Astaroth\Debug;
 
 use Stringable;
+use function memory_get_usage;
+use function number_format;
 
 final class Memory implements Stringable
 {
@@ -14,9 +16,9 @@ final class Memory implements Stringable
     private int $base_memory_usage;
     public function __construct(callable $app, private string $convertTo = "M")
     {
-        $this->base_memory_usage = \memory_get_usage(true);
+        $this->base_memory_usage = memory_get_usage(true);
         $app();
-        $this->final_memory_usage = \memory_get_usage(true);
+        $this->final_memory_usage = memory_get_usage(true);
     }
 
     /**
@@ -33,9 +35,9 @@ final class Memory implements Stringable
     private function convert(int $bytes, string $to, int $decimal_places = 1): string
     {
         $formulas = [
-            'K' => \number_format($bytes / 1024, $decimal_places),
-            'M' => \number_format($bytes / 1048576, $decimal_places),
-            'G' => \number_format($bytes / 1073741824, $decimal_places)
+            'K' => number_format($bytes / 1024, $decimal_places),
+            'M' => number_format($bytes / 1048576, $decimal_places),
+            'G' => number_format($bytes / 1073741824, $decimal_places)
         ];
         return $formulas[$to] ?? "0";
     }

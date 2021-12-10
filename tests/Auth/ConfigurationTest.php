@@ -5,19 +5,22 @@ namespace Auth;
 
 use Astaroth\Auth\Configuration;
 use Astaroth\Auth\ParameterMissingException;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use function dirname;
 use function PHPUnit\Framework\assertEquals;
+use function sys_get_temp_dir;
 
 class ConfigurationTest extends TestCase
 {
     private Configuration $configuration;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setUp(): void
     {
-        $this->configuration = Configuration::set(\dirname(__DIR__));
+        $this->configuration = Configuration::set(dirname(__DIR__));
     }
 
     /**
@@ -126,7 +129,7 @@ class ConfigurationTest extends TestCase
 
     public function testGetCachePath(): void
     {
-        assertEquals($this->configuration->getCachePath(), \sys_get_temp_dir());
+        assertEquals($this->configuration->getCachePath(), sys_get_temp_dir());
     }
 
     public function testGetDatabaseName(): void

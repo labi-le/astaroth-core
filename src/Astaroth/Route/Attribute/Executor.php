@@ -13,6 +13,10 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionUnionType;
+use function array_filter;
+use function array_merge;
+use function current;
+use function debug_backtrace;
 use function is_object;
 use function is_string;
 
@@ -38,6 +42,8 @@ final class Executor
     }
 
     /**
+     * Attempts to invoke methods and pass parameters
+     *
      * @throws ReflectionException
      */
     public function launch(callable $methodResponseHandler = null): void
@@ -50,7 +56,7 @@ final class Executor
             $this->addReplaceableAttributes($method->getAttributes());
             $this->initializeParameters($method->getParameters());
 
-            $parameters = \array_merge($this->getParameters(), $this->getReplaceableObjects());
+            $parameters = array_merge($this->getParameters(), $this->getReplaceableObjects());
 
             $method_return = $this->invoke
             (
@@ -151,7 +157,7 @@ final class Executor
             $parameters[] = $this->normalizeNamedType($reflectionType, $additionalParameter);
         }
 
-        return \current(\array_filter($parameters)) ?: null;
+        return current(array_filter($parameters)) ?: null;
     }
 
     /**
@@ -186,7 +192,7 @@ final class Executor
 
             //for debug
             if ($attribute instanceof Debug) {
-                $this->replaceObjects($attribute->setHaystack(\debug_backtrace()));
+                $this->replaceObjects($attribute->setHaystack(debug_backtrace()));
             }
         }
     }
@@ -218,9 +224,9 @@ final class Executor
     /**
      * Add intercepted object from outside
      * @param object ...$instances
-     * @return $this
+     * @return Executor
      */
-    public function replaceObjects(object ...$instances): static
+    public function replaceObjects(object ...$instances): Executor
     {
         foreach ($instances as $instance) {
             isset($this->getReplaceableObjects()[$instance::class]) ?:

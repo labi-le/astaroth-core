@@ -13,9 +13,12 @@ use Astaroth\Attribute\Method\Message;
 use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Enums\Events;
+use function count;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsObject;
+use function range;
+use function uniqid;
 
 #[Conversation]
 #[Event(Events::MESSAGE_NEW)]
@@ -45,11 +48,11 @@ class testClass extends BaseCommands
         assertEquals("desc2", $description->getResult());
 
         $stack = [];
-        foreach (\range(0, 10000) as $ignored) {
-            $stack[] = \uniqid('', true);
+        foreach (range(0, 10000) as $ignored) {
+            $stack[] = uniqid('', true);
         }
 
-        assertEquals(10001, \count($stack));
+        assertEquals(10001, count($stack));
 
         return true;
     }

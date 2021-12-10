@@ -3,7 +3,15 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use Throwable;
 use UnhandledMatchError;
+use function abs;
+use function current;
+use function explode;
+use function file_get_contents;
+use function preg_match;
+use function preg_replace_callback;
+use function trim;
 
 /**
  * Class with which you can add placeholders to messages
@@ -61,7 +69,7 @@ final class Placeholder
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function replace(int $id): string
     {
@@ -71,25 +79,25 @@ final class Placeholder
         $member_name = $member[self::FIRST_NAME_VK] ?? $member[self::NAME];
         $member_last_name = $member[self::LAST_NAME_VK] ?? "";
 
-        $member_full_name = \trim("$member_name $member_last_name");
+        $member_full_name = trim("$member_name $member_last_name");
 
-        return \preg_replace_callback(self::PATTERN,
+        return preg_replace_callback(self::PATTERN,
             static function ($match) use ($id, $member_id, $member_name, $member_last_name, $member_full_name) {
-                return match (\current($match)) {
+                return match (current($match)) {
                     self::NAME_TAG => $member_name,
                     self::MENTION_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_name)"
-                        : self::STAR_AND_CLUB . \abs($member_id) . "($member_name)",
+                        : self::STAR_AND_CLUB . abs($member_id) . "($member_name)",
 
                     self::FULL_NAME_TAG => $member_full_name,
                     self::MENTION_FULL_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_full_name)"
-                        : self::STAR_AND_CLUB . \abs($member_id) . "($member_name)",
+                        : self::STAR_AND_CLUB . abs($member_id) . "($member_name)",
 
                     self::LAST_NAME_TAG => $id > 0 ? $member_last_name : $member_name,
                     self::MENTION_LAST_NAME_TAG => $id > 0
                         ? self::STAR_AND_ID . "$member_id($member_last_name)"
-                        : self::STAR_AND_CLUB . \abs($member_id) . "($member_name)",
+                        : self::STAR_AND_CLUB . abs($member_id) . "($member_name)",
 
                     default => throw new UnhandledMatchError("No valid placeholder found")
                 };
@@ -98,21 +106,21 @@ final class Placeholder
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function iterateId(int $id): array
     {
         /** @noinspection RegExpRedundantEscape */
-        \preg_match(
+        preg_match(
             '/\<foaf\:name\>(.*)\<\/foaf\:name\>/m',
-            \file_get_contents("https://vk.com/foaf.php?id=$id"),
+            file_get_contents("https://vk.com/foaf.php?id=$id"),
             $data
         );
         $site = mb_convert_encoding($data[1], "UTF-8", "windows-1251");
 
 
         if ($id > 0) {
-            $e = \explode(" ", $site);
+            $e = explode(" ", $site);
             return [
                 self::FIRST_NAME_VK => $e[0],
                 self::LAST_NAME_VK => $e[1],

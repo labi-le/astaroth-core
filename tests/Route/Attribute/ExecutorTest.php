@@ -7,6 +7,7 @@ use Astaroth\Route\Attribute\Executor;
 use Astaroth\Route\Attribute\ValidatedObject;
 use Astaroth\Route\ReturnResultHandler;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
@@ -14,7 +15,7 @@ class ExecutorTest extends TestCase
 {
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testLaunch(): void
     {

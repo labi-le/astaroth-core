@@ -13,6 +13,7 @@ use JetBrains\PhpStorm\Language;
 use ReturnTypeWillChange;
 use function count;
 use function is_null;
+use function preg_match;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -59,7 +60,7 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
     {
         /** @var string[] $matches */
         $matches = [];
-        @\preg_match($this->pattern, $this->haystack, $matches);
+        @preg_match($this->pattern, $this->haystack, $matches);
 
         return $matches;
     }

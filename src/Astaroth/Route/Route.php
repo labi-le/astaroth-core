@@ -12,6 +12,7 @@ use Astaroth\Route\Attribute\EventAttributeHandler;
 use Astaroth\Route\Attribute\Executor;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
+use ReflectionException;
 use Throwable;
 
 /**
@@ -33,7 +34,7 @@ final class Route
      * @return static
      * @throws Exception
      */
-    public function setClassMap(string $class_map): static
+    public function setClassMap(string $class_map): Route
     {
         self::$class_map = ClassFinder::getClassesInNamespace($class_map, ClassFinder::RECURSIVE_MODE);
         return $this;
@@ -69,7 +70,7 @@ final class Route
      * @param array $classMap
      * @param DataFetcher $data
      * @return void
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @psalm-suppress PossiblyNullArgument
      */

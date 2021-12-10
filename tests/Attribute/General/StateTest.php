@@ -9,11 +9,13 @@ use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Session;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use function dirname;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
+use function sys_get_temp_dir;
 
 class StateTest extends TestCase
 {
@@ -26,7 +28,7 @@ class StateTest extends TestCase
     {
         $this->data = require self::DATA_DIR;
 
-        $this->session = new Session(259166248, State::RESERVED_NAME, \sys_get_temp_dir());
+        $this->session = new Session(259166248, State::RESERVED_NAME, sys_get_temp_dir());
         $this->session->put("example", true);
     }
 
@@ -41,7 +43,7 @@ class StateTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testValidate(): void
     {

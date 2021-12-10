@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Astaroth\Auth;
 
-class ParameterMissingException extends \Exception
+use Exception;
+
+class ParameterMissingException extends Exception
 {
 
 }

@@ -11,9 +11,13 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Enums\Events;
+use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use function sprintf;
+use function trigger_error;
+use const E_USER_WARNING;
 
 final class EventAttributeHandler
 {
@@ -95,8 +99,8 @@ final class EventAttributeHandler
                 }
 
             } else if ($throwOnNotImplementAttr) {
-                throw new \LogicException(
-                    \sprintf("%s not implement %s, %s, %s",
+                throw new LogicException(
+                    sprintf("%s not implement %s, %s, %s",
                         $reflectionAttribute->getName(),
                         AttributeValidatorInterface::class,
                         AttributeMethodInterface::class,
@@ -133,7 +137,7 @@ final class EventAttributeHandler
             return $data->messageEvent();
         }
 
-        \trigger_error($data->getType() . " not yet implemented, please create issue", \E_USER_WARNING);
+        trigger_error($data->getType() . " not yet implemented, please create issue", E_USER_WARNING);
 
         return null;
     }

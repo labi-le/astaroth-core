@@ -12,6 +12,7 @@ use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
 use Throwable;
+use function array_map;
 
 /**
  * Class Create
@@ -27,7 +28,7 @@ final class Create
      */
     private static function messagePlaceholder(IBuilder ...$instances): array
     {
-        return \array_map(static function (IBuilder $instance) {
+        return array_map(static function (IBuilder $instance) {
             if ($instance instanceof IMessageBuilder) {
                 $message = $instance->getParams()["message"];
                 $id = $instance->getParams()["peer_ids"] > 2e9 ? $instance->getParams()["user_ids"] : $instance->getParams()["peer_ids"];
@@ -59,6 +60,8 @@ final class Create
      * Get an instance with a different token
      * @param string $access_token
      * @return Builder
+     *
+     * @psalm-suppress PossiblyInvalidClone
      */
     public static function changeToken(string $access_token): Builder
     {

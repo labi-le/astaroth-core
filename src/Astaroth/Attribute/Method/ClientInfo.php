@@ -9,6 +9,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
+use function array_intersect_key;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -70,7 +71,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
     public function validate(): bool
     {
         if ($this->client_info) {
-            if (($this->button_actions !== []) && \array_intersect_key(
+            if (($this->button_actions !== []) && array_intersect_key(
                     $this->button_actions,
                     $this->client_info->button_actions) === []) {
                 return false;

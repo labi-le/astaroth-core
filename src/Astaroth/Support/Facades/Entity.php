@@ -14,6 +14,8 @@ final class Entity extends EntityManagerDecorator
 {
     /**
      * @return ?EntityManagerInterface
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress MoreSpecificReturnType
      */
     private static function getContainer(): ?object
     {
@@ -25,6 +27,9 @@ final class Entity extends EntityManagerDecorator
         return new Entity;
     }
 
+    /**
+     * @psalm-suppress PossiblyNullArgument
+     */
     public function __construct()
     {
         parent::__construct(self::getContainer());

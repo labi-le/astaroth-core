@@ -19,7 +19,7 @@ final class FacadePlaceholder
     private static ContainerInterface $container;
     private static Configuration $configuration;
 
-    private function __construct(ContainerInterface $container, Configuration $configuration)
+    private function __construct(?ContainerInterface $container, ?Configuration $configuration)
     {
         self::$container = $container;
         self::$configuration = $configuration;
