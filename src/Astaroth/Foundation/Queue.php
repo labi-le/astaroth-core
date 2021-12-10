@@ -11,7 +11,7 @@ use SplQueue;
  * Scene analog
  * @package Astaroth\Foundation
  */
-final class Queue
+class Queue
 {
     public const CURRENT = "current_queue";
     public const COUNT = "count_queue";
@@ -43,8 +43,8 @@ final class Queue
     private function createSession(): void
     {
         if ($this->getCurrentQueue() === null) {
-            $this->session->put(static::COUNT, $this->queue->count());
-            $this->session->put(static::CURRENT, 1);
+            $this->session->put(Queue::COUNT, $this->queue->count());
+            $this->session->put(Queue::CURRENT, 1);
         }
     }
 
@@ -55,7 +55,7 @@ final class Queue
      */
     private function changeCurrentQueue(int $queue): void
     {
-        $this->session->put(static::CURRENT, $queue);
+        $this->session->put(Queue::CURRENT, $queue);
     }
 
     /**
@@ -64,7 +64,7 @@ final class Queue
      */
     private function getCurrentQueue(): ?int
     {
-        return $this->session->get(static::CURRENT);
+        return $this->session->get(Queue::CURRENT);
     }
 
     /**
@@ -73,7 +73,7 @@ final class Queue
      */
     public function getLengthQueue(): ?int
     {
-        return $this->session->get(static::COUNT);
+        return $this->session->get(Queue::COUNT);
     }
 
     /**
