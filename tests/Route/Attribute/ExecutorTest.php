@@ -2,10 +2,9 @@
 
 namespace Route\Attribute;
 
+use Astaroth\Foundation\Executor;
 use Astaroth\Route\Attribute\EventAttributeHandler;
-use Astaroth\Route\Attribute\Executor;
 use Astaroth\Route\Attribute\ValidatedObject;
-use Astaroth\Route\ReturnResultHandler;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use function PHPUnit\Framework\assertEquals;

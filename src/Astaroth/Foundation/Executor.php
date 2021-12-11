@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Route\Attribute;
+namespace Astaroth\Foundation;
 
 use Astaroth\Attribute\Method\Debug;
 use Astaroth\Contracts\AttributeReturnInterface;
+use Astaroth\Route\Attribute\AdditionalParameter;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;

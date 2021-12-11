@@ -8,8 +8,8 @@ namespace Astaroth\Route;
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Foundation\Executor;
 use Astaroth\Route\Attribute\EventAttributeHandler;
-use Astaroth\Route\Attribute\Executor;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use ReflectionException;
