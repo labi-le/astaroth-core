@@ -14,6 +14,7 @@ use Throwable;
 
 /**
  * Class BaseCommands
+ * Commands which are used in user defined classes
  * @package Astaroth\Commands
  */
 abstract class BaseCommands
@@ -24,6 +25,7 @@ abstract class BaseCommands
 
 
     /**
+     * Call message facade and send message
      * @throws Throwable
      */
     final protected function message(string $text = ""): MessageFacade
@@ -31,12 +33,18 @@ abstract class BaseCommands
         return (new MessageFacade($this->data?->getPeerId()))->text($text);
     }
 
+    /**
+     * Create a new request
+     * @param string|null $accessToken
+     * @return ApiRequest
+     */
     final protected function request(string $accessToken = null): ApiRequest
     {
         return new ApiRequest($accessToken);
     }
 
     /**
+     * Log data to message
      * @throws Throwable
      */
     final protected function logToMessage(int $id, string $error_level, Exception|string $e): void

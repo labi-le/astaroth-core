@@ -17,6 +17,7 @@ final class ApiRequest
     }
 
     /**
+     * Call API method
      * @throws Throwable
      */
     public function customRequest(string $method, $params): array
@@ -45,6 +46,7 @@ final class ApiRequest
     }
 
     /**
+     * Edit message by passing the previousz ID
      * @param IBuilder $message
      * @param int|null $conversation_message_id
      * @param int|null $message_id
@@ -64,6 +66,7 @@ final class ApiRequest
     }
 
     /**
+     * Delete message
      * @param int[] $message_ids
      * @param bool $spam
      * @param int|null $group_id
