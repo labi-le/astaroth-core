@@ -21,7 +21,7 @@ final class Application
     public const DEV = "DEV";
     public const PRODUCTION = "PRODUCTION";
 
-    private static ?ContainerBuilder $container = null;
+    public static ?ContainerBuilder $container = null;
 
 
     /**
