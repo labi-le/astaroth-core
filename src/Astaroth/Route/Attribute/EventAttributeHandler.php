@@ -12,12 +12,10 @@ use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Enums\Events;
-use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use function is_object;
-use function sprintf;
 use function trigger_error;
 use const E_USER_WARNING;
 
@@ -49,7 +47,7 @@ final class EventAttributeHandler
             $reflectionClass = new ReflectionClass($class);
 
             //if the validation of the top-level class attributes is false, then we validate another class
-            if ($this->validateAttr($reflectionClass, false) === false) {
+            if ($this->validateAttr($reflectionClass) === false) {
                 continue;
             }
 
@@ -71,13 +69,11 @@ final class EventAttributeHandler
      * @see https://i.imgur.com/zcylScY.png
      *
      * @param ReflectionClass|ReflectionMethod $reflection
-     * @param bool $throwOnNotImplementAttr
      * @return bool|AttributeReturnInterface
      */
     private function validateAttr
     (
         ReflectionClass|ReflectionMethod $reflection,
-        bool                             $throwOnNotImplementAttr = true
     ): bool|AttributeReturnInterface
     {
         $validatedAttr = false;
@@ -88,31 +84,24 @@ final class EventAttributeHandler
             if (
                 $attribute instanceof AttributeValidatorInterface
                 && $attribute->setHaystack($this->data)
-                && $attribute->validate()
             ) {
 
+                $validate = $attribute->validate();
                 if ($attribute instanceof AttributeClassInterface) {
-                    $validatedAttr = true;
+                    $validatedAttr = $validate;
                 }
 
-                // will return an attribute that will be replaced in reflection
-                if ($attribute instanceof AttributeReturnInterface) {
-                    return $attribute;
-                }
-                // only the first attribute of the method is checked
-                if ($attribute instanceof AttributeMethodInterface) {
-                    return true;
+                if ($validate === true) {
+                    // will return an attribute that will be replaced in reflection
+                    if ($attribute instanceof AttributeReturnInterface) {
+                        return $attribute;
+                    }
+                    // only the first attribute of the method is checked
+                    if ($attribute instanceof AttributeMethodInterface) {
+                        return true;
+                    }
                 }
 
-            } else if ($throwOnNotImplementAttr) {
-                throw new LogicException(
-                    sprintf("%s not implement %s, %s, %s",
-                        $reflectionAttribute->getName(),
-                        AttributeValidatorInterface::class,
-                        AttributeMethodInterface::class,
-                        AttributeClassInterface::class
-                    )
-                );
             }
         }
 
@@ -128,7 +117,7 @@ final class EventAttributeHandler
     {
         $validatedMethods = [];
         foreach ($classInfo->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if ($replaceAttr = $this->validateAttr($method, false)) {
+            if ($replaceAttr = $this->validateAttr($method)) {
                 $md = new ReflectionMethodDecorator($classInfo->getName(), $method->getName());
 
                 if (is_object($replaceAttr)) {
