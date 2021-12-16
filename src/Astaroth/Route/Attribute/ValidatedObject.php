@@ -4,15 +4,17 @@ declare(strict_types=1);
 namespace Astaroth\Route\Attribute;
 
 use ReflectionClass;
-use ReflectionMethod;
 
 final class ValidatedObject
 {
     /**
      * @param ReflectionClass $object
-     * @param ReflectionMethod[] $methods
+     * @param ReflectionMethodDecorator[] $methods
      */
-    public function __construct(private ReflectionClass $object, private array $methods)
+    public function __construct(
+        private ReflectionClass $object,
+        private array $methods,
+    )
     {
 
     }
@@ -26,7 +28,7 @@ final class ValidatedObject
     }
 
     /**
-     * @return ReflectionMethod[]
+     * @return ReflectionMethodDecorator[]
      */
     public function getMethods(): array
     {
