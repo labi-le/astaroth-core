@@ -73,16 +73,17 @@ final class Placeholder
      */
     public function replace(int $id): string
     {
-        $member = $this->iterateId($id);
-        $member_id = $id;
-
-        $member_name = $member[self::FIRST_NAME_VK] ?? $member[self::NAME];
-        $member_last_name = $member[self::LAST_NAME_VK] ?? "";
-
-        $member_full_name = trim("$member_name $member_last_name");
-
         return preg_replace_callback(self::PATTERN,
-            static function ($match) use ($id, $member_id, $member_name, $member_last_name, $member_full_name) {
+            static function ($match) use ($id) {
+
+                $member = self::iterateId($id);
+                $member_id = $id;
+
+                $member_name = $member[self::FIRST_NAME_VK] ?? $member[self::NAME];
+                $member_last_name = $member[self::LAST_NAME_VK] ?? "";
+
+                $member_full_name = trim("$member_name $member_last_name");
+
                 return match (current($match)) {
                     self::NAME_TAG => $member_name,
                     self::MENTION_NAME_TAG => $id > 0
@@ -108,7 +109,7 @@ final class Placeholder
     /**
      * @throws Throwable
      */
-    private function iterateId(int $id): array
+    private static function iterateId(int $id): array
     {
         /** @noinspection RegExpRedundantEscape */
         preg_match(
@@ -116,6 +117,7 @@ final class Placeholder
             file_get_contents("https://vk.com/foaf.php?id=$id"),
             $data
         );
+
         $site = mb_convert_encoding($data[1], "UTF-8", "windows-1251");
 
 
