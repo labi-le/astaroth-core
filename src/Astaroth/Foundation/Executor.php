@@ -7,6 +7,7 @@ namespace Astaroth\Foundation;
 use Astaroth\Attribute\Method\Debug;
 use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Route\Attribute\AdditionalParameter;
+use Astaroth\Route\Attribute\ReflectionMethodDecorator;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
@@ -33,11 +34,11 @@ final class Executor
     /**
      * General event coordinator
      * @param ReflectionClass $reflectionClass
-     * @param ReflectionMethod[] $reflectionMethods
+     * @param ReflectionMethodDecorator[] $reflectionMethods
      */
     public function __construct(
         private ReflectionClass $reflectionClass,
-        private array $reflectionMethods = []
+        private array           $reflectionMethods = []
     )
     {
     }
@@ -53,7 +54,6 @@ final class Executor
         $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
 
         foreach ($this->reflectionMethods as $method) {
-
             $this->addReplaceableAttributes($method->getAttributes());
             $this->initializeParameters($method->getParameters());
 
@@ -68,7 +68,7 @@ final class Executor
             );
 
             /** We process the result returned by the method */
-            if ($methodResponseHandler !== null){
+            if ($methodResponseHandler !== null) {
                 $methodResponseHandler($method_return);
             }
 
@@ -180,13 +180,16 @@ final class Executor
     }
 
     /**
-     * We give the opportunity to get data from the attribute if it passed validation
-     * @param ReflectionAttribute[] $attributes
+     * Replace attributes that can be used as method parameters
+     * @param object[] $attributes
      */
     private function addReplaceableAttributes(array $attributes): void
     {
         foreach ($attributes as $attribute) {
-            $attribute = $attribute->newInstance();
+            if ($attribute instanceof ReflectionAttribute) {
+                $attribute = $attribute->newInstance();
+            }
+
             if ($attribute instanceof AttributeReturnInterface) {
                 $this->replaceObjects($attribute);
             }
@@ -214,7 +217,6 @@ final class Executor
                 $this->parameters[$instance::class] = new AdditionalParameter
                 (
                     $instance::class,
-                    $instance::class,
                     true,
                     $instance
                 );
@@ -224,21 +226,19 @@ final class Executor
 
     /**
      * Add intercepted object from outside
-     * @param object ...$instances
+     * @param object $instance
      * @return Executor
      */
-    public function replaceObjects(object ...$instances): Executor
+    public function replaceObjects(object $instance): Executor
     {
-        foreach ($instances as $instance) {
-            isset($this->getReplaceableObjects()[$instance::class]) ?:
-                $this->replaceableObjects[$instance::class] = new AdditionalParameter
-                (
-                    $instance::class,
-                    $instance::class,
-                    false,
-                    $instance
-                );
-        }
+        isset($this->getReplaceableObjects()[$instance::class]) ?:
+            $this->replaceableObjects[$instance::class] = new AdditionalParameter
+            (
+                $instance::class,
+                false,
+                $instance
+            );
+
 
         return $this;
     }
