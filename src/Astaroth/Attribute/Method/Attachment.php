@@ -30,6 +30,7 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
             self::STICKER,
             self::PHOTO,
             self::WALL,
+            self::LINK,
         ]
         )]
         public string $type = Attachment::ALL,
@@ -47,6 +48,7 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
     public const AUDIO = "audio";
     public const STICKER = "sticker";
     public const WALL = "wall";
+    public const LINK = "link";
 
     public function validate(): bool
     {
