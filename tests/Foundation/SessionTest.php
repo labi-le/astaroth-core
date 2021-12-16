@@ -8,6 +8,7 @@ use Astaroth\Foundation\Session;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNull;
+use function sys_get_temp_dir;
 
 
 class SessionTest extends TestCase
@@ -18,7 +19,7 @@ class SessionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->session = new Session(self::ID, self::TYPE, \sys_get_temp_dir());
+        $this->session = new Session(self::ID, self::TYPE, sys_get_temp_dir());
     }
 
     protected function tearDown(): void

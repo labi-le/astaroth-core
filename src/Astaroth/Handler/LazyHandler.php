@@ -10,6 +10,8 @@ use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Throwable;
 use function is_array;
+use function json_decode;
+use function json_encode;
 
 /**
  * Class LazyHandler
@@ -29,8 +31,8 @@ final class LazyHandler implements HandlerInterface
     private function normalizeData(object|array $data): DataFetcher
     {
         if (is_array($data)) {
-            $toJson = \json_encode($data);
-            $toObject = \json_decode($toJson, false);
+            $toJson = json_encode($data);
+            $toObject = json_decode($toJson, false);
             return new DataFetcher($toObject);
         }
         return new DataFetcher($data);

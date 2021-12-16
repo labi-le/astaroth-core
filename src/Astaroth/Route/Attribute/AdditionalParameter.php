@@ -7,21 +7,12 @@ final class AdditionalParameter
 {
     public function __construct
     (
-        private string $name,
         private string $type,
         private bool $needCreateInstance = false,
         private ?object $instance = null,
     )
     {
 
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Astaroth\Foundation;
 
 use SplQueue;
+use function array_walk;
 
 /**
  * Class Queue
  * Scene analog
  * @package Astaroth\Foundation
  */
-final class Queue
+class Queue
 {
     public const CURRENT = "current_queue";
     public const COUNT = "count_queue";
@@ -29,7 +30,7 @@ final class Queue
     public function __construct(Session $session, callable ...$queue)
     {
         $this->queue = new SplQueue();
-        \array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
+        array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
 
         $this->session = $session;
 
@@ -43,8 +44,8 @@ final class Queue
     private function createSession(): void
     {
         if ($this->getCurrentQueue() === null) {
-            $this->session->put(static::COUNT, $this->queue->count());
-            $this->session->put(static::CURRENT, 1);
+            $this->session->put(self::COUNT, $this->queue->count());
+            $this->session->put(self::CURRENT, 1);
         }
     }
 
@@ -55,7 +56,7 @@ final class Queue
      */
     private function changeCurrentQueue(int $queue): void
     {
-        $this->session->put(static::CURRENT, $queue);
+        $this->session->put(self::CURRENT, $queue);
     }
 
     /**
@@ -64,7 +65,7 @@ final class Queue
      */
     private function getCurrentQueue(): ?int
     {
-        return $this->session->get(static::CURRENT);
+        return $this->session->get(self::CURRENT);
     }
 
     /**
@@ -73,7 +74,7 @@ final class Queue
      */
     public function getLengthQueue(): ?int
     {
-        return $this->session->get(static::COUNT);
+        return $this->session->get(self::COUNT);
     }
 
     /**

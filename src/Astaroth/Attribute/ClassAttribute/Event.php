@@ -6,10 +6,10 @@ namespace Astaroth\Attribute\ClassAttribute;
 
 use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
-use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Foundation\Enums\Events;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
+use function method_exists;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 /**
@@ -39,12 +39,12 @@ class Event implements AttributeValidatorInterface, AttributeMethodInterface
 
     /**
      *
-     * @param DataFetcher $haystack
-     * @return Event
+     * @param $haystack
+     * @return $this
      */
     public function setHaystack($haystack): Event
     {
-        if (\method_exists($haystack, "getType")) {
+        if (method_exists($haystack, "getType")) {
             $this->type = $haystack->getType();
         }
 

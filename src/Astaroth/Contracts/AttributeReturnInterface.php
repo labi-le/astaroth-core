@@ -10,5 +10,5 @@ namespace Astaroth\Contracts;
  */
 interface AttributeReturnInterface
 {
-    public function getResult(): mixed;
+    public function return(): mixed;
 }

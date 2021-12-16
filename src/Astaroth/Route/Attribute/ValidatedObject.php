@@ -3,27 +3,32 @@ declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
+use ReflectionClass;
+
 final class ValidatedObject
 {
     /**
-     * @param \ReflectionClass $object
-     * @param \ReflectionMethod[] $methods
+     * @param ReflectionClass $object
+     * @param ReflectionMethodDecorator[] $methods
      */
-    public function __construct(private \ReflectionClass $object, private array $methods)
+    public function __construct(
+        private ReflectionClass $object,
+        private array $methods,
+    )
     {
 
     }
 
     /**
-     * @return \ReflectionClass
+     * @return ReflectionClass
      */
-    public function getObject(): \ReflectionClass
+    public function getObject(): ReflectionClass
     {
         return $this->object;
     }
 
     /**
-     * @return \ReflectionMethod[]
+     * @return ReflectionMethodDecorator[]
      */
     public function getMethods(): array
     {

@@ -12,8 +12,10 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
 use LogicException;
+use function array_intersect;
 use function array_key_exists;
 use function is_array;
+use function print_r;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -57,7 +59,7 @@ final class Payload implements AttributeValidatorInterface, AttributeMethodInter
      */
     private function containsValidate(array|string $payload, array $haystack): bool
     {
-        return \array_intersect($payload, $haystack) !== [];
+        return array_intersect($payload, $haystack) !== [];
     }
 
     private function strictValidate(array|string $payload, array $haystack): bool
@@ -68,7 +70,7 @@ final class Payload implements AttributeValidatorInterface, AttributeMethodInter
     private function keyExistValidate(array|string $payload, array $haystack): bool
     {
         if (is_array($payload)) {
-            throw new LogicException("Instead of a key, an array is specified for validation of the KEY_EXISTS type\nTo find the error, use the attribute data shown below\n" . \print_r($this->payload_or_key, true));
+            throw new LogicException("Instead of a key, an array is specified for validation of the KEY_EXISTS type\nTo find the error, use the attribute data shown below\n" . print_r($this->payload_or_key, true));
         }
         return array_key_exists($payload, $haystack);
     }

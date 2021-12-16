@@ -6,14 +6,20 @@ namespace Astaroth\Route\Attribute;
 
 use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeMethodInterface;
+use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Enums\Events;
+use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use function is_object;
+use function sprintf;
+use function trigger_error;
+use const E_USER_WARNING;
 
 final class EventAttributeHandler
 {
@@ -24,8 +30,8 @@ final class EventAttributeHandler
      * @param DataFetcher $data
      */
     public function __construct(
-        private array       $classMap,
-        DataFetcher $data,
+        private array $classMap,
+        DataFetcher   $data,
     )
     {
         $this->data = self::fetchData($data);
@@ -66,13 +72,13 @@ final class EventAttributeHandler
      *
      * @param ReflectionClass|ReflectionMethod $reflection
      * @param bool $throwOnNotImplementAttr
-     * @return bool
+     * @return bool|AttributeReturnInterface
      */
     private function validateAttr
     (
         ReflectionClass|ReflectionMethod $reflection,
         bool                             $throwOnNotImplementAttr = true
-    ): bool
+    ): bool|AttributeReturnInterface
     {
         $validatedAttr = false;
 
@@ -89,14 +95,18 @@ final class EventAttributeHandler
                     $validatedAttr = true;
                 }
 
+                // will return an attribute that will be replaced in reflection
+                if ($attribute instanceof AttributeReturnInterface) {
+                    return $attribute;
+                }
                 // only the first attribute of the method is checked
                 if ($attribute instanceof AttributeMethodInterface) {
                     return true;
                 }
 
             } else if ($throwOnNotImplementAttr) {
-                throw new \LogicException(
-                    \sprintf("%s not implement %s, %s, %s",
+                throw new LogicException(
+                    sprintf("%s not implement %s, %s, %s",
                         $reflectionAttribute->getName(),
                         AttributeValidatorInterface::class,
                         AttributeMethodInterface::class,
@@ -109,14 +119,22 @@ final class EventAttributeHandler
         return $validatedAttr;
     }
 
+    /**
+     * @throws ReflectionException
+     */
     private function validateAttrMethods(
         ReflectionClass $classInfo,
     ): array
     {
         $validatedMethods = [];
         foreach ($classInfo->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if ($this->validateAttr($method, false)) {
-                $validatedMethods[] = $method;
+            if ($replaceAttr = $this->validateAttr($method, false)) {
+                $md = new ReflectionMethodDecorator($classInfo->getName(), $method->getName());
+
+                if (is_object($replaceAttr)) {
+                    $md->addReplaceAttribute($replaceAttr);
+                }
+                $validatedMethods[] = $md;
             }
         }
 
@@ -133,7 +151,7 @@ final class EventAttributeHandler
             return $data->messageEvent();
         }
 
-        \trigger_error($data->getType() . " not yet implemented, please create issue", \E_USER_WARNING);
+        trigger_error($data->getType() . " not yet implemented, please create issue", E_USER_WARNING);
 
         return null;
     }

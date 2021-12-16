@@ -33,7 +33,7 @@ final class Debug implements AttributeReturnInterface, AttributeValidatorInterfa
         return $this;
     }
 
-    public function getResult(): mixed
+    public function return(): mixed
     {
         return $this->haystack;
     }

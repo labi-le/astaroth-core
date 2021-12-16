@@ -6,19 +6,20 @@ namespace Astaroth\Attribute\Method;
 
 use ArrayAccess;
 use Astaroth\Contracts\AttributeMethodInterface;
+use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\Language;
-use ReturnTypeWillChange;
 use function count;
 use function is_null;
+use function preg_match;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
  * Attribute defining the message
  */
-final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeMethodInterface
+final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeMethodInterface, AttributeReturnInterface
 {
     private string $haystack = "";
     private string $pattern;
@@ -59,7 +60,7 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
     {
         /** @var string[] $matches */
         $matches = [];
-        @\preg_match($this->pattern, $this->haystack, $matches);
+        @preg_match($this->pattern, $this->haystack, $matches);
 
         return $matches;
     }
@@ -69,7 +70,7 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
         return isset($this->matches[$offset]);
     }
 
-    #[ReturnTypeWillChange] public function offsetGet($offset)
+    public function offsetGet($offset)
     {
         return $this->matches[$offset] ?? null;
     }
@@ -86,5 +87,18 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
     public function offsetUnset($offset): void
     {
         unset($this->matches[$offset]);
+    }
+
+    public function return(): array
+    {
+        return $this->matches;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPattern(): string
+    {
+        return $this->pattern;
     }
 }

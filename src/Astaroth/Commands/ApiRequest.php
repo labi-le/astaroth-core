@@ -7,6 +7,8 @@ use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\Support\Facades\Request;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Throwable;
+use function implode;
+use function json_encode;
 
 final class ApiRequest
 {
@@ -15,6 +17,7 @@ final class ApiRequest
     }
 
     /**
+     * Call API method
      * @throws Throwable
      */
     public function customRequest(string $method, $params): array
@@ -38,11 +41,12 @@ final class ApiRequest
                 "event_id" => $data->getEventId(),
                 "user_id" => $data->getUserId(),
                 "peer_id" => $data->getPeerId(),
-                "event_data" => \json_encode($event)
+                "event_data" => json_encode($event)
             ]);
     }
 
     /**
+     * Edit message by passing the previousz ID
      * @param IBuilder $message
      * @param int|null $conversation_message_id
      * @param int|null $message_id
@@ -62,6 +66,7 @@ final class ApiRequest
     }
 
     /**
+     * Delete message
      * @param int[] $message_ids
      * @param bool $spam
      * @param int|null $group_id
@@ -84,8 +89,8 @@ final class ApiRequest
     ): array
     {
         $params = [];
-        $params["message_ids"] = \implode(",", $message_ids);
-        $params["conversation_message_ids"] = \implode(",", $conversation_message_ids);
+        $params["message_ids"] = implode(",", $message_ids);
+        $params["conversation_message_ids"] = implode(",", $conversation_message_ids);
         $params["peer_id"] = $peer_id;
         $params["spam"] = $spam;
         $params["group_id"] = $group_id;
@@ -120,8 +125,8 @@ final class ApiRequest
     {
         return $this->customRequest("users.get",
             [
-                "user_ids" => \implode(",", $user_ids),
-                "fields" => \implode(",", $fields),
+                "user_ids" => implode(",", $user_ids),
+                "fields" => implode(",", $fields),
                 "name_case" => $name_case
             ]
         );
@@ -139,8 +144,8 @@ final class ApiRequest
     {
         return $this->customRequest("groups.getById",
             [
-                "group_ids" => \implode(",", $group_ids),
-                "fields" => \implode(",", $fields)
+                "group_ids" => implode(",", $group_ids),
+                "fields" => implode(",", $fields)
             ]
         );
     }

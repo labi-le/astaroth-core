@@ -6,6 +6,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Route\Attribute\EventAttributeHandler;
 use Astaroth\Route\Attribute\ValidatedObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use function PHPUnit\Framework\assertEquals;
 
 class EventAttributeHandlerTest extends TestCase
@@ -20,7 +21,7 @@ class EventAttributeHandlerTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testValidate(): void
     {

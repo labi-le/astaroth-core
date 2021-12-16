@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use function file_get_contents;
+use function file_put_contents;
+use function json_decode;
+use function json_encode;
+use function unlink;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const LOCK_EX;
+
 /**
  * Class Session
  * Simple database for recording states
@@ -21,7 +30,7 @@ class Session
     public function __construct(int $id, private string $type, string $cache_path)
     {
         $storageName = $id . self::FILE_EXTENSION;
-        $this->fullStoragePath = $cache_path . \DIRECTORY_SEPARATOR . $storageName;
+        $this->fullStoragePath = $cache_path . DIRECTORY_SEPARATOR . $storageName;
     }
 
     /**
@@ -76,10 +85,10 @@ class Session
      */
     private function saveToFile(array $data): bool
     {
-        return (bool)@\file_put_contents(
+        return (bool)@file_put_contents(
             $this->fullStoragePath,
-            \json_encode($data, \JSON_PRETTY_PRINT),
-            \LOCK_EX
+            json_encode($data, JSON_PRETTY_PRINT),
+            LOCK_EX
         );
     }
 
@@ -97,7 +106,7 @@ class Session
             return $this->saveToFile($storage);
         }
 
-        return @\unlink($this->fullStoragePath);
+        return @unlink($this->fullStoragePath);
     }
 
     /**
@@ -107,8 +116,8 @@ class Session
      */
     private function getStorageData(): array
     {
-        $content = (string)@\file_get_contents($this->fullStoragePath);
-        return @\json_decode($content, true) ?: [];
+        $content = (string)@file_get_contents($this->fullStoragePath);
+        return @json_decode($content, true) ?: [];
     }
 
     /**

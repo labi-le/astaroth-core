@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Astaroth\Debug;
 
+use function file_put_contents;
 use function is_array;
+use function print_r;
+use function var_dump;
+use function var_export;
 
 final class Dump
 {
@@ -22,13 +26,13 @@ final class Dump
         }
 
         foreach ($this->data as $out) {
-            \file_put_contents('php://stdout', \var_export($out, true));
+            file_put_contents('php://stdout', var_export($out, true));
         }
     }
 
     public function toPrint(): void
     {
-        \print_r($this->data);
+        print_r($this->data);
     }
 
     /**
@@ -36,11 +40,11 @@ final class Dump
      */
     public function toVar_Dump(): void
     {
-        \var_dump($this->data);
+        var_dump($this->data);
     }
 
     public function return(): string|bool
     {
-        return \print_r($this->data, true);
+        return print_r($this->data, true);
     }
 }
