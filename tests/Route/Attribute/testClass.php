@@ -10,6 +10,7 @@ use Astaroth\Attribute\ClassAttribute\Event;
 use Astaroth\Attribute\General\Description;
 use Astaroth\Attribute\Method\Debug;
 use Astaroth\Attribute\Method\Message;
+use Astaroth\Attribute\Method\MessageRegex;
 use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Enums\Events;
@@ -19,6 +20,7 @@ use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsObject;
 use function range;
 use function uniqid;
+use function var_dump;
 
 #[Conversation]
 #[Event(Events::MESSAGE_NEW)]
@@ -30,12 +32,12 @@ class testClass extends BaseCommands
         assertIsObject($this->data);
     }
 
-    #[Message("test")]
+    #[Message("uwuwu")]
     #[Description("method to be implicitly executed")]
     public function emptyMethod(MessageNew|Event $dataEmptyMethod, Description $description): bool
     {
-        assertEquals("method to be implicitly executed", $description->getResult());
-        assertEquals("test", $dataEmptyMethod->getText());
+        assertEquals("method to be implicitly executed", $description->return());
+        assertEquals("uwuwu", $dataEmptyMethod->getText());
 
         return true;
     }
@@ -44,8 +46,8 @@ class testClass extends BaseCommands
     #[Description("desc2")]
     public function emptyMethod2(Debug $debug, Description $description): bool
     {
-        assertIsArray($debug->getResult());
-        assertEquals("desc2", $description->getResult());
+        assertIsArray($debug->return());
+        assertEquals("desc2", $description->return());
 
         $stack = [];
         foreach (range(0, 10000) as $ignored) {
@@ -54,6 +56,13 @@ class testClass extends BaseCommands
 
         assertEquals(10001, count($stack));
 
+        return true;
+    }
+
+    #[MessageRegex("/uwuwu/")]
+    public function emptyMethod3(MessageRegex $regex): bool
+    {
+        assertEquals($regex[0], "uwuwu");
         return true;
     }
 }
