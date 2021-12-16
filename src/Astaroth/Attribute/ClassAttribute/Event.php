@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute\ClassAttribute;
 
-use Astaroth\Contracts\AttributeMethodInterface;
+use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\Foundation\Enums\Events;
 use Attribute;
@@ -15,7 +15,7 @@ use function method_exists;
 /**
  * AttributeOLD defining new message
  */
-class Event implements AttributeValidatorInterface, AttributeMethodInterface
+class Event implements AttributeValidatorInterface, AttributeClassInterface
 {
     public function __construct(
         #[ExpectedValues(flagsFromClass: Events::class)]
