@@ -46,7 +46,7 @@ final class ApiRequest
     }
 
     /**
-     * Edit message by passing the previousz ID
+     * Edit message by passing the previous ID
      * @param IBuilder $message
      * @param int|null $conversation_message_id
      * @param int|null $message_id
