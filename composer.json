@@ -10,7 +10,7 @@
   "license": "MIT",
   "minimum-stability": "stable",
   "require": {
-    "php": ">=8.0",
+    "php": ">=8",
     "ext-curl": "*",
 
     "labile/vk-data-fetcher": "^1",

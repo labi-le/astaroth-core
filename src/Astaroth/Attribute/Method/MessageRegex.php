@@ -70,7 +70,7 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
         return isset($this->matches[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?array
     {
         return $this->matches[$offset] ?? null;
     }
