@@ -46,6 +46,6 @@
   },
 
   "bin": [
-    "bin/astaroth.php"
+    "bin/astaroth"
   ]
 }
