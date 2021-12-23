@@ -21,6 +21,8 @@ final class Command extends CliCommand
                 '<bold>  $0</end> <green>make:command</end> Greetings message_new</end><eol/>'
             )
             ->action(function (string $className, string $event) {
+                 new Application(getcwd());
+
                 $path = str_replace('\\', DIRECTORY_SEPARATOR, Application::$configuration->getAppNamespace());
                 if (@!mkdir($path, 0777, true) && !is_dir($path)) {
                     throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
