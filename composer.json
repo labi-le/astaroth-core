@@ -43,5 +43,7 @@
     "phpunit/phpunit": "^9.5",
     "jetbrains/phpstorm-attributes": "^1.0",
     "vimeo/psalm": "^4.15"
-  }
+  },
+
+  "bin": ["src/Astaroth/Console/astaroth.php"]
 }
