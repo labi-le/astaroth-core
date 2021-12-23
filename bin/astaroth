@@ -1,4 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-require_once "vendor/astaroth-cli.php";
+require_once __DIR__ . "/astaroth-cli.php";
