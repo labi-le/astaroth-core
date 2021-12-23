@@ -21,7 +21,14 @@ final class Application
     public const DEV = "DEV";
     public const PRODUCTION = "PRODUCTION";
 
-    public static ?ContainerBuilder $container = null;
+    public static ContainerBuilder $container;
+    public static Configuration $configuration;
+
+    public function __construct(private ?string $envDir = null, private string $type = Application::DEV)
+    {
+        self::$container = new ContainerBuilder();
+        self::$configuration = Configuration::set($this->envDir, $this->type);
+    }
 
 
     /**
@@ -34,37 +41,23 @@ final class Application
     }
 
     /**
-     * @return ContainerBuilder
-     */
-    public static function getContainer(): ContainerBuilder
-    {
-        if (self::$container === null) {
-            self::$container = new ContainerBuilder();
-        }
-        return self::$container;
-    }
-
-    /**
      * @throws Throwable
      */
-    public function run(string $envDir = null, string $type = Application::DEV): void
+    public function run(): void
     {
-        $container = self::getContainer();
-        $configuration = Configuration::set($envDir, $type);
-
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
             /**
              * @var ContainerPlaceholderInterface $instanceContainer
              */
             $instanceContainer = new $containerObject;
-            $instanceContainer($container, $configuration);
+            $instanceContainer(self::$container, self::$configuration);
         }
 
-        FacadePlaceholder::getInstance($container, $configuration);
+        FacadePlaceholder::getInstance(self::$container, self::$configuration);
 
         (new Route(
-            new LazyHandler((new BotInstance($configuration))->bootstrap())))
-            ->setClassMap($configuration->getAppNamespace())
+            new LazyHandler((new BotInstance(self::$configuration))->bootstrap())))
+            ->setClassMap(self::$configuration->getAppNamespace())
             ->handle();
     }
 }
