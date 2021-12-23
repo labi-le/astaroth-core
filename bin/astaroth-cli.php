@@ -7,7 +7,7 @@ require_once "vendor/autoload.php";
 use Astaroth\Console\Make\Command;
 use Astaroth\Foundation\Application;
 
-new Application(__DIR__);
+new Application(getcwd());
 
 $app = new Ahc\Cli\Application('Astaroth-Cli', 'v0.0.1');
 
