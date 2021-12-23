@@ -45,5 +45,7 @@
     "vimeo/psalm": "^4.15"
   },
 
-  "bin": ["src/Astaroth/Console/astaroth.php"]
+  "bin": [
+    "bin/astaroth.php"
+  ]
 }
