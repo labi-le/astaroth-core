@@ -22,7 +22,7 @@ final class EventGenerator implements GeneratorInterface
     /**
      * @throws NonExistentEventException
      */
-    public static function generate(string $namespace, string $className, string $eventName): void
+    public static function generate(string $namespace, string $className, string $eventName): string
     {
 
         $file = new PhpFile;
@@ -46,7 +46,7 @@ final class EventGenerator implements GeneratorInterface
             ->setExtends(BaseCommands::class)
             ->addAttribute(Event::class, [new Literal(self::parseEventPseudoEnum($eventName))])
             ->addAttribute(Conversation::class, [new Literal('Conversation::ALL')])
-            ->addAttribute(Description::class);
+            ->addAttribute(Description::class, ["..."]);
 
         $class
             ->addMethod("method")
@@ -55,7 +55,7 @@ final class EventGenerator implements GeneratorInterface
             ->setReturnType("void")
         ;
 
-        echo $file;
+        return $file;
     }
 
     /**
