@@ -7,6 +7,7 @@ namespace Astaroth\Foundation;
 use Astaroth\Auth\Configuration;
 use Astaroth\Bootstrap\BotInstance;
 use Astaroth\Contracts\ContainerPlaceholderInterface;
+use Astaroth\Enums\Configuration\ApplicationWorkMode;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
 use HaydenPierce\ClassFinder\ClassFinder;
@@ -16,15 +17,13 @@ use const PHP_SAPI;
 
 final class Application
 {
-    public const VERSION = 2;
-
-    public const DEV = "DEV";
-    public const PRODUCTION = "PRODUCTION";
+    public const MAJOR_VERSION = 2;
+    public const MINOR_VERSION = '2.9.0';
 
     public static ContainerBuilder $container;
     public static Configuration $configuration;
 
-    public function __construct(private ?string $envDir = null, private string $type = Application::DEV)
+    public function __construct(private ?string $envDir = null, private ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
         self::$container = new ContainerBuilder();
         self::$configuration = Configuration::set($this->envDir, $this->type);
