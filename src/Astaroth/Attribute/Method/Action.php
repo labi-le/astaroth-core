@@ -22,7 +22,7 @@ use function property_exists;
  */
 final class Action implements AttributeValidatorInterface, AttributeClassInterface
 {
-    private readonly object $haystack;
+    private readonly ?object $haystack;
 
     /**
      * @param ActionEnum $type accepts self constants
