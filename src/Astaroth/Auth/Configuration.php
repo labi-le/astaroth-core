@@ -6,174 +6,54 @@ declare(strict_types=1);
 namespace Astaroth\Auth;
 
 
-use Astaroth\Foundation\Application;
+use Astaroth\Enums\Configuration\Additional;
+use Astaroth\Enums\Configuration\ApplicationWorkMode;
+use Astaroth\Enums\Configuration\CallbackRequired;
+use Astaroth\Enums\Configuration\Database;
+use Astaroth\Enums\Configuration\LongpollRequired;
+use Astaroth\Enums\Configuration\PseudoBoolean;
+use Astaroth\Enums\Configuration\Required;
+use Astaroth\Enums\Configuration\Type;
 use Dotenv\Dotenv;
-use Dotenv\Exception\ValidationException;
 use Exception;
-use JetBrains\PhpStorm\ExpectedValues;
 use function array_map;
 use function explode;
-use function getenv;
 use function sys_get_temp_dir;
 
 final class Configuration
 {
-    private array $config;
-
-    public const
-        YES = "yes",
-        NO = "no",
-
-        DEBUG = "DEBUG",
-
-        CACHE_PATH = "CACHE_PATH",
-
-        CALLBACK = "CALLBACK",
-        LONGPOLL = "LONGPOLL",
-
-        TYPE = "TYPE",
-        ACCESS_TOKEN = "ACCESS_TOKEN",
-        API_VERSION = "API_VERSION",
-        CONFIRMATION_KEY = "CONFIRMATION_KEY",
-        SECRET_KEY = "SECRET_KEY",
-        HANDLE_REPEATED_REQUESTS = "HANDLE_REPEATED_REQUESTS",
-
-        APP_NAMESPACE = "APP_NAMESPACE",
-        ENTITY_PATH = "ENTITY_PATH",
-
-        DATABASE_DRIVER = "DATABASE_DRIVER",
-        DATABASE_NAME = "DATABASE_NAME",
-        DATABASE_USER = "DATABASE_USER",
-        DATABASE_PASSWORD = "DATABASE_PASSWORD",
-        DATABASE_URL = "DATABASE_URL",
-        DATABASE_HOST = "DATABASE_HOST",
-        DATABASE_PORT = "DATABASE_PORT",
-
-        COUNT_PARALLEL_OPERATIONS = "COUNT_PARALLEL_OPERATIONS";
-
-    /**
-     * Configuration file structure
-     */
-    private const ENV_STRUCTURE =
-        self::REQUIRED_ENV_STRUCTURE +
-        self::ADDITIONAL_ENV_STRUCTURE +
-        self::REQUIRED_CALLBACK_ENV_STRUCTURE;
-
-
-    /**
-     * Configuration file structure
-     */
-    private const ADDITIONAL_ENV_STRUCTURE =
-        [
-            self::DEBUG, //default false
-            self::CACHE_PATH, //default sys_get_temp_dir()
-
-            self::DATABASE_DRIVER,
-            self::DATABASE_NAME,
-            self::DATABASE_USER,
-            self::DATABASE_PASSWORD,
-            self::DATABASE_URL,
-            self::DATABASE_HOST,
-            self::DATABASE_PORT,
-
-            self::HANDLE_REPEATED_REQUESTS, //default false
-            self::COUNT_PARALLEL_OPERATIONS //default 0
-        ];
-
-
-    private const REQUIRED_ENV_STRUCTURE =
-        [
-            self::APP_NAMESPACE,
-            self::ENTITY_PATH,
-            self::ACCESS_TOKEN,
-            self::TYPE,
-
-            self::API_VERSION,
-        ];
-
-    private const REQUIRED_CALLBACK_ENV_STRUCTURE =
-        [
-            self::CONFIRMATION_KEY,
-            self::SECRET_KEY,
-        ];
-
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
 
     /**
      * @throws Exception
      */
-    private function __construct(?string $dir, string $type)
+    private function __construct(?string $dir, ApplicationWorkMode $type)
     {
-        if ($type === Application::DEV && $dir !== null) {
-            $this->config = $this->parseDevEnv($dir);
+        if ($type === ApplicationWorkMode::DEVELOPMENT && $dir !== null) {
+            $this->parseDevEnv($dir);
         }
 
-        if ($type === Application::PRODUCTION) {
-            $this->config = $this->parseProdEnv();
+        if ($type === ApplicationWorkMode::PRODUCTION) {
+            Additional::DEBUG->setEnv(PseudoBoolean::NO->name);
         }
     }
 
     /**
      * @throws Exception
      */
-    #[ExpectedValues(values: [Application::DEV, Application::PRODUCTION])]
-    public static function set(?string $dir, string $type = Application::DEV): Configuration
+    public static function set(?string $dir, ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT): Configuration
     {
         return new Configuration($dir, $type);
     }
 
 
-    private function parseProdEnv(): array
-    {
-        $env = [];
-        foreach (self::ENV_STRUCTURE as $key) {
-            if ($_env = getenv($key)) {
-                $env[$key] = $_env;
-            }
-        }
-        return $env;
-    }
-
     /**
      * @throws Exception
      */
-    private function parseDevEnv(string $dir): array
+    private function parseDevEnv(string $dir): void
     {
-        $dotenv = Dotenv::createImmutable($dir);
+        $dotenv = Dotenv::createUnsafeImmutable($dir);
         $dotenv->load();
-
-        $this->validation($dotenv);
-
-        return $_ENV;
-    }
-
-    /**
-     * Check config for missing parameters
-     * @throws Exception
-     */
-    private function validation(Dotenv $dotenv): void
-    {
-        try {
-            $dotenv->required(self::REQUIRED_ENV_STRUCTURE);
-        } catch (ValidationException $e) {
-            throw new ParameterMissingException($e->getMessage());
-        }
-
-        try {
-            $dotenv
-                ->required(self::TYPE)
-                ->assert(static function ($type) {
-                    return $type === self::CALLBACK || $type === self::LONGPOLL;
-                }, (string)getenv(self::TYPE));
-
-        } catch (ValidationException) {
-            throw new ParameterMissingException("Bot operation type is not specified");
-        }
-
-
-        if ((getenv(self::TYPE) === self::CALLBACK) && empty(getenv(self::CONFIRMATION_KEY))) {
-            throw new ParameterMissingException("Not specified " . self::CONFIRMATION_KEY);
-        }
     }
 
     /**
@@ -181,7 +61,7 @@ final class Configuration
      */
     public function getAccessToken(): string
     {
-        return $this->getConfig(self::ACCESS_TOKEN);
+        return Required::ACCESS_TOKEN->getEnv();
     }
 
     /**
@@ -189,7 +69,7 @@ final class Configuration
      */
     public function getApiVersion(): string
     {
-        return $this->getConfig(self::API_VERSION);
+        return Required::API_VERSION->getEnv();
     }
 
     /**
@@ -197,7 +77,7 @@ final class Configuration
      */
     public function getAppNamespace(): string
     {
-        return $this->getConfig(self::APP_NAMESPACE);
+        return Required::APP_NAMESPACE->getEnv();
     }
 
     /**
@@ -206,13 +86,13 @@ final class Configuration
      */
     public function getEntityPath(): array
     {
-        return array_map("\\trim", explode(',', $this->getConfig(self::ENTITY_PATH)));
+        return array_map("trim", explode(',', Database::ENTITY_PATH->getEnv()));
     }
 
     public function isHandleRepeatedRequest(): bool
     {
         try {
-            return $this->getConfig(self::HANDLE_REPEATED_REQUESTS) === self::YES;
+            return CallbackRequired::HANDLE_REPEATED_REQUESTS->getEnv() === PseudoBoolean::YES->value;
         } catch (ParameterMissingException) {
             return false;
         }
@@ -221,7 +101,7 @@ final class Configuration
     public function isDebug(): bool
     {
         try {
-            return $this->getConfig(self::DEBUG) === self::YES;
+            return Additional::DEBUG->getEnv() === PseudoBoolean::YES->value;
         } catch (ParameterMissingException) {
             return false;
         }
@@ -230,15 +110,15 @@ final class Configuration
     /**
      * @throws ParameterMissingException
      */
-    public function getType(): string
+    public function getType(): Type
     {
-        return $this->getConfig(self::TYPE);
+        return Type::tryFrom(mb_strtolower(Required::TYPE->getEnv()));
     }
 
     public function getCachePath(): string
     {
         try {
-            return $this->getConfig(self::CACHE_PATH);
+            return Additional::CACHE_PATH->getEnv();
         } catch (ParameterMissingException) {
             return sys_get_temp_dir();
         }
@@ -247,7 +127,7 @@ final class Configuration
     public function getCallbackSecretKey(): ?string
     {
         try {
-            return $this->getConfig(self::SECRET_KEY);
+            return CallbackRequired::SECRET_KEY->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -258,13 +138,13 @@ final class Configuration
      */
     public function getCallbackConfirmationKey(): string
     {
-        return $this->getConfig(self::CONFIRMATION_KEY);
+        return CallbackRequired::CONFIRMATION_KEY->getEnv();
     }
 
     public function getDatabaseDriver(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_DRIVER);
+            return Database::DATABASE_DRIVER->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -273,7 +153,7 @@ final class Configuration
     public function getDatabaseHost(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_HOST);
+            return Database::DATABASE_HOST->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -282,7 +162,7 @@ final class Configuration
     public function getDatabasePort(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_PORT);
+            return Database::DATABASE_PORT->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -291,7 +171,7 @@ final class Configuration
     public function getDatabaseUrl(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_URL);
+            return Database::DATABASE_URL->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -300,7 +180,7 @@ final class Configuration
     public function getDatabaseUser(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_USER);
+            return Database::DATABASE_USER->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -309,7 +189,7 @@ final class Configuration
     public function getDatabaseName(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_NAME);
+            return Database::DATABASE_NAME->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -318,7 +198,7 @@ final class Configuration
     public function getDatabasePassword(): ?string
     {
         try {
-            return $this->getConfig(self::DATABASE_PASSWORD);
+            return Database::DATABASE_PASSWORD->getEnv();
         } catch (ParameterMissingException) {
             return null;
         }
@@ -328,33 +208,13 @@ final class Configuration
     {
         try {
             //fork processes not work well on web servers
-            if ($this->getType() === self::CALLBACK) {
+            if ($this->getType() === Type::CALLBACK) {
                 return 0;
             }
 
-            return (int)$this->getConfig(self::COUNT_PARALLEL_OPERATIONS);
+            return (int)LongpollRequired::COUNT_PARALLEL_OPERATIONS->getEnv();
         } catch (ParameterMissingException) {
             return 0;
         }
-    }
-
-
-    /**
-     * @param ?string $key
-     * @return mixed
-     * @throws ParameterMissingException
-     */
-    private function getConfig(string $key = null): mixed
-    {
-        if ($key === null) {
-            return $this->config;
-        }
-
-        $value = $this->config[$key] ?? null;
-        if (!$value) {
-            throw new ParameterMissingException("Missing parameter $key from environment");
-        }
-
-        return $value;
     }
 }

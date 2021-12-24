@@ -5,6 +5,7 @@ namespace Auth;
 
 use Astaroth\Auth\Configuration;
 use Astaroth\Auth\ParameterMissingException;
+use Astaroth\Enums\Configuration\Type;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use function dirname;
@@ -96,7 +97,7 @@ class ConfigurationTest extends TestCase
      */
     public function testGetType(): void
     {
-        assertEquals($this->configuration->getType(), "LONGPOLL");
+        assertEquals($this->configuration->getType(), Type::LONGPOLL);
     }
 
     public function testSet(): void
