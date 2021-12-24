@@ -7,10 +7,10 @@ namespace Astaroth\Attribute\Method;
 use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
-use Astaroth\Enums\ClientInfoEnum as ClientInfoEnum;
+use Astaroth\Enums\ClientInfoEnum;
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 use function array_intersect_key;
+use function array_map;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**

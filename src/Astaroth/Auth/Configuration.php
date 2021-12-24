@@ -86,7 +86,7 @@ final class Configuration
      */
     public function getEntityPath(): array
     {
-        return array_map("trim", explode(',', Database::ENTITY_PATH->getEnv()));
+        return array_map("\\trim", explode(',', Database::ENTITY_PATH->getEnv()));
     }
 
     public function isHandleRepeatedRequest(): bool

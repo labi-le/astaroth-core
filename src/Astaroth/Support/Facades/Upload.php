@@ -20,8 +20,6 @@ final class Upload
     }
 
     /**
-     * @param ICanBeSaved ...$instance
-     * @return array
      * @throws Exception
      */
     public static function attachments(ICanBeSaved ...$instance): array

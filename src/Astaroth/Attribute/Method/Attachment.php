@@ -7,7 +7,7 @@ namespace Astaroth\Attribute\Method;
 use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Enums\AttachmentEnum as AttachmentEnum;
+use Astaroth\Enums\AttachmentEnum;
 use Attribute;
 use function count;
 

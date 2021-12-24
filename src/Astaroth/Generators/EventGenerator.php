@@ -13,6 +13,7 @@ use Astaroth\Enums\Events as EnumEvents;
 use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpFile;
 use ReflectionClass;
+use function array_flip;
 
 final class EventGenerator implements GeneratorInterface
 {

@@ -3,7 +3,11 @@
 namespace Astaroth\Console\Make;
 
 use Ahc\Cli\Input\Command as CliCommand;
+use function copy;
 use function dirname;
+use function getcwd;
+use function sprintf;
+use const DIRECTORY_SEPARATOR;
 
 final class Env extends CliCommand
 {

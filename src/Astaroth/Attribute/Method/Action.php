@@ -7,7 +7,7 @@ namespace Astaroth\Attribute\Method;
 use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Enums\ActionEnum as ActionEnum;
+use Astaroth\Enums\ActionEnum;
 use Attribute;
 use function current;
 use function key;

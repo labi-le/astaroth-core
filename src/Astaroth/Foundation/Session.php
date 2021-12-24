@@ -36,7 +36,7 @@ class Session
     /**
      * Switch to another type
      * @param string $type
-     * @return $this
+     * @return Session $this
      */
     public function changeType(string $type): static
     {
@@ -79,8 +79,6 @@ class Session
 
     /**
      * Save data to session file
-     * @param array $data
-     * @return bool
      * @noinspection JsonEncodingApiUsageInspection
      */
     private function saveToFile(array $data): bool
@@ -111,7 +109,6 @@ class Session
 
     /**
      * Get data from session file
-     * @return array
      * @noinspection JsonEncodingApiUsageInspection
      */
     private function getStorageData(): array
@@ -128,7 +125,7 @@ class Session
         return $this->type;
     }
 
-    public function getCurrentTypeData()
+    public function getCurrentTypeData(): array
     {
         return $this->getStorageData()[$this->getType()] ?? [];
     }

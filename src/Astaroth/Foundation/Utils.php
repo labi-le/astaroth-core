@@ -28,14 +28,13 @@ use const CURLOPT_CUSTOMREQUEST;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_POSTFIELDS;
 use const CURLOPT_RETURNTRANSFER;
+use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 
 final class Utils
 {
 
     /**
-     * @param array $param
-     * @return string|null
      * @throws JsonException
      * @noinspection JsonEncodingApiUsageInspection
      */
@@ -101,9 +100,6 @@ final class Utils
 
     /**
      * Explode с возможностью использовать несколько символов
-     * @param array $delimiters
-     * @param string $haystack
-     * @return array|bool
      */
     public static function multiExplode(array $delimiters, string $haystack): array|bool
     {
@@ -113,8 +109,6 @@ final class Utils
 
     /**
      * Регулярка, чтоб выбрать все айдишники из текста
-     * @param string $string
-     * @return array|bool
      */
     public static function regexId(string $string): array|bool
     {

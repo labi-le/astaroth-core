@@ -11,7 +11,6 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\ConversationType;
 use Astaroth\Support\Facades\Session;
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class State implements AttributeValidatorInterface, AttributeMethodInterface
