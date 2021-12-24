@@ -7,6 +7,7 @@ namespace Attribute\General;
 use Astaroth\Attribute\General\State;
 use Astaroth\Auth\Configuration;
 use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Enums\ConversationType;
 use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Session;
 use Exception;
@@ -50,7 +51,7 @@ class StateTest extends TestCase
         //cache directory
         FacadePlaceholder::getInstance(new ContainerBuilder(), Configuration::set(dirname(__DIR__, 2)));
 
-        $hs = (new State("example", State::USER))->setHaystack($this->data->messageNew());
+        $hs = (new State("example", ConversationType::PERSONAL))->setHaystack($this->data->messageNew());
         assertTrue($hs->validate());
     }
 }

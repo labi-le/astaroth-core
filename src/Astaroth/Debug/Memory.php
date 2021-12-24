@@ -11,10 +11,10 @@ use function number_format;
 final class Memory implements Stringable
 {
 
-    private int $final_memory_usage;
+    private readonly int $final_memory_usage;
+    private readonly int $base_memory_usage;
 
-    private int $base_memory_usage;
-    public function __construct(callable $app, private string $convertTo = "M")
+    public function __construct(callable $app, private readonly string $convertTo = "M")
     {
         $this->base_memory_usage = memory_get_usage(true);
         $app();

@@ -12,8 +12,8 @@ final class ValidatedObject
      * @param ReflectionMethodDecorator[] $methods
      */
     public function __construct(
-        private ReflectionClass $object,
-        private array $methods,
+        private readonly ReflectionClass $object,
+        private readonly array $methods,
     )
     {
 

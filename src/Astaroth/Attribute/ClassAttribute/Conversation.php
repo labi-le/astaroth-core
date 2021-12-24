@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Astaroth\Attribute\ClassAttribute;
 
 use Astaroth\Contracts\AttributeClassInterface;
-use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Enums\ConversationType;
 use Attribute;
 use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use function in_array;
 
@@ -21,10 +20,6 @@ use function in_array;
  */
 final class Conversation implements AttributeValidatorInterface, AttributeClassInterface
 {
-    public const ALL = 6;
-    public const CHAT = 12;
-    public const PERSONAL_DIALOG = 24;
-
     /**
      * @var int[]
      */
@@ -34,12 +29,11 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
 
     /**
      * Conversation constructor.
-     * @param int $type
+     * @param ConversationType $type
      * @param int ...$member_id
      */
     public function __construct(
-        #[ExpectedValues(values: [self::ALL, self::PERSONAL_DIALOG, self::CHAT])]
-        public int $type = Conversation::ALL,
+        private readonly ConversationType $type = ConversationType::ALL,
         int ...$member_id
     )
     {
@@ -51,9 +45,9 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
         if ($this->haystack) {
 
             $validate = match ($this->type) {
-                self::PERSONAL_DIALOG => $this->personalDialogValidate($this->haystack),
-                self::ALL => $this->allDialogValidate($this->haystack),
-                self::CHAT => $this->chatValidate($this->haystack)
+                ConversationType::PERSONAL => $this->personalDialogValidate($this->haystack),
+                ConversationType::ALL => $this->allDialogValidate($this->haystack),
+                ConversationType::CHAT => $this->chatValidate($this->haystack)
             };
 
             //if the ID array is not specified in the attribute, then we check if the type matches

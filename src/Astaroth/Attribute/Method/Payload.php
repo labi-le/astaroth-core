@@ -9,8 +9,8 @@ use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Enums\PayloadValidation;
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 use LogicException;
 use function array_intersect;
 use function array_key_exists;
@@ -23,17 +23,11 @@ use function print_r;
  */
 final class Payload implements AttributeValidatorInterface, AttributeMethodInterface
 {
-
-    public const KEY_EXIST = 0;
-    public const STRICT = 1;
-    public const CONTAINS = 2;
-
     private ?array $haystack = null;
 
     public function __construct(
-        private array|string $payload_or_key,
-                             #[ExpectedValues(values: [self::STRICT, self::CONTAINS, self::KEY_EXIST])]
-                             private int $validation = Payload::STRICT)
+        private readonly array|string      $payload_or_key,
+        private readonly PayloadValidation $validation = PayloadValidation::STRICT)
     {
     }
 
@@ -41,9 +35,9 @@ final class Payload implements AttributeValidatorInterface, AttributeMethodInter
     {
         if ($this->haystack) {
             return match ($this->validation) {
-                self::STRICT => $this->strictValidate($this->payload_or_key, $this->haystack),
-                self::KEY_EXIST => $this->keyExistValidate($this->payload_or_key, $this->haystack),
-                self::CONTAINS => $this->containsValidate($this->payload_or_key, $this->haystack),
+                PayloadValidation::STRICT => $this->strictValidate($this->payload_or_key, $this->haystack),
+                PayloadValidation::KEY_EXIST => $this->keyExistValidate($this->payload_or_key, $this->haystack),
+                PayloadValidation::CONTAINS => $this->containsValidate($this->payload_or_key, $this->haystack),
             };
         }
 
@@ -81,7 +75,7 @@ final class Payload implements AttributeValidatorInterface, AttributeMethodInter
      */
     public function setHaystack($haystack): Payload
     {
-        if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent){
+        if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent) {
             $this->haystack = $haystack->getPayload();
         }
 

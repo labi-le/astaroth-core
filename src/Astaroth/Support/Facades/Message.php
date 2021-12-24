@@ -15,7 +15,7 @@ use function is_string;
 
 final class Message
 {
-    public function __construct(private ?int $peer_id = null)
+    public function __construct(private readonly ?int $peer_id = null)
     {
 
     }
@@ -51,7 +51,7 @@ final class Message
 
     /**
      * @param string|string[] ...$img
-     * @return $this
+     * @return Message $this
      * @throws Exception
      */
     public function addImg(string|array $img): Message
@@ -76,7 +76,7 @@ final class Message
 
     /**
      * @param string|string[] $video
-     * @return $this
+     * @return Message $this
      * @throws Exception
      */
     public function addVoice(string|array $video): Message

@@ -37,8 +37,8 @@ final class Executor
      * @param ReflectionMethodDecorator[] $reflectionMethods
      */
     public function __construct(
-        private ReflectionClass $reflectionClass,
-        private array           $reflectionMethods = []
+        private readonly ReflectionClass $reflectionClass,
+        private readonly array           $reflectionMethods = []
     )
     {
     }
@@ -158,6 +158,7 @@ final class Executor
             $parameters[] = $this->normalizeNamedType($reflectionType, $additionalParameter);
         }
 
+        /** @noinspection PhpDeprecatedStdLibCallInspection */
         return current(array_filter($parameters)) ?: null;
     }
 

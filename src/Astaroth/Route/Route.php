@@ -23,7 +23,7 @@ final class Route
 {
     private static array $class_map;
 
-    public function __construct(private HandlerInterface $handler)
+    public function __construct(private readonly HandlerInterface $handler)
     {
     }
 

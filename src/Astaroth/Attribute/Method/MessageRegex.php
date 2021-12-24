@@ -22,7 +22,7 @@ use function preg_match;
 final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, AttributeMethodInterface, AttributeReturnInterface
 {
     private string $haystack = "";
-    private string $pattern;
+    private readonly string $pattern;
 
     private array $matches = [];
 
@@ -70,14 +70,14 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
         return isset($this->matches[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->matches[$offset] ?? null;
     }
 
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->matches[] = $value;
         } else {
             $this->matches[$offset] = $value;

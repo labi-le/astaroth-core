@@ -13,14 +13,13 @@ use Astaroth\Attribute\Method\Message;
 use Astaroth\Attribute\Method\MessageRegex;
 use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Foundation\Enums\Events;
+use Astaroth\Enums\Events;
 use function count;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsObject;
 use function range;
 use function uniqid;
-use function var_dump;
 
 #[Conversation]
 #[Event(Events::MESSAGE_NEW)]

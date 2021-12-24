@@ -7,9 +7,9 @@ final class AdditionalParameter
 {
     public function __construct
     (
-        private string $type,
-        private bool $needCreateInstance = false,
-        private ?object $instance = null,
+        private readonly string $type,
+        private readonly bool $needCreateInstance = false,
+        private readonly ?object $instance = null,
     )
     {
 

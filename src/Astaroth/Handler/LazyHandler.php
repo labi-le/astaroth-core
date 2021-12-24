@@ -20,7 +20,7 @@ use function json_encode;
 final class LazyHandler implements HandlerInterface
 {
 
-    public function __construct(private HandlerInterface $botInstance){}
+    public function __construct(private readonly HandlerInterface $botInstance){}
 
     /**
      * Normalize output data from VKontakte

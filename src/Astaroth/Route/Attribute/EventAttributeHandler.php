@@ -11,7 +11,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Foundation\Enums\Events;
+use Astaroth\Enums\Events;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -21,14 +21,14 @@ use const E_USER_WARNING;
 
 final class EventAttributeHandler
 {
-    private null|MessageEvent|MessageNew $data;
+    private readonly null|MessageEvent|MessageNew $data;
 
     /**
      * @param string[] $classMap
      * @param DataFetcher $data
      */
     public function __construct(
-        private array $classMap,
+        private readonly array $classMap,
         DataFetcher   $data,
     )
     {
@@ -132,11 +132,11 @@ final class EventAttributeHandler
 
     public static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
     {
-        if ($data->getType() === Events::MESSAGE_NEW) {
+        if ($data->getType() === Events::MESSAGE_NEW->value) {
             return $data->messageNew();
         }
 
-        if ($data->getType() === Events::MESSAGE_EVENT) {
+        if ($data->getType() === Events::MESSAGE_EVENT->value) {
             return $data->messageEvent();
         }
 

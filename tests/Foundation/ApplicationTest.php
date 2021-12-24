@@ -17,9 +17,4 @@ class ApplicationTest extends TestCase
         assertTrue(Application::runningInConsole());
     }
 
-    public function testGetContainer(): void
-    {
-        assertTrue(Application::getContainer() instanceof ContainerInterface);
-    }
-
 }

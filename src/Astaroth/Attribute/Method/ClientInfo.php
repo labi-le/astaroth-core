@@ -7,9 +7,10 @@ namespace Astaroth\Attribute\Method;
 use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Enums\ClientInfoEnum;
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 use function array_intersect_key;
+use function array_map;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -18,54 +19,36 @@ use function array_intersect_key;
  */
 final class ClientInfo implements AttributeValidatorInterface, AttributeMethodInterface
 {
-    public const TEXT = "text";
-    public const VKPAY = "vkpay";
-    public const OPEN_APP = "open_app";
-    public const LOCATION = "location";
-    public const OPEN_LINK = "open_link";
-    public const CALLBACK = "callback";
-    public const INTENT_SUBSCRIBE = "intent_subscribe";
-    public const INTENT_UNSUBSCRIBE = "intent_unsubscribe";
-
-    private ?object $client_info = null;
+    private readonly object $client_info;
+    private readonly array $button_actions;
 
     /**
      * By default, a regular keyboard is installed that supports everything
-     * @param array|string[] $button_actions
+     * @param ClientInfoEnum[] $button_actions
      * @param bool $keyboard
      * @param bool $inline_keyboard
      * @param bool $carousel
      * @param int $lang_id
      */
     public function __construct(
-        #[ExpectedValues(values: [
-            self::TEXT,
-            self::VKPAY,
-            self::OPEN_APP,
-            self::LOCATION,
-            self::OPEN_LINK,
-            self::CALLBACK,
-            self::INTENT_SUBSCRIBE,
-            self::INTENT_UNSUBSCRIBE
-        ]
-        )]
-        private array $button_actions =
+        array        $button_actions =
         [
-            self::TEXT,
-            self::VKPAY,
-            self::OPEN_APP,
-            self::LOCATION,
-            self::OPEN_LINK,
-            self::CALLBACK,
-            self::INTENT_SUBSCRIBE,
-            self::INTENT_UNSUBSCRIBE
+            ClientInfoEnum::TEXT,
+            ClientInfoEnum::VKPAY,
+            ClientInfoEnum::OPEN_APP,
+            ClientInfoEnum::LOCATION,
+            ClientInfoEnum::OPEN_LINK,
+            ClientInfoEnum::CALLBACK,
+            ClientInfoEnum::INTENT_SUBSCRIBE,
+            ClientInfoEnum::INTENT_UNSUBSCRIBE
         ],
         private bool $keyboard = true,
         private bool $inline_keyboard = true,
         private bool $carousel = true,
-        private int $lang_id = 0,
+        private int  $lang_id = 0,
     )
     {
+        $this->button_actions = array_map(static fn(ClientInfoEnum $enum) => $enum->value, $button_actions);
     }
 
     public function validate(): bool

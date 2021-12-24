@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\ClientInfo;
+use Astaroth\Enums\ClientInfoEnum;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertTrue;
 
@@ -19,7 +20,7 @@ class ClientInfoTest extends TestCase
 
     public function testValidate(): void
     {
-        assertTrue((new ClientInfo([ClientInfo::CALLBACK], keyboard: true, inline_keyboard: false))
+        assertTrue((new ClientInfo([ClientInfoEnum::CALLBACK], keyboard: true, inline_keyboard: false))
             ->setHaystack((require self::DATA_DIR))->validate());
     }
 }

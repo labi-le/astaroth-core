@@ -19,7 +19,7 @@ use Throwable;
  */
 abstract class BaseCommands
 {
-    public function __construct(protected MessageNew|MessageEvent|null $data = null)
+    public function __construct(protected readonly MessageNew|MessageEvent|null $data = null)
     {
     }
 
