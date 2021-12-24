@@ -22,8 +22,8 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
 
     public function __construct
     (
-        private string $state_name,
-                       private ConversationType $member_type = ConversationType::PERSONAL
+        private readonly string $state_name,
+        private readonly ConversationType $member_type = ConversationType::PERSONAL
     )
     {
     }

@@ -10,8 +10,8 @@ use function microtime;
 
 final class TimePerformance implements Stringable
 {
-    private int|float $time_start;
-    private int|float $time_end;
+    private readonly int|float $time_start;
+    private readonly int|float $time_end;
 
     public function __construct(callable $app)
     {

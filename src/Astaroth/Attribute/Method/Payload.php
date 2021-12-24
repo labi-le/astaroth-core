@@ -23,13 +23,11 @@ use function print_r;
  */
 final class Payload implements AttributeValidatorInterface, AttributeMethodInterface
 {
-
-
     private ?array $haystack = null;
 
     public function __construct(
-        private array|string      $payload_or_key,
-        private PayloadValidation $validation = PayloadValidation::STRICT)
+        private readonly array|string      $payload_or_key,
+        private readonly PayloadValidation $validation = PayloadValidation::STRICT)
     {
     }
 

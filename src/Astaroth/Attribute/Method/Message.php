@@ -22,8 +22,8 @@ final class Message implements AttributeValidatorInterface, AttributeMethodInter
 
     public function __construct
     (
-        private string            $message,
-        private MessageValidation $validation = MessageValidation::STRICT)
+        private readonly string $message,
+        private readonly MessageValidation $validation = MessageValidation::STRICT)
     {
     }
 

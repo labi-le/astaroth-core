@@ -37,8 +37,8 @@ final class Executor
      * @param ReflectionMethodDecorator[] $reflectionMethods
      */
     public function __construct(
-        private ReflectionClass $reflectionClass,
-        private array           $reflectionMethods = []
+        private readonly ReflectionClass $reflectionClass,
+        private readonly array           $reflectionMethods = []
     )
     {
     }

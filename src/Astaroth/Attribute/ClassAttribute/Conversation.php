@@ -33,7 +33,7 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
      * @param int ...$member_id
      */
     public function __construct(
-        public ConversationType $type = ConversationType::ALL,
+        private readonly ConversationType $type = ConversationType::ALL,
         int ...$member_id
     )
     {

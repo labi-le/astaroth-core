@@ -21,14 +21,14 @@ use const E_USER_WARNING;
 
 final class EventAttributeHandler
 {
-    private null|MessageEvent|MessageNew $data;
+    private readonly null|MessageEvent|MessageNew $data;
 
     /**
      * @param string[] $classMap
      * @param DataFetcher $data
      */
     public function __construct(
-        private array $classMap,
+        private readonly array $classMap,
         DataFetcher   $data,
     )
     {

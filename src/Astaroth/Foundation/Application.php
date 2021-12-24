@@ -23,7 +23,7 @@ final class Application
     public static ContainerBuilder $container;
     public static Configuration $configuration;
 
-    public function __construct(private ?string $envDir = null, private ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
+    public function __construct(private ?string $envDir = null, private readonly ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
         self::$container = new ContainerBuilder();
         self::$configuration = Configuration::set($this->envDir, $this->type);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Payload;
+use Astaroth\Enums\PayloadValidation;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertTrue;
 
@@ -19,7 +20,7 @@ class PayloadTest extends TestCase
 
     public function testValidate(): void
     {
-        $payload = new Payload("foo", Payload::KEY_EXIST);
+        $payload = new Payload("foo", PayloadValidation::KEY_EXIST);
         $payload->setHaystack((require self::DATA_DIR)->messageNew());
         assertTrue($payload->validate());
     }

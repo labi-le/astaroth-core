@@ -15,7 +15,7 @@ use function is_string;
 
 final class Message
 {
-    public function __construct(private ?int $peer_id = null)
+    public function __construct(private readonly ?int $peer_id = null)
     {
 
     }

@@ -22,7 +22,7 @@ use function property_exists;
  */
 final class Action implements AttributeValidatorInterface, AttributeClassInterface
 {
-    private ?object $haystack = null;
+    private readonly object $haystack;
 
     /**
      * @param ActionEnum $type accepts self constants
@@ -31,7 +31,7 @@ final class Action implements AttributeValidatorInterface, AttributeClassInterfa
      * @see https://i.imgur.com/S4vcS9w.png
      */
     public function __construct(
-        private ActionEnum $type,
+        private readonly ActionEnum $type,
         private array      $anyData = []
     )
     {
@@ -42,7 +42,7 @@ final class Action implements AttributeValidatorInterface, AttributeClassInterfa
         //if haystack is object and type given in the attribute matches the type haystack
         if (
             $this->haystack
-            && $this->type === $this->haystack->type
+            && $this->type->value === $this->haystack->type
         ) {
             if ($this->anyData === []) {
                 return true;

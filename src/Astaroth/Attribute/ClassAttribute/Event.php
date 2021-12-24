@@ -17,7 +17,7 @@ use function method_exists;
 class Event implements AttributeValidatorInterface, AttributeClassInterface
 {
     public function __construct(
-        private Events $event
+        private readonly Events $event
     )
     {
 

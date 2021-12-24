@@ -19,8 +19,8 @@ use function array_map;
  */
 final class ClientInfo implements AttributeValidatorInterface, AttributeMethodInterface
 {
-    private ?object $client_info = null;
-    private array $button_actions;
+    private readonly object $client_info;
+    private readonly array $button_actions;
 
     /**
      * By default, a regular keyboard is installed that supports everything

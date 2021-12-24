@@ -10,7 +10,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class Description implements AttributeReturnInterface, AttributeMethodInterface
 {
-    public function __construct(private string $description)
+    public function __construct(private readonly string $description)
     {
 
     }

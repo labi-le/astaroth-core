@@ -22,35 +22,41 @@ final class Placeholder
 
 
     //VK NAME *******************************************
-    public const NAME = "name";
-    public const LAST_NAME_VK = "last_name";
-    public const FIRST_NAME_VK = "first_name";
-    public const ID = "id";
-    public const CLUB = "club";
+    public const
+        NAME = "name",
+        LAST_NAME_VK = "last_name",
+        FIRST_NAME_VK = "first_name",
+        ID = "id",
+        CLUB = "club";
 
 
-    public const FULL_NAME_PH = "full-name";
-    public const LAST_NAME_PH = "last-name";
+    public const
+        FULL_NAME_PH = "full-name",
+        LAST_NAME_PH = "last-name";
 
     //END VK NAME *******************************************
 
     //TAG *******************************************************************
-    private const NAME_TAG = self::PERCENT . self::NAME;
-    private const MENTION_NAME_TAG = self::PERCENT . self::MENTION . self::NAME;
+    private const
+        NAME_TAG = self::PERCENT . self::NAME,
+        MENTION_NAME_TAG = self::PERCENT . self::MENTION . self::NAME;
 
-    private const FULL_NAME_TAG = self::PERCENT . self::FULL_NAME_PH;
-    private const MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME_PH;
+    private const
+        FULL_NAME_TAG = self::PERCENT . self::FULL_NAME_PH,
+        MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME_PH;
 
-    private const LAST_NAME_TAG = self::PERCENT . self::LAST_NAME_PH;
-    private const MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME_PH;
+    private const
+        LAST_NAME_TAG = self::PERCENT . self::LAST_NAME_PH,
+        MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME_PH;
     //END TAG *******************************************************************
 
-    private const PERCENT = "%";
-    private const STAR = "*";
-    private const MENTION = "@";
+    private const
+        PERCENT = "%",
+        STAR = "*",
+        MENTION = "@",
 
-    private const STAR_AND_ID = self::STAR . self::ID;
-    private const STAR_AND_CLUB = self::STAR . self::CLUB;
+        STAR_AND_ID = self::STAR . self::ID,
+        STAR_AND_CLUB = self::STAR . self::CLUB;
 
 
     /**
@@ -64,7 +70,7 @@ final class Placeholder
      * @example hi %@name
      * @example FirstName  %name
      */
-    public function __construct(private string $subject)
+    public function __construct(private readonly string $subject)
     {
     }
 

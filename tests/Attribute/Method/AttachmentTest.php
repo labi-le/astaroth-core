@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Attachment;
+use Astaroth\Enums\AttachmentEnum;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertTrue;
 
@@ -19,7 +20,7 @@ class AttachmentTest extends TestCase
 
     public function testValidate(): void
     {
-        $hs = (new Attachment(Attachment::PHOTO, 2))
+        $hs = (new Attachment(AttachmentEnum::PHOTO, 2))
             ->setHaystack((require self::DATA_DIR)->messageNew());
 
         assertTrue($hs->validate());

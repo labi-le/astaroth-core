@@ -20,8 +20,8 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
     private array $haystack = [];
 
     public function __construct(
-        public AttachmentEnum $type,
-        public int            $count = 1)
+        public readonly AttachmentEnum $type,
+        public readonly int $count = 1)
     {
     }
 
@@ -30,7 +30,7 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
     {
         $attachments = [];
         foreach ($this->haystack as $attachment) {
-            if ($attachment->type === $this->type) {
+            if ($attachment->type === $this->type->value) {
                 $attachments[] = $attachment;
             }
         }
