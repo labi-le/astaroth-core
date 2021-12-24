@@ -125,10 +125,10 @@ final class Utils
     /**
      * Простой дебаг в stdout
      * Будет полезно для callback
-     * @deprecated
+     * @param mixed ...$data
      * @see Dump::toStdOut()
      *
-     * @param mixed ...$data
+     * @deprecated
      */
     public static function var_dumpToStdout(mixed ...$data): void
     {
@@ -159,5 +159,10 @@ final class Utils
         }
 
         Create::new($message);
+    }
+
+    public static function replaceNamespaceToPath(string $namespace): string
+    {
+        return str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
     }
 }

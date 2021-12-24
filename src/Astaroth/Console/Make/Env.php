@@ -11,7 +11,6 @@ final class Env extends CliCommand
     {
         parent::__construct("make:env", "generate env config");
 
-
         $this
             ->action(function () {
                 copy(dirname(__DIR__, 4) . "/tests/.env", sprintf('%s%s.env', getcwd(), DIRECTORY_SEPARATOR));
