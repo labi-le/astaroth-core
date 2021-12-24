@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Attribute\ClassAttribute;
 
 use Astaroth\Attribute\ClassAttribute\Event;
-use Astaroth\Foundation\Enums\Events;
+use Astaroth\Enums\Events;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class EventTest extends TestCase
