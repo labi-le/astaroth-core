@@ -6,9 +6,8 @@ namespace Astaroth\Attribute\ClassAttribute;
 
 use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
-use Astaroth\Foundation\Enums\Events;
+use Astaroth\Enums\Events;
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 use function method_exists;
 
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -18,8 +17,7 @@ use function method_exists;
 class Event implements AttributeValidatorInterface, AttributeClassInterface
 {
     public function __construct(
-        #[ExpectedValues(flagsFromClass: Events::class)]
-        private string $event
+        private Events $event
     )
     {
 
@@ -27,7 +25,7 @@ class Event implements AttributeValidatorInterface, AttributeClassInterface
 
     public function validate(): bool
     {
-        return $this->event === $this->type;
+        return $this->event->value === $this->type;
     }
 
 
@@ -40,7 +38,7 @@ class Event implements AttributeValidatorInterface, AttributeClassInterface
     /**
      *
      * @param $haystack
-     * @return $this
+     * @return Event
      */
     public function setHaystack($haystack): Event
     {

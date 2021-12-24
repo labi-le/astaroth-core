@@ -8,6 +8,7 @@ use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Enums\ConversationType;
 use Astaroth\Support\Facades\Session;
 use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -15,10 +16,6 @@ use JetBrains\PhpStorm\ExpectedValues;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class State implements AttributeValidatorInterface, AttributeMethodInterface
 {
-    public const USER = 0;
-    public const CHAT = 1;
-    public const PEER = 3;
-
     //reserved
     public const RESERVED_NAME = "__state";
 
@@ -27,8 +24,7 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
     public function __construct
     (
         private string $state_name,
-                       #[ExpectedValues(values: [self::CHAT, self::PEER, self::USER])]
-                       private int $member_type = State::USER
+                       private ConversationType $member_type = ConversationType::PERSONAL
     )
     {
     }
@@ -46,9 +42,9 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
             };
 
             $member_id = match ($this->member_type) {
-                self::USER => (int)$user_id(),
-                self::CHAT => (int)$this->haystack->getChatId(),
-                self::PEER => $this->haystack->getPeerId(),
+                ConversationType::PERSONAL => (int)$user_id(),
+                ConversationType::CHAT => (int)$this->haystack->getChatId(),
+                ConversationType::ALL => $this->haystack->getPeerId(),
             };
 
             return (bool)(new Session($member_id, self::RESERVED_NAME))->get($this->state_name);

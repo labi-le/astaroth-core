@@ -7,8 +7,8 @@ namespace Astaroth\Attribute\Method;
 use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
+use Astaroth\Enums\AttachmentEnum as AttachmentEnum;
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 use function count;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
@@ -20,35 +20,11 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
     private array $haystack = [];
 
     public function __construct(
-        #[ExpectedValues(values: [
-            self::ALL,
-            self::VIDEO,
-            self::AUDIO,
-            self::AUDIO_MESSAGE,
-            self::DOC,
-            self::GRAFFITI,
-            self::STICKER,
-            self::PHOTO,
-            self::WALL,
-            self::LINK,
-        ]
-        )]
-        public string $type = Attachment::ALL,
-        public int $count = 1)
+        public AttachmentEnum $type,
+        public int            $count = 1)
     {
     }
 
-    public const ALL = "all";
-
-    public const AUDIO_MESSAGE = "audio_message";
-    public const PHOTO = "photo";
-    public const DOC = "doc";
-    public const GRAFFITI = "graffiti";
-    public const VIDEO = "video";
-    public const AUDIO = "audio";
-    public const STICKER = "sticker";
-    public const WALL = "wall";
-    public const LINK = "link";
 
     public function validate(): bool
     {

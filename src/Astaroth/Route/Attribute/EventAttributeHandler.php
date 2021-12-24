@@ -11,7 +11,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
-use Astaroth\Foundation\Enums\Events;
+use Astaroth\Enums\Events;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -132,11 +132,11 @@ final class EventAttributeHandler
 
     public static function fetchData(DataFetcher $data): MessageNew|MessageEvent|null
     {
-        if ($data->getType() === Events::MESSAGE_NEW) {
+        if ($data->getType() === Events::MESSAGE_NEW->value) {
             return $data->messageNew();
         }
 
-        if ($data->getType() === Events::MESSAGE_EVENT) {
+        if ($data->getType() === Events::MESSAGE_EVENT->value) {
             return $data->messageEvent();
         }
 
