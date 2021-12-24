@@ -19,7 +19,7 @@ use function array_map;
  */
 final class ClientInfo implements AttributeValidatorInterface, AttributeMethodInterface
 {
-    private readonly object $client_info;
+    private readonly ?object $client_info;
     private readonly array $button_actions;
 
     /**
