@@ -10,7 +10,7 @@
   "license": "MIT",
   "minimum-stability": "stable",
   "require": {
-    "php": ">=8",
+    "php": ">=8.1",
     "ext-curl": "*",
 
     "labile/vk-data-fetcher": "^1",
@@ -46,6 +46,6 @@
   },
 
   "bin": [
-    "bin/astaroth"
+    "bin/lilit"
   ]
 }
