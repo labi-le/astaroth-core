@@ -9,6 +9,7 @@ use Astaroth\Auth\Configuration;
 use Astaroth\Auth\ParameterMissingException;
 use Astaroth\Callback\Callback;
 use Astaroth\Contracts\HandlerInterface;
+use Astaroth\Enums\Configuration\Type;
 use Astaroth\Longpoll\Longpoll;
 use Exception;
 
@@ -32,7 +33,7 @@ final class BotInstance
      */
     private function selectStartupType(Configuration $configuration): HandlerInterface
     {
-        return $configuration->getType() === Configuration::CALLBACK
+        return $configuration->getType() === Type::CALLBACK
             ? $this->callback($configuration)
             : $this->longpoll($configuration);
     }
