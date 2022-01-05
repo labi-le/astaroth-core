@@ -24,6 +24,8 @@
     "haydenpierce/class-finder": "^0.4.3",
 
     "doctrine/orm": ">=2.10",
+    "doctrine/migrations": ">=3.3.2",
+
 
     "symfony/dependency-injection": "^5",
     "symfony/cache": ">=v3",
@@ -47,5 +49,10 @@
 
   "bin": [
     "bin/lilit"
-  ]
+  ],
+  "config": {
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true
+    }
+  }
 }
