@@ -71,7 +71,7 @@ final class Application
      */
     public function run(): void
     {
-        self::$logger->info("App is started");
+        self::$logger->info("App started");
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
             /**
              * @var ContainerPlaceholderInterface $instanceContainer
