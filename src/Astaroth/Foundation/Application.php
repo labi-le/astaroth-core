@@ -42,7 +42,7 @@ final class Application
     private static function setLogLevel(ApplicationWorkMode $workMode)
     {
         self::$logger->pushHandler(new StreamHandler(sprintf('%s%s%s', getcwd(), DIRECTORY_SEPARATOR, '.log')));
-        if ($workMode !== ApplicationWorkMode::DEVELOPMENT) {
+        if ($workMode === ApplicationWorkMode::DEVELOPMENT) {
             self::$logger->pushHandler(new StreamHandler(STDOUT));
         }
     }
