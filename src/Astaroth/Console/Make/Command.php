@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Astaroth\Console\Make;
 
@@ -6,6 +7,7 @@ use Ahc\Cli\Input\Command as CliCommand;
 use Astaroth\Foundation\Application;
 use Astaroth\Foundation\Utils;
 use Astaroth\Generators\EventGenerator;
+use Astaroth\Generators\NonExistentEventException;
 use RuntimeException;
 use function file_put_contents;
 use function getcwd;
@@ -35,10 +37,19 @@ final class Command extends CliCommand
                     throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
                 }
 
-                file_put_contents(
-                    sprintf('%s%s%s.php', $path, DIRECTORY_SEPARATOR, $className),
-                    EventGenerator::generate(Application::$configuration->getAppNamespace(), $className, $event)
-                );
+                try {
+                    $file = EventGenerator::generate(Application::$configuration->getAppNamespace(), $className, $event);
+                    $filePathName = sprintf('%s%s%s.php', $path, DIRECTORY_SEPARATOR, $className);
+
+                    file_put_contents($filePathName, $file);
+
+                    $this->writer()
+                        ->ok("Action successfully", true)
+                        ->info("Path from generated file:\n$filePathName", true);
+                } catch (NonExistentEventException $e) {
+                    $this->writer()->red($e->getMessage(), true);
+                }
+
             });
     }
 
