@@ -36,6 +36,7 @@ final class Application
         self::$configuration = Configuration::set($this->envDir, $this->type);
 
         self::$logger = new Logger("log");
+        self::setLogLevel($this->type);
     }
 
     private static function setLogLevel(ApplicationWorkMode $workMode)
