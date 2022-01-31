@@ -8,6 +8,7 @@ namespace Astaroth\Handler;
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
+use Astaroth\Foundation\Application;
 use Throwable;
 use function is_array;
 use function json_decode;
@@ -48,7 +49,10 @@ final class LazyHandler implements HandlerInterface
     public function listen(callable $func): void
     {
         $this->botInstance->listen(
-            fn($raw_data) => $func($this->normalizeData($raw_data))
+            function ($raw_data) use ($func) {
+                Application::$logger->info("new event\n $raw_data");
+                return $func($this->normalizeData($raw_data));
+            }
         );
     }
 }
