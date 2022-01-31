@@ -11,6 +11,7 @@ use Astaroth\Enums\Configuration\ApplicationWorkMode;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
 use HaydenPierce\ClassFinder\ClassFinder;
+use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -41,15 +42,15 @@ final class Application
 
     private function configureLog(): LoggerInterface
     {
-        if (self::$configuration->isDebug() === true) {
-            $logger = new Logger("log");
-        } else {
-            $logger = new NullLogger();
-        }
+        $logger = new Logger("log");
 
-        $logger->pushHandler(new StreamHandler(sprintf('%s%s%s', getcwd(), DIRECTORY_SEPARATOR, '.log')));
-        if ($this->type === ApplicationWorkMode::DEVELOPMENT) {
-            $logger->pushHandler(new StreamHandler(STDOUT));
+        if (self::$configuration->isDebug() === true) {
+            $logger->pushHandler(new StreamHandler(sprintf('%s%s%s', getcwd(), DIRECTORY_SEPARATOR, '.log')));
+            if ($this->type === ApplicationWorkMode::DEVELOPMENT) {
+                $logger->pushHandler(new StreamHandler(STDOUT));
+            }
+        } else {
+            $logger->pushHandler(new NullHandler);
         }
 
         return $logger;
