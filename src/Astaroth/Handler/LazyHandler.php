@@ -45,12 +45,13 @@ final class LazyHandler implements HandlerInterface
      * @implements HandlerInterface
      * @param callable $func
      * @throws Throwable
+     * @noinspection JsonEncodingApiUsageInspection
      */
     public function listen(callable $func): void
     {
         $this->botInstance->listen(
             function ($raw_data) use ($func) {
-                Application::$logger->info("new event\n $raw_data");
+                Application::$logger->info("new event\n" . @json_encode($raw_data));
                 return $func($this->normalizeData($raw_data));
             }
         );
