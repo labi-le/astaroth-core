@@ -14,6 +14,7 @@ use HaydenPierce\ClassFinder\ClassFinder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Throwable;
 use function getcwd;
@@ -35,16 +36,23 @@ final class Application
         self::$container = new ContainerBuilder();
         self::$configuration = Configuration::set($this->envDir, $this->type);
 
-        self::$logger = new Logger("log");
-        self::setLogLevel($this->type);
+        self::$logger = $this->configureLog();
     }
 
-    private static function setLogLevel(ApplicationWorkMode $workMode)
+    private function configureLog(): LoggerInterface
     {
-        self::$logger->pushHandler(new StreamHandler(sprintf('%s%s%s', getcwd(), DIRECTORY_SEPARATOR, '.log')));
-        if ($workMode === ApplicationWorkMode::DEVELOPMENT) {
-            self::$logger->pushHandler(new StreamHandler(STDOUT));
+        if (self::$configuration->isDebug() === true) {
+            $logger = new Logger("log");
+        } else {
+            $logger = new NullLogger();
         }
+
+        $logger->pushHandler(new StreamHandler(sprintf('%s%s%s', getcwd(), DIRECTORY_SEPARATOR, '.log')));
+        if ($this->type === ApplicationWorkMode::DEVELOPMENT) {
+            $logger->pushHandler(new StreamHandler(STDOUT));
+        }
+
+        return $logger;
     }
 
 
