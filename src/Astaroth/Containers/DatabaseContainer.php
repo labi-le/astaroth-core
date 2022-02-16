@@ -48,7 +48,7 @@ final class DatabaseContainer implements ContainerPlaceholderInterface
             return;
         }
 
-        $config = Setup::createAnnotationMetadataConfiguration($configuration->getEntityPath(), $configuration->isDebug());
+        $config = Setup::createAttributeMetadataConfiguration($configuration->getEntityPath(), $configuration->isDebug());
 
         $container
             ->set(self::CONTAINER_ID, EntityManager::create($connection, $config));

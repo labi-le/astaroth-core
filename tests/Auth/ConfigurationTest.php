@@ -42,7 +42,7 @@ class ConfigurationTest extends TestCase
      */
     public function testGetAppNamespace(): void
     {
-        assertEquals($this->configuration->getAppNamespace(), "App\Command");
+        assertEquals($this->configuration->getAppNamespace(), "app\Command");
     }
 
     public function testGetDatabaseHost(): void
@@ -89,7 +89,7 @@ class ConfigurationTest extends TestCase
      */
     public function testGetEntityPath(): void
     {
-        assertEquals($this->configuration->getEntityPath(), ["./App/Entity"]);
+        assertEquals($this->configuration->getEntityPath(), ["./app/Entity"]);
     }
 
     /**
