@@ -24,7 +24,6 @@
     "haydenpierce/class-finder": "^0.4.3",
 
     "doctrine/orm": ">=2",
-    "doctrine/annotations": ">=3.4.1",
 
     "symfony/dependency-injection": "^5",
     "symfony/cache": ">=v3",
