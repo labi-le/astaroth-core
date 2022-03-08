@@ -66,6 +66,30 @@ final class Application
     }
 
     /**
+     * @return ContainerBuilder
+     */
+    public static function getContainer(): ContainerBuilder
+    {
+        return self::$container;
+    }
+
+    /**
+     * @return Configuration
+     */
+    public static function getConfiguration(): Configuration
+    {
+        return self::$configuration;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public static function getLogger(): LoggerInterface
+    {
+        return self::$logger;
+    }
+
+    /**
      * @throws Throwable
      */
     public function run(): void
