@@ -7,6 +7,7 @@ namespace Astaroth\Foundation;
 use Astaroth\Auth\Configuration;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function is_subclass_of;
 
 /**
  * Class Facade
@@ -49,11 +50,11 @@ final class FacadePlaceholder
      */
     public static function getInstance(object $app = null): FacadePlaceholder
     {
-        if ($app instanceof Application) {
+        if (is_subclass_of($app, Application::class)) {
             if (self::$instance === null) {
                 self::$instance = new self($app);
             }
-        } else if (self::$instance === null) {
+        } else {
             throw new RuntimeException('The app parameter must be an instance of the Astaroth\Foundation\Application class');
         }
 
