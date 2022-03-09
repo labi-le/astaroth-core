@@ -1,4 +1,7 @@
 <?php
+/*
+ * Copyright (c) 2022.
+ */
 
 declare(strict_types=1);
 
@@ -13,7 +16,6 @@ use Throwable;
 use function is_array;
 use function json_decode;
 use function json_encode;
-use const JSON_PRETTY_PRINT;
 
 /**
  * Class LazyHandler
@@ -22,7 +24,9 @@ use const JSON_PRETTY_PRINT;
 final class LazyHandler implements HandlerInterface
 {
 
-    public function __construct(private readonly HandlerInterface $botInstance, private LoggerInterface $logger){}
+    public function __construct(private readonly HandlerInterface $botInstance, private LoggerInterface $logger)
+    {
+    }
 
     /**
      * Normalize output data from VKontakte
@@ -41,6 +45,7 @@ final class LazyHandler implements HandlerInterface
 
     }
 
+
     /**
      * Run instance
      * @implements HandlerInterface
@@ -52,7 +57,7 @@ final class LazyHandler implements HandlerInterface
     {
         $this->botInstance->listen(
             function ($raw_data) use ($func) {
-                $this->logger->info("new event\n" . @json_encode($raw_data, JSON_PRETTY_PRINT));
+                $this->logger->info("new event\n" . json_encode($raw_data));
                 return $func($this->normalizeData($raw_data));
             }
         );

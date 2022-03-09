@@ -1,4 +1,7 @@
 <?php
+/*
+ * Copyright (c) 2022.
+ */
 
 declare(strict_types=1);
 
@@ -15,7 +18,6 @@ use Astaroth\Enums\Events;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use function count;
 use function is_object;
 use function trigger_error;
 use const E_USER_WARNING;
@@ -29,8 +31,8 @@ final class EventAttributeHandler
      * @param DataFetcher $data
      */
     public function __construct(
-        private readonly array $classMap,
-        DataFetcher   $data,
+        private     readonly array $classMap,
+        DataFetcher $data,
     )
     {
         $this->data = self::fetchData($data);
@@ -47,13 +49,8 @@ final class EventAttributeHandler
             /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
-            //if the validation of the top-level class attributes is false, then we validate another class
-            // if the number of validated attributes is not equal to the number of class attributes, then the validation failed
-
-            // cast to array to allow count
-            $topLevelValidation = (array)$this->validateAttr($reflectionClass);
-            $classAttr = $reflectionClass->getAttributes(AttributeClassInterface::class);
-            if (count($topLevelValidation) !== count($classAttr)) {
+            // if the validation of the top-level class attributes is false, then we validate another class
+            if ($this->validateAttr($reflectionClass) === false) {
                 continue;
             }
 
@@ -71,7 +68,7 @@ final class EventAttributeHandler
 
 
     /**
-     * Validating top-level attributes
+     * Validating attributes
      * @see https://i.imgur.com/zcylScY.png
      *
      * @param ReflectionClass|ReflectionMethod $reflection
@@ -94,7 +91,10 @@ final class EventAttributeHandler
 
                 $validate = $attribute->validate();
                 if ($attribute instanceof AttributeClassInterface) {
-                    $validatedAttr = $validate;
+                    if ($validate === false) {
+                        return false;
+                    }
+                    $validatedAttr = true;
                 }
 
                 if ($validate === true) {

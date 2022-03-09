@@ -1,4 +1,7 @@
 <?php
+/*
+ * Copyright (c) 2022.
+ */
 
 declare(strict_types=1);
 
@@ -10,6 +13,7 @@ use Astaroth\Contracts\ContainerPlaceholderInterface;
 use Astaroth\Enums\Configuration\ApplicationWorkMode;
 use Astaroth\Handler\LazyHandler;
 use Astaroth\Route\Route;
+use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
@@ -32,6 +36,9 @@ class Application
 
     private LoggerInterface $logger;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(private ?string $envDir = null, private readonly ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
         $this->container = new ContainerBuilder();
@@ -102,6 +109,9 @@ class Application
         $this->bootstrap();
     }
 
+    /**
+     * @throws Exception
+     */
     protected function fillContainers(): void
     {
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
