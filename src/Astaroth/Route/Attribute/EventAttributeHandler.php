@@ -1,7 +1,4 @@
 <?php
-/*
- * Copyright (c) 2022.
- */
 
 declare(strict_types=1);
 
