@@ -27,7 +27,7 @@ final class Configuration
     /**
      * @throws Exception
      */
-    private function __construct(?string $dir, ApplicationWorkMode $type)
+    public function __construct(?string $dir, ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
         if ($type === ApplicationWorkMode::DEVELOPMENT && $dir !== null) {
             $this->parseDevEnv($dir);
@@ -36,14 +36,6 @@ final class Configuration
         if ($type === ApplicationWorkMode::PRODUCTION) {
             Additional::DEBUG->setEnv(PseudoBoolean::NO->name);
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function set(?string $dir, ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT): Configuration
-    {
-        return new Configuration($dir, $type);
     }
 
 

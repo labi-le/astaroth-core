@@ -39,7 +39,7 @@ class Application
     public function __construct(private ?string $envDir = null, private readonly ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
         $this->container = new ContainerBuilder();
-        $this->configuration = Configuration::set($this->envDir, $this->type);
+        $this->configuration = new Configuration($this->envDir, $this->type);
 
         $this->logger = $this->configureLog();
     }
@@ -122,7 +122,7 @@ class Application
 
     protected function fillFacades(): void
     {
-        FacadePlaceholder::getInstance($this);
+        FacadePlaceholder::getInstance($this->getContainer(), $this->getConfiguration());
     }
 
     /**

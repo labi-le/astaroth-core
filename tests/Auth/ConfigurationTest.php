@@ -21,7 +21,7 @@ class ConfigurationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = Configuration::set(dirname(__DIR__));
+        $this->configuration = new Configuration(dirname(__DIR__));
     }
 
     /**
