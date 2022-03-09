@@ -21,29 +21,29 @@ use function getcwd;
 use function sprintf;
 use const PHP_SAPI;
 
-final class Application
+class Application
 {
     public const MAJOR_VERSION = 2;
     public const MINOR_VERSION = '2.9.0';
 
-    public static ContainerBuilder $container;
-    public static Configuration $configuration;
+    private ContainerBuilder $container;
+    private Configuration $configuration;
 
-    public static LoggerInterface $logger;
+    private LoggerInterface $logger;
 
     public function __construct(private ?string $envDir = null, private readonly ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
-        self::$container = new ContainerBuilder();
-        self::$configuration = Configuration::set($this->envDir, $this->type);
+        $this->container = new ContainerBuilder();
+        $this->configuration = Configuration::set($this->envDir, $this->type);
 
-        self::$logger = $this->configureLog();
+        $this->logger = $this->configureLog();
     }
 
-    private function configureLog(): LoggerInterface
+    protected function configureLog(): LoggerInterface
     {
         $logger = new Logger("log");
 
-        if (self::$configuration->isDebug() === true) {
+        if ($this->getConfiguration()->isDebug() === true) {
             $logger->pushHandler(new StreamHandler(sprintf('%s%s%s', getcwd(), DIRECTORY_SEPARATOR, '.log')));
             if ($this->type === ApplicationWorkMode::DEVELOPMENT) {
                 $logger->pushHandler(new StreamHandler(STDOUT));
@@ -68,25 +68,25 @@ final class Application
     /**
      * @return ContainerBuilder
      */
-    public static function getContainer(): ContainerBuilder
+    public function getContainer(): ContainerBuilder
     {
-        return self::$container;
+        return $this->container;
     }
 
     /**
      * @return Configuration
      */
-    public static function getConfiguration(): Configuration
+    public function getConfiguration(): Configuration
     {
-        return self::$configuration;
+        return $this->configuration;
     }
 
     /**
      * @return LoggerInterface
      */
-    public static function getLogger(): LoggerInterface
+    public function getLogger(): LoggerInterface
     {
-        return self::$logger;
+        return $this->logger;
     }
 
     /**
@@ -94,20 +94,38 @@ final class Application
      */
     public function run(): void
     {
-        self::$logger->info("App started");
+        $this->getLogger()->info("App started");
+        $this->fillContainers();
+        $this->fillFacades();
+
+        $this->bootstrap();
+    }
+
+    protected function fillContainers(): void
+    {
         foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
             /**
              * @var ContainerPlaceholderInterface $instanceContainer
              */
             $instanceContainer = new $containerObject;
-            $instanceContainer(self::$container, self::$configuration);
+            $instanceContainer($this->getContainer(), $this->getConfiguration());
         }
+    }
 
-        FacadePlaceholder::getInstance(self::$container, self::$configuration);
+    protected function fillFacades(): void
+    {
+        FacadePlaceholder::getInstance($this->getContainer(), $this->getConfiguration());
+    }
 
-        (new Route(
-            new LazyHandler((new BotInstance(self::$configuration))->bootstrap())))
-            ->setClassMap(self::$configuration->getAppNamespace())
-            ->handle();
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    protected function bootstrap(): void
+    {
+        $botInstance = new BotInstance($this->getConfiguration());
+        $lazyHandler = new LazyHandler($botInstance->bootstrap());
+        $route = new Route($lazyHandler);
+        $route->handle();
     }
 }
