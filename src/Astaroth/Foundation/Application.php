@@ -126,7 +126,7 @@ class Application
     {
         $botInstance = new BotInstance($this->getConfiguration(),);
         $lazyHandler = new LazyHandler($botInstance->bootstrap(), $this->getLogger());
-        $route = new Route($lazyHandler);
+        $route = new Route($lazyHandler, $this->getConfiguration()->getAppNamespace());
         $route->handle();
     }
 }

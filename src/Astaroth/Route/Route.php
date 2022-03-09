@@ -23,22 +23,16 @@ final class Route
 {
     private static array $class_map;
 
-    public function __construct(private readonly HandlerInterface $handler)
-    {
-    }
-
-
     /**
-     * Set class map
+     * @param HandlerInterface $handler
      * @param string $class_map
-     * @return static
      * @throws Exception
      */
-    public function setClassMap(string $class_map): Route
+    public function __construct(private readonly HandlerInterface $handler, string $class_map)
     {
         self::$class_map = ClassFinder::getClassesInNamespace($class_map, ClassFinder::RECURSIVE_MODE);
-        return $this;
     }
+
 
     /**
      * Routing data from VK
