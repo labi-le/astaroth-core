@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use function count;
 use function mt_rand;
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertIsString;
 use function PHPUnit\Framework\assertNotNull;
 use function range;
 use function sleep;
@@ -29,7 +28,7 @@ class TimePerformanceTest extends TestCase
 
             assertEquals(10001, count($arr));
             assertEquals(10001, count($arr2));
-            sleep(2);
+            sleep(1);
         };
 
         assertNotNull((new TimePerformance($app))->getTimeEnd());

@@ -14,7 +14,6 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use function dirname;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 use function sys_get_temp_dir;
 
@@ -49,7 +48,7 @@ class StateTest extends TestCase
     public function testValidate(): void
     {
         //cache directory
-        FacadePlaceholder::getInstance(new ContainerBuilder(), Configuration::set(dirname(__DIR__, 2)));
+        FacadePlaceholder::getInstance(new ContainerBuilder(), new Configuration(dirname(__DIR__, 2)));
 
         $hs = (new State("example", ConversationType::PERSONAL))->setHaystack($this->data->messageNew());
         assertTrue($hs->validate());
