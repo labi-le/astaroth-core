@@ -15,6 +15,7 @@ use Astaroth\Enums\Events;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use function count;
 use function is_object;
 use function trigger_error;
 use const E_USER_WARNING;
@@ -47,7 +48,12 @@ final class EventAttributeHandler
             $reflectionClass = new ReflectionClass($class);
 
             //if the validation of the top-level class attributes is false, then we validate another class
-            if ($this->validateAttr($reflectionClass) === false) {
+            // if the number of validated attributes is not equal to the number of class attributes, then the validation failed
+
+            // cast to array to allow count
+            $topLevelValidation = (array)$this->validateAttr($reflectionClass);
+            $classAttr = $reflectionClass->getAttributes(AttributeClassInterface::class);
+            if (count($topLevelValidation) !== count($classAttr)) {
                 continue;
             }
 
