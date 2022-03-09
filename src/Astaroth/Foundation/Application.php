@@ -124,7 +124,7 @@ class Application
      */
     protected function bootstrap(): void
     {
-        $botInstance = new BotInstance($this->getConfiguration(),);
+        $botInstance = new BotInstance($this->getConfiguration());
         $lazyHandler = new LazyHandler($botInstance->bootstrap(), $this->getLogger());
         $route = new Route($lazyHandler, $this->getConfiguration()->getAppNamespace());
         $route->handle();

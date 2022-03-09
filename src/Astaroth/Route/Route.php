@@ -13,6 +13,7 @@ use Astaroth\Route\Attribute\EventAttributeHandler;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use ReflectionException;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -25,12 +26,15 @@ final class Route
 
     /**
      * @param HandlerInterface $handler
-     * @param string $class_map
+     * @param string $commandNamespace
      * @throws Exception
      */
-    public function __construct(private readonly HandlerInterface $handler, string $class_map)
+    public function __construct(private readonly HandlerInterface $handler, string $commandNamespace)
     {
-        self::$class_map = ClassFinder::getClassesInNamespace($class_map, ClassFinder::RECURSIVE_MODE);
+        self::$class_map = ClassFinder::getClassesInNamespace($commandNamespace, ClassFinder::RECURSIVE_MODE);
+        if (self::$class_map === []) {
+            throw new RuntimeException('No classes found in namespace: ' . $commandNamespace);
+        }
     }
 
 
