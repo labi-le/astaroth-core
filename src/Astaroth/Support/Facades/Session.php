@@ -11,6 +11,6 @@ final class Session extends _Session
 {
     public function __construct(int $id, string $type)
     {
-        parent::__construct($id, $type, FacadePlaceholder::getConfiguration()->getCachePath());
+        parent::__construct($id, $type, FacadePlaceholder::getInstance()->getConfiguration()->getCachePath());
     }
 }

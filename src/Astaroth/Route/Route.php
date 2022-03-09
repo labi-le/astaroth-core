@@ -13,6 +13,7 @@ use Astaroth\Route\Attribute\EventAttributeHandler;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use ReflectionException;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -23,22 +24,19 @@ final class Route
 {
     private static array $class_map;
 
-    public function __construct(private readonly HandlerInterface $handler)
-    {
-    }
-
-
     /**
-     * Set class map
-     * @param string $class_map
-     * @return static
+     * @param HandlerInterface $handler
+     * @param string $commandNamespace
      * @throws Exception
      */
-    public function setClassMap(string $class_map): Route
+    public function __construct(private readonly HandlerInterface $handler, string $commandNamespace)
     {
-        self::$class_map = ClassFinder::getClassesInNamespace($class_map, ClassFinder::RECURSIVE_MODE);
-        return $this;
+        self::$class_map = ClassFinder::getClassesInNamespace($commandNamespace, ClassFinder::RECURSIVE_MODE);
+        if (self::$class_map === []) {
+            throw new RuntimeException('No classes found in namespace: ' . $commandNamespace);
+        }
     }
+
 
     /**
      * Routing data from VK
@@ -78,6 +76,7 @@ final class Route
     {
         $attrHandler = new EventAttributeHandler($classMap, $data);
 
+         // TODO ускорить поиск класса по аттрибутам
         foreach ($attrHandler->validate() as $validatedObject) {
             (new Executor($validatedObject->getObject(), $validatedObject->getMethods()))
                 ->replaceObjects(EventAttributeHandler::fetchData($data))

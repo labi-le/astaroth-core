@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Foundation;
 
 use Astaroth\Auth\Configuration;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,42 +17,46 @@ final class FacadePlaceholder
 {
     private static ?FacadePlaceholder $instance = null;
 
-    private static ContainerInterface $container;
-    private static Configuration $configuration;
-
-    private function __construct(?ContainerInterface $container, ?Configuration $configuration)
-    {
-        self::$container = $container;
-        self::$configuration = $configuration;
-    }
+    private ContainerInterface $container;
 
     /**
-     * @param ContainerInterface|null $container
-     * @param Configuration|null $configuration
-     * @return FacadePlaceholder
+     * @return ContainerInterface
      */
-    public static function getInstance(ContainerInterface $container = null, Configuration $configuration = null): FacadePlaceholder
+    public function getContainer(): ContainerInterface
     {
-        if (self::$instance === null) {
-            self::$instance = new self($container, $configuration);
-        }
-
-        return self::$instance;
+        return $this->container;
     }
 
     /**
      * @return Configuration
      */
-    public static function getConfiguration(): Configuration
+    public function getConfiguration(): Configuration
     {
-        return self::$configuration;
+        return $this->configuration;
+    }
+
+    private Configuration $configuration;
+
+    private function __construct(Application $app)
+    {
+        $this->container = $app->getContainer();
+        $this->configuration = $app->getConfiguration();
     }
 
     /**
-     * @return ContainerInterface
+     * @param object|null $app
+     * @return FacadePlaceholder
      */
-    public static function getContainer(): ContainerInterface
+    public static function getInstance(object $app = null): FacadePlaceholder
     {
-        return self::$container;
+        if ($app instanceof Application) {
+            if (self::$instance === null) {
+                self::$instance = new self($app);
+            }
+        } else if (self::$instance === null) {
+            throw new RuntimeException('The app parameter must be an instance of the Astaroth\Foundation\Application class');
+        }
+
+        return self::$instance;
     }
 }

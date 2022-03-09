@@ -28,8 +28,8 @@ final class EventAttributeHandler
      * @param DataFetcher $data
      */
     public function __construct(
-        private readonly array $classMap,
-        DataFetcher   $data,
+        private     readonly array $classMap,
+        DataFetcher $data,
     )
     {
         $this->data = self::fetchData($data);
@@ -46,7 +46,7 @@ final class EventAttributeHandler
             /** @psalm-suppress ArgumentTypeCoercion */
             $reflectionClass = new ReflectionClass($class);
 
-            //if the validation of the top-level class attributes is false, then we validate another class
+            // if the validation of the top-level class attributes is false, then we validate another class
             if ($this->validateAttr($reflectionClass) === false) {
                 continue;
             }
@@ -65,7 +65,7 @@ final class EventAttributeHandler
 
 
     /**
-     * Validating top-level attributes
+     * Validating attributes
      * @see https://i.imgur.com/zcylScY.png
      *
      * @param ReflectionClass|ReflectionMethod $reflection
@@ -88,7 +88,10 @@ final class EventAttributeHandler
 
                 $validate = $attribute->validate();
                 if ($attribute instanceof AttributeClassInterface) {
-                    $validatedAttr = $validate;
+                    if ($validate === false) {
+                        return false;
+                    }
+                    $validatedAttr = true;
                 }
 
                 if ($validate === true) {

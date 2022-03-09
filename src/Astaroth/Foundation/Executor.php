@@ -158,7 +158,6 @@ final class Executor
             $parameters[] = $this->normalizeNamedType($reflectionType, $additionalParameter);
         }
 
-        /** @noinspection PhpDeprecatedStdLibCallInspection */
         return current(array_filter($parameters)) ?: null;
     }
 
