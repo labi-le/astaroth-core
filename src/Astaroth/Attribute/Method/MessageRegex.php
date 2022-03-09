@@ -12,7 +12,6 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\Language;
 use function count;
-use function is_null;
 use function preg_match;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]

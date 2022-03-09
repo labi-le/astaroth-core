@@ -79,7 +79,7 @@ final class EventGenerator implements GeneratorInterface
         return new Literal('ConversationType::' . ConversationType::ALL->name);
     }
 
-    private static function generateMessageValidationEnum()
+    private static function generateMessageValidationEnum(): Literal
     {
         return new Literal('MessageValidation::CONTAINS');
     }

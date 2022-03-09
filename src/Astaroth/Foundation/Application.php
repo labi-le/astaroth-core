@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Throwable;
 use function getcwd;
 use function sprintf;
+use const DIRECTORY_SEPARATOR;
 use const PHP_SAPI;
 
 class Application
@@ -114,7 +115,7 @@ class Application
 
     protected function fillFacades(): void
     {
-        FacadePlaceholder::getInstance($this->getContainer(), $this->getConfiguration());
+        FacadePlaceholder::getInstance($this);
     }
 
     /**
@@ -123,8 +124,8 @@ class Application
      */
     protected function bootstrap(): void
     {
-        $botInstance = new BotInstance($this->getConfiguration());
-        $lazyHandler = new LazyHandler($botInstance->bootstrap());
+        $botInstance = new BotInstance($this->getConfiguration(),);
+        $lazyHandler = new LazyHandler($botInstance->bootstrap(), $this->getLogger());
         $route = new Route($lazyHandler);
         $route->handle();
     }
