@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Attribute\Method;
 
-use Astaroth\Contracts\AttributeClassInterface;
+use Astaroth\Contracts\AttributeMethodInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\ActionEnum;
@@ -20,7 +20,7 @@ use function property_exists;
  *
  * @see https://i.imgur.com/4YQWIZ4.png
  */
-final class Action implements AttributeValidatorInterface, AttributeClassInterface
+final class Action implements AttributeValidatorInterface, AttributeMethodInterface
 {
     private readonly ?object $haystack;
 
