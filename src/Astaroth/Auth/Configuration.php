@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Astaroth\Auth;
 
 
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Enums\Configuration\Additional;
 use Astaroth\Enums\Configuration\ApplicationWorkMode;
 use Astaroth\Enums\Configuration\CallbackRequired;
@@ -24,8 +25,9 @@ use function sys_get_temp_dir;
  * @psalm-suppress InvalidReturnStatement
  * @psalm-suppress InvalidReturnType
  * @psalm-suppress PossiblyInvalidArgument
+ * @psalm-suppress MethodSignatureMismatch
  */
-final class Configuration
+final class Configuration implements ConfigurationInterface
 {
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
 

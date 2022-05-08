@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Astaroth\Bootstrap;
 
 
-use Astaroth\Auth\Configuration;
-use Astaroth\Auth\ParameterMissingException;
 use Astaroth\Callback\Callback;
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\Enums\Configuration\Type;
 use Astaroth\Longpoll\Longpoll;
@@ -15,7 +14,7 @@ use Exception;
 
 final class BotInstance
 {
-    public function __construct(private Configuration $container)
+    public function __construct(private readonly ConfigurationInterface $container)
     {
     }
 
@@ -30,8 +29,9 @@ final class BotInstance
 
     /**
      * @throws Exception
+     * @psalm-suppress TypeDoesNotContainType
      */
-    private function selectStartupType(Configuration $configuration): HandlerInterface
+    private function selectStartupType(ConfigurationInterface $configuration): HandlerInterface
     {
         return $configuration->getType() === Type::CALLBACK
             ? $this->callback($configuration)
@@ -41,7 +41,7 @@ final class BotInstance
     /**
      * @throws Exception
      */
-    private function callback(Configuration $configuration): HandlerInterface
+    private function callback(ConfigurationInterface $configuration): HandlerInterface
     {
         $callback = new Callback(
             $configuration->getCallbackConfirmationKey(),
@@ -52,10 +52,7 @@ final class BotInstance
         return $configuration->isDebug() ? $callback->disableClearHeaders() : $callback;
     }
 
-    /**
-     * @throws ParameterMissingException
-     */
-    private function longpoll(Configuration $configuration): HandlerInterface
+    private function longpoll(ConfigurationInterface $configuration): HandlerInterface
     {
         return (new LongPoll(
             $configuration->getAccessToken(),
