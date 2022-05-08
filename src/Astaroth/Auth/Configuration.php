@@ -20,6 +20,11 @@ use function array_map;
 use function explode;
 use function sys_get_temp_dir;
 
+/**
+ * @psalm-suppress InvalidReturnStatement
+ * @psalm-suppress InvalidReturnType
+ * @psalm-suppress PossiblyInvalidArgument
+ */
 final class Configuration
 {
     public const CONTAINER_NAMESPACE = "Astaroth\Containers";
@@ -102,7 +107,7 @@ final class Configuration
     /**
      * @throws ParameterMissingException
      */
-    public function getType(): Type
+    public function getType(): ?Type
     {
         return Type::tryFrom(mb_strtolower(Required::TYPE->getEnv()));
     }
