@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Astaroth\Console\Make;
 
 use Ahc\Cli\Input\Command as CliCommand;
+use Astaroth\Contracts\ConfigurableCommand;
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Foundation\Application;
 use Astaroth\Foundation\Utils;
 use Astaroth\Generators\EventGenerator;
@@ -16,12 +18,11 @@ use function mkdir;
 use function sprintf;
 use const DIRECTORY_SEPARATOR;
 
-final class Command extends CliCommand
+final class Command extends CliCommand implements ConfigurableCommand
 {
-    public function __construct()
+    public function __construct(ConfigurationInterface $configuration)
     {
         parent::__construct("make:command", "generate command");
-
 
         $this
             ->argument('className', 'name of the class that will be indicated when creating')
@@ -29,16 +30,16 @@ final class Command extends CliCommand
             ->usage(
                 '<bold>  $0</end> <green>make:command</end> Greetings message_new</end><eol/>'
             )
-            ->action(function (string $className, string $event) {
+            ->action(function (string $className, string $event) use ($configuration) {
                 new Application(getcwd());
 
-                $path = Utils::replaceNamespaceToPath(Application::$configuration->getAppNamespace());
+                $path = Utils::replaceNamespaceToPath($configuration->getAppNamespace());
                 if (@!mkdir($path, 0777, true) && !is_dir($path)) {
                     throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
                 }
 
                 try {
-                    $file = EventGenerator::generate(Application::$configuration->getAppNamespace(), $className, $event);
+                    $file = EventGenerator::generate($configuration->getAppNamespace(), $className, $event);
                     $filePathName = sprintf('%s%s%s.php', $path, DIRECTORY_SEPARATOR, $className);
 
                     file_put_contents($filePathName, $file);
