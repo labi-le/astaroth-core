@@ -27,7 +27,7 @@ final class DatabaseContainer implements ContainerPlaceholderInterface
         $connection = [];
         if ($configuration->getDatabaseUrl()) {
             $connection["url"] = $configuration->getDatabaseUrl();
-        } else if (
+        } /** @noinspection PhpSeparateElseIfInspection */ else if (
             $configuration->getDatabaseDriver() &&
             $configuration->getDatabaseHost() &&
             $configuration->getDatabaseName() &&

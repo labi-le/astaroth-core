@@ -19,7 +19,7 @@ use function array_map;
  */
 final class ClientInfo implements AttributeValidatorInterface, AttributeMethodInterface
 {
-    private readonly ?object $client_info;
+    private ?object $client_info;
     private readonly array $button_actions;
 
     /**
@@ -31,7 +31,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
      * @param int $lang_id
      */
     public function __construct(
-        array        $button_actions =
+        array   $button_actions =
         [
             ClientInfoEnum::TEXT,
             ClientInfoEnum::VKPAY,
@@ -42,10 +42,10 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
             ClientInfoEnum::INTENT_SUBSCRIBE,
             ClientInfoEnum::INTENT_UNSUBSCRIBE
         ],
-        private bool $keyboard = true,
-        private bool $inline_keyboard = true,
-        private bool $carousel = true,
-        private int  $lang_id = 0,
+        private readonly bool $keyboard = true,
+        private readonly bool $inline_keyboard = true,
+        private readonly bool $carousel = true,
+        private readonly int $lang_id = 0,
     )
     {
         $this->button_actions = array_map(static fn(ClientInfoEnum $enum) => $enum->value, $button_actions);

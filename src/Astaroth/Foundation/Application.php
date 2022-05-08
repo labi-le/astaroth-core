@@ -37,7 +37,7 @@ class Application
     /**
      * @throws Exception
      */
-    public function __construct(private ?string $envDir = null, private readonly ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
+    public function __construct(private readonly ?string $envDir = null, private readonly ApplicationWorkMode $type = ApplicationWorkMode::DEVELOPMENT)
     {
         $this->container = new ContainerBuilder();
         $this->configuration = new Configuration($this->envDir, $this->type);

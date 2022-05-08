@@ -12,7 +12,7 @@ use function json_encode;
 
 final class ApiRequest
 {
-    public function __construct(private ?string $accessToken)
+    public function __construct(private readonly ?string $accessToken)
     {
     }
 

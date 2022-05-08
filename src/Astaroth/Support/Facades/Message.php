@@ -98,7 +98,7 @@ final class Message
      */
     public function send(int $id = null): array
     {
-        $message = (new MessageBuilder)
+        $message = (new MessageBuilder())
             ->setPeerId($id ?? $this->peer_id)
             ->setMessage($this->text)
             ->setKeyboard($this->keyboard)

@@ -36,7 +36,7 @@ class Session
     /**
      * Switch to another type
      * @param string $type
-     * @return Session $this
+     * @return static
      */
     public function changeType(string $type): static
     {

@@ -25,9 +25,9 @@ final class EventGenerator implements GeneratorInterface
      */
     public static function generate(string $namespace, string $className, string $eventName): string
     {
-        $file = new PhpFile;
+        $file = new PhpFile();
         $file
-            ->setStrictTypes(true);
+            ->setStrictTypes();
 
         $ns = $file->addNamespace($namespace);
         $ns
@@ -44,7 +44,7 @@ final class EventGenerator implements GeneratorInterface
         $class = $ns->addClass($className);
 
         $class
-            ->setFinal(true)
+            ->setFinal()
             ->setExtends(BaseCommands::class)
             ->addAttribute(Event::class, [self::parseEventEnum($eventName)])
             ->addAttribute(Conversation::class, [self::generateConversationEnum()])
