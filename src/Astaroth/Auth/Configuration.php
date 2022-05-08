@@ -29,8 +29,6 @@ use function sys_get_temp_dir;
  */
 final class Configuration implements ConfigurationInterface
 {
-    public const CONTAINER_NAMESPACE = "Astaroth\Containers";
-
     /**
      * @throws Exception
      */

@@ -9,6 +9,8 @@ use Astaroth\Enums\Configuration\Type;
 
 interface ConfigurationInterface
 {
+    public const CONTAINER_NAMESPACE = "Astaroth\Containers";
+
     public function getAccessToken(): string;
 
     public function getApiVersion(): string;

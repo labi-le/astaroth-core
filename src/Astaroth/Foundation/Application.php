@@ -6,6 +6,7 @@ namespace Astaroth\Foundation;
 
 use Astaroth\Auth\Configuration;
 use Astaroth\Bootstrap\BotInstance;
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Contracts\ContainerPlaceholderInterface;
 use Astaroth\Enums\Configuration\ApplicationWorkMode;
 use Astaroth\Handler\LazyHandler;
@@ -29,7 +30,7 @@ class Application
     public const MINOR_VERSION = '2.9.0';
 
     private ContainerBuilder $container;
-    private Configuration $configuration;
+    private ConfigurationInterface $configuration;
 
     private LoggerInterface $logger;
 
@@ -54,7 +55,7 @@ class Application
                 $logger->pushHandler(new StreamHandler(STDOUT));
             }
         } else {
-            $logger->pushHandler(new NullHandler);
+            $logger->pushHandler(new NullHandler());
         }
 
         return $logger;
@@ -78,10 +79,7 @@ class Application
         return $this->container;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfiguration(): Configuration
+    public function getConfiguration(): ConfigurationInterface
     {
         return $this->configuration;
     }
@@ -111,11 +109,15 @@ class Application
      */
     protected function fillContainers(): void
     {
-        foreach (ClassFinder::getClassesInNamespace(Configuration::CONTAINER_NAMESPACE, ClassFinder::RECURSIVE_MODE) as $containerObject) {
+        foreach (
+            ClassFinder::getClassesInNamespace(
+                ConfigurationInterface::CONTAINER_NAMESPACE,
+                ClassFinder::RECURSIVE_MODE
+            ) as $containerObject) {
             /**
              * @var ContainerPlaceholderInterface $instanceContainer
              */
-            $instanceContainer = new $containerObject;
+            $instanceContainer = new $containerObject();
             $instanceContainer($this->getContainer(), $this->getConfiguration());
         }
     }
