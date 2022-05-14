@@ -4,17 +4,15 @@ declare(strict_types=1);
 namespace Astaroth\Console\Make;
 
 use Ahc\Cli\Input\Command as CliCommand;
-use Astaroth\Contracts\ConfigurableCommand;
-use Astaroth\Contracts\ConfigurationInterface;
 use function copy;
 use function dirname;
 use function getcwd;
 use function sprintf;
 use const DIRECTORY_SEPARATOR;
 
-final class Env extends CliCommand implements ConfigurableCommand
+final class Env extends CliCommand
 {
-    public function __construct(ConfigurationInterface $configuration)
+    public function __construct()
     {
         parent::__construct("make:env", "generate env config");
 
