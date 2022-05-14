@@ -14,8 +14,8 @@ use Astaroth\Foundation\Application;
 $app = new Ahc\Cli\Application('    Lilit cli helper', Application::MINOR_VERSION);
 $configuration = new Configuration(getcwd(), ApplicationWorkMode::DEVELOPMENT);
 
-$app->add(new Command($configuration));
-$app->add(new Env($configuration));
+$app->add(new Command());
+$app->add(new Env());
 
 $app->logo(Logo::LILIT->value);
 $app->handle($argv);
