@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Containers;
 
-use Astaroth\Auth\Configuration;
-use Astaroth\Auth\ParameterMissingException;
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Contracts\ContainerPlaceholderInterface;
 use Astaroth\VkUtils\Builder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,17 +17,13 @@ final class BuilderContainer implements ContainerPlaceholderInterface
 {
     public const CONTAINER_ID = "builder";
 
-    /**
-     * @throws ParameterMissingException
-     */
-    public function __invoke(ContainerBuilder $container, Configuration $configuration): void
+    public function __invoke(ContainerBuilder $container, ConfigurationInterface $configuration): void
     {
         $container
             ->register(self::CONTAINER_ID, Builder::class)
             ->setLazy(true)
             ->addArgument($configuration->getApiVersion())
             ->addMethodCall("setDefaultToken", [$configuration->getAccessToken()])
-            ->addMethodCall("setParallelProcess", [$configuration->getCountParallelOperations()])
-        ;
+            ->addMethodCall("setParallelProcess", [$configuration->getCountParallelOperations()]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Astaroth\Enums\Configuration;
 
@@ -13,14 +14,4 @@ enum Required implements EnvironmentInterface
     case ACCESS_TOKEN;
     case API_VERSION;
     case APP_NAMESPACE;
-
-    public static function toArray(): array
-    {
-        $arr = [];
-        foreach (self::cases() as $case) {
-            $arr[] = $case->name;
-        }
-
-        return $arr;
-    }
 }

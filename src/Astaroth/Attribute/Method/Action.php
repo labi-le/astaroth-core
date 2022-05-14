@@ -22,16 +22,17 @@ use function property_exists;
  */
 final class Action implements AttributeValidatorInterface, AttributeMethodInterface
 {
-    private readonly ?object $haystack;
+    private ?object $haystack;
 
     /**
      * @param ActionEnum $type accepts self constants
      * @param array $anyData example ["member_id" => 418618]
      *
      * @see https://i.imgur.com/S4vcS9w.png
+     * @noinspection PhpPropertyCanBeReadonlyInspection
      */
     public function __construct(
-        private readonly ActionEnum $type,
+        private ActionEnum $type,
         private array      $anyData = []
     )
     {

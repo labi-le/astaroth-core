@@ -11,6 +11,7 @@ use function array_walk;
  * Class Queue
  * Scene analog
  * @package Astaroth\Foundation
+ * @deprecated
  */
 class Queue
 {
@@ -109,7 +110,6 @@ class Queue
     public function prev(): void
     {
         $currentQueue = $this->getCurrentQueue();
-        echo 21212121;
         $this->changeCurrentQueue(--$currentQueue);
         $this->queue->prev();
     }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Astaroth\Auth;
 
 
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Enums\Configuration\Additional;
 use Astaroth\Enums\Configuration\ApplicationWorkMode;
 use Astaroth\Enums\Configuration\CallbackRequired;
@@ -20,10 +21,14 @@ use function array_map;
 use function explode;
 use function sys_get_temp_dir;
 
-final class Configuration
+/**
+ * @psalm-suppress InvalidReturnStatement
+ * @psalm-suppress InvalidReturnType
+ * @psalm-suppress PossiblyInvalidArgument
+ * @psalm-suppress MethodSignatureMismatch
+ */
+final class Configuration implements ConfigurationInterface
 {
-    public const CONTAINER_NAMESPACE = "Astaroth\Containers";
-
     /**
      * @throws Exception
      */
@@ -102,7 +107,7 @@ final class Configuration
     /**
      * @throws ParameterMissingException
      */
-    public function getType(): Type
+    public function getType(): ?Type
     {
         return Type::tryFrom(mb_strtolower(Required::TYPE->getEnv()));
     }

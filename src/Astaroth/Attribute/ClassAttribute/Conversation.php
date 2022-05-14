@@ -40,7 +40,7 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
         $this->member_id = $member_id;
     }
 
-    #[Pure] public function validate(): bool
+    public function validate(): bool
     {
         if ($this->haystack) {
 
@@ -63,7 +63,7 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
 
     }
 
-    #[Pure] #[ArrayShape(["type" => "bool", "id" => "int"])]
+    #[ArrayShape(["type" => "bool", "id" => "int"])]
     private function personalDialogValidate(MessageNew|MessageEvent $data): array
     {
         return

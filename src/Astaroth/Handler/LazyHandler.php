@@ -21,7 +21,7 @@ use function json_encode;
 final class LazyHandler implements HandlerInterface
 {
 
-    public function __construct(private readonly HandlerInterface $botInstance, private LoggerInterface $logger)
+    public function __construct(private readonly HandlerInterface $botInstance, private readonly LoggerInterface $logger)
     {
     }
 

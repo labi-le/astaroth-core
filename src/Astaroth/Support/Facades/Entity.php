@@ -24,7 +24,7 @@ final class Entity extends EntityManagerDecorator
 
     public function __invoke(): Entity
     {
-        return new Entity;
+        return new Entity();
     }
 
     /**

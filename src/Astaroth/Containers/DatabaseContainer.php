@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Astaroth\Containers;
 
-use Astaroth\Auth\Configuration;
-use Astaroth\Auth\ParameterMissingException;
+use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Contracts\ContainerPlaceholderInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
@@ -21,14 +20,14 @@ final class DatabaseContainer implements ContainerPlaceholderInterface
     public const CONTAINER_ID = "db";
 
     /**
-     * @throws ORMException|\Doctrine\ORM\ORMException|ParameterMissingException
+     * @throws ORMException|\Doctrine\ORM\ORMException
      */
-    public function __invoke(ContainerBuilder $container, Configuration $configuration): void
+    public function __invoke(ContainerBuilder $container, ConfigurationInterface $configuration): void
     {
         $connection = [];
         if ($configuration->getDatabaseUrl()) {
             $connection["url"] = $configuration->getDatabaseUrl();
-        } else if (
+        } /** @noinspection PhpSeparateElseIfInspection */ else if (
             $configuration->getDatabaseDriver() &&
             $configuration->getDatabaseHost() &&
             $configuration->getDatabaseName() &&
