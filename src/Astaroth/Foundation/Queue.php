@@ -11,6 +11,7 @@ use function array_walk;
  * Class Queue
  * Scene analog
  * @package Astaroth\Foundation
+ * @deprecated
  */
 class Queue
 {
