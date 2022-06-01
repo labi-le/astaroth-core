@@ -36,7 +36,7 @@ class PlaceholderTest extends TestCase
 
         $p = new Placeholder("%@name");
         assertEquals("*id1(Pavel)", $p->replace(1));
-        assertEquals("*club1(VKontakte API)", $p->replace(-1));
+        assertEquals("*club1(ВКонтакте API)", $p->replace(-1));
 
 
         $p = new Placeholder("%full-name");
