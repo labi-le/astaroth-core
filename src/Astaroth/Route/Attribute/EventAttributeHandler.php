@@ -28,8 +28,8 @@ final class EventAttributeHandler
      * @param DataFetcher $data
      */
     public function __construct(
-        private     readonly array $classMap,
-        DataFetcher $data,
+        private readonly array $classMap,
+        DataFetcher            $data,
     )
     {
         $this->data = self::fetchData($data);
@@ -81,10 +81,8 @@ final class EventAttributeHandler
         foreach ($reflection->getAttributes() as $reflectionAttribute) {
             $attribute = $reflectionAttribute->newInstance();
 
-            if (
-                $attribute instanceof AttributeValidatorInterface
-                && $attribute->setHaystack($this->data)
-            ) {
+            if ($attribute instanceof AttributeValidatorInterface) {
+                $attribute->setHaystack($this->data);
 
                 $validate = $attribute->validate();
                 if ($attribute instanceof AttributeClassInterface) {
@@ -112,6 +110,7 @@ final class EventAttributeHandler
     }
 
     /**
+     * @return ReflectionMethodDecorator[]
      * @throws ReflectionException
      */
     private function validateAttrMethods(

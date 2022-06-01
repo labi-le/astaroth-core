@@ -6,7 +6,6 @@ namespace Astaroth\Support\Facades;
 
 
 use Astaroth\Containers\BuilderContainer;
-use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\Foundation\Placeholder;
 use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
@@ -17,23 +16,40 @@ use function array_map;
 /**
  * Class Create
  * @package Astaroth\Support\Facades\Create
+ * @psalm-suppress MixedReturnStatement
+ *
  */
-final class Create
+final class Create extends AbstractFacade
 {
+
+    protected static function getContainerService(): Builder
+    {
+        /** @var Builder $container */
+        $container = parent::getContainerService();
+        return $container;
+    }
+
+    protected static function getServiceName(): string
+    {
+        return BuilderContainer::CONTAINER_ID;
+    }
+
     /**
      * We check the message for placeholders and, if necessary, add
      * @param IBuilder ...$instances
-     * @return array
+     * @return IBuilder[]
      * @throws Throwable
      */
     private static function messagePlaceholder(IBuilder ...$instances): array
     {
         return array_map(static function (IBuilder $instance) {
             if ($instance instanceof IMessageBuilder) {
-                $message = $instance->getParams()["message"];
-                $id = $instance->getParams()["peer_ids"] > 2e9 ? $instance->getParams()["user_ids"] : $instance->getParams()["peer_ids"];
+                $message = (string)$instance->getParams()["message"];
+                $id = (int)$instance->getParams()["peer_ids"] > 2e9
+                    ? (int)$instance->getParams()["user_ids"]
+                    : (int)$instance->getParams()["peer_ids"];
                 if (!empty($message)) {
-                    return $instance->setMessage((new Placeholder($message))->replace((int)$id));
+                    return $instance->setMessage((new Placeholder($message))->replace($id));
                 }
             }
             return $instance;
@@ -50,10 +66,7 @@ final class Create
     public static function new(IBuilder ...$instance): array
     {
         $new_instance = self::messagePlaceholder(...$instance);
-
-        return FacadePlaceholder::getInstance()
-            ->getContainer()->get(BuilderContainer::CONTAINER_ID)
-            ?->create(...$new_instance);
+        return self::getContainerService()->create(...$new_instance);
     }
 
     /**
@@ -65,11 +78,7 @@ final class Create
      */
     public static function changeToken(string $access_token): Builder
     {
-        /**
-         * @var Builder $instance
-         */
-        $instance = clone FacadePlaceholder::getInstance()->getContainer()->get(BuilderContainer::CONTAINER_ID);
-        return $instance->setDefaultToken($access_token);
+        return clone self::getContainerService()->setDefaultToken($access_token);
     }
 
     /**
@@ -81,5 +90,4 @@ final class Create
     {
         return self::new(...$instance);
     }
-
 }

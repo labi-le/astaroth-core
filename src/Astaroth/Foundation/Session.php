@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
+use RuntimeException;
+use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
+use function is_array;
 use function json_decode;
 use function json_encode;
 use function unlink;
@@ -17,6 +20,7 @@ use const LOCK_EX;
  * Class Session
  * Simple database for recording states
  * @package Astaroth\Foundation
+ * @psalm-suppress MixedArrayAssignment, MixedAssignment, MixedArrayAccess, MixedReturnStatement, MixedInferredReturnType
  */
 class Session
 {
@@ -57,11 +61,11 @@ class Session
 
     /**
      * Write data
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      * @return bool
      */
-    public function put($key, $value): bool
+    public function put(string $key, mixed $value): bool
     {
         $storage = $this->getStorageData() ?: [];
         $storage[$this->getType()][$key] = $value;
@@ -110,11 +114,21 @@ class Session
     /**
      * Get data from session file
      * @noinspection JsonEncodingApiUsageInspection
+     * @return array
      */
     private function getStorageData(): array
     {
-        $content = (string)@file_get_contents($this->fullStoragePath);
-        return @json_decode($content, true) ?: [];
+        if (file_exists($this->fullStoragePath) === false) {
+            file_put_contents($this->fullStoragePath, json_encode([]));
+        }
+        $content = @file_get_contents($this->fullStoragePath);
+        if ($content === false) {
+            throw new RuntimeException("Can't read session file");
+        }
+
+        $data = json_decode($content, true);
+
+        return is_array($data) ? $data : throw new RuntimeException("Can't decode session file");
     }
 
     /**

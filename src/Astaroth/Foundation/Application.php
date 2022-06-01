@@ -17,6 +17,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Throwable;
 use function getcwd;
@@ -106,6 +107,7 @@ class Application
 
     /**
      * @throws Exception
+     * @psalm-suppress ArgumentTypeCoercion
      */
     protected function fillContainers(): void
     {
@@ -114,17 +116,18 @@ class Application
                 ConfigurationInterface::CONTAINER_NAMESPACE,
                 ClassFinder::RECURSIVE_MODE
             ) as $containerObject) {
+            $reflection = new ReflectionClass($containerObject);
             /**
              * @var ContainerPlaceholderInterface $instanceContainer
              */
-            $instanceContainer = new $containerObject();
+            $instanceContainer = $reflection->newInstanceWithoutConstructor();
             $instanceContainer($this->getContainer(), $this->getConfiguration());
         }
     }
 
     protected function fillFacades(): void
     {
-        FacadePlaceholder::getInstance($this->getContainer(), $this->getConfiguration());
+        FacadePlaceholder::fill($this->getContainer(), $this->getConfiguration());
     }
 
     /**

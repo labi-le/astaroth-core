@@ -6,11 +6,10 @@ namespace Astaroth\Support\Facades;
 
 
 use Astaroth\Containers\ClientContainer;
-use Astaroth\Foundation\FacadePlaceholder;
 use Astaroth\VkUtils\Client;
 use Throwable;
 
-final class Request
+final class Request extends AbstractFacade
 {
     /**
      * @param string $method
@@ -21,11 +20,7 @@ final class Request
      */
     public static function call(string $method, array $parameters = [], ?string $token = null): array
     {
-        /**
-         * @var Client $instance
-         */
-        $instance = FacadePlaceholder::getInstance()->getContainer()->get(ClientContainer::CONTAINER_ID);
-        return $instance->request($method, $parameters, $token);
+        return self::getContainerService()->request($method, $parameters, $token);
     }
 
     /**
@@ -40,4 +35,18 @@ final class Request
         return self::call($method, $parameters, $token);
     }
 
+    protected static function getServiceName(): string
+    {
+        return ClientContainer::CONTAINER_ID;
+    }
+
+    protected static function getContainerService(): Client
+    {
+        /**
+         * @var Client $container
+         */
+        $container = parent::getContainerService();
+
+        return $container;
+    }
 }
