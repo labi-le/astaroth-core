@@ -16,6 +16,20 @@ final class FacadePlaceholder
 {
     private static ?FacadePlaceholder $instance = null;
 
+    /**
+     * @param ContainerInterface $container
+     * @param ConfigurationInterface $configuration
+     * @return FacadePlaceholder
+     */
+    public static function fill(ContainerInterface $container, ConfigurationInterface $configuration): FacadePlaceholder
+    {
+        if (self::$instance === null) {
+            self::$instance = new self($container, $configuration);
+        }
+
+        return self::$instance;
+    }
+
 
     /**
      * @return ContainerInterface
@@ -38,17 +52,8 @@ final class FacadePlaceholder
     {
     }
 
-    /**
-     * @param ContainerInterface|null $container
-     * @param ConfigurationInterface|null $configuration
-     * @return FacadePlaceholder
-     */
-    public static function getInstance(ContainerInterface $container = null, ConfigurationInterface $configuration = null): FacadePlaceholder
+    public static function getInstance(): ?FacadePlaceholder
     {
-        if (self::$instance === null) {
-            self::$instance = new self($container, $configuration);
-        }
-
         return self::$instance;
     }
 }

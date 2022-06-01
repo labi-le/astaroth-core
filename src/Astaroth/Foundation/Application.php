@@ -127,7 +127,7 @@ class Application
 
     protected function fillFacades(): void
     {
-        FacadePlaceholder::getInstance($this->getContainer(), $this->getConfiguration());
+        FacadePlaceholder::fill($this->getContainer(), $this->getConfiguration());
     }
 
     /**

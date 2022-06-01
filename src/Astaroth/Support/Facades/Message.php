@@ -9,6 +9,8 @@ use Astaroth\VkUtils\Builders\Attachments\Message\PhotoMessages;
 use Astaroth\VkUtils\Builders\Message as MessageBuilder;
 use Astaroth\VkUtils\Contracts\ICanBeSaved;
 use Exception;
+use ReflectionClass;
+use ReflectionException;
 use Throwable;
 use function array_map;
 use function is_string;
@@ -65,13 +67,15 @@ final class Message
      * @param string $className
      * @return ICanBeSaved[]
      *
-     * @psalm-suppress LessSpecificReturnStatement
-     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement, ArgumentTypeCoercion, MoreSpecificReturnType
+     * @throws ReflectionException
      */
     private static function genAttachObj(array|string $value, string $className): array
     {
         is_string($value) === false ?: $value = [$value];
-        return array_map(static fn(string $url) => new $className($url), $value);
+        return array_map(static function (string $url) use ($className) {
+            return (new ReflectionClass($className))->newInstance($url);
+        }, $value);
     }
 
     /**

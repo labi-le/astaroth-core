@@ -8,18 +8,22 @@ use Astaroth\Containers\DatabaseContainer;
 use Astaroth\Foundation\FacadePlaceholder;
 use Doctrine\ORM\Decorator\EntityManagerDecorator;
 use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class Entity extends EntityManagerDecorator
 {
     /**
-     * @return ?EntityManagerInterface
-     * @psalm-suppress LessSpecificReturnStatement
-     * @psalm-suppress MoreSpecificReturnType
+     * @return EntityManagerInterface
      */
-    private static function getContainer(): ?object
+    private static function getContainer(): EntityManagerInterface
     {
-        return FacadePlaceholder::getInstance()->getContainer()->get(DatabaseContainer::CONTAINER_ID, ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE);
+        $container = FacadePlaceholder::getInstance()?->getContainer()->get(DatabaseContainer::CONTAINER_ID, ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        if ($container instanceof EntityManagerInterface) {
+            return $container;
+        }
+
+        throw new LogicException('Container not found');
     }
 
     public function __invoke(): Entity
