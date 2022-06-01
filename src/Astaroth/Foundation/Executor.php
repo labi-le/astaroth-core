@@ -47,10 +47,10 @@ final class Executor
      * Attempts to invoke methods and pass parameters
      *
      * @throws ReflectionException
+     * @psalm-suppress MixedAssignment, PossiblyInvalidArgument
      */
     public function launch(callable $methodResponseHandler = null): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
 
         foreach ($this->reflectionMethods as $method) {
@@ -247,7 +247,7 @@ final class Executor
      * @psalm-suppress ArgumentTypeCoercion
      * @throws ReflectionException
      */
-    private function newInstance(string $class, ...$parameters): object
+    private function newInstance(string $class, mixed ...$parameters): object
     {
         return (new ReflectionClass($class))->newInstance(...$parameters);
     }
@@ -256,11 +256,16 @@ final class Executor
      * We call methods from the class on which the correct route is set
      * And add arguments
      * method_exist is not needed since method 100% exists
+     *
+     * вернет объект класса или объект класса с параметрами
+     *
      * @param object $object
      * @param ReflectionMethod $method
      * @param array $parameters
      * @return mixed
      * @throws ReflectionException
+     *
+     * @psalm-suppress MixedReturnStatement
      */
     private function invoke(object $object, ReflectionMethod $method, array $parameters): mixed
     {

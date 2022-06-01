@@ -30,6 +30,7 @@ final class LazyHandler implements HandlerInterface
      * @param object|array $data
      * @return DataFetcher
      * @noinspection JsonEncodingApiUsageInspection
+     * @psalm-suppress MixedAssignment, MixedArgument
      */
     private function normalizeData(object|array $data): DataFetcher
     {
@@ -49,6 +50,7 @@ final class LazyHandler implements HandlerInterface
      * @param callable $func
      * @throws Throwable
      * @noinspection JsonEncodingApiUsageInspection
+     * @psalm-suppress MissingClosureReturnType, MixedArgument, MissingClosureParamType
      */
     public function listen(callable $func): void
     {

@@ -22,6 +22,7 @@ use Throwable;
  */
 final class Route
 {
+    /** @var string[] */
     private static array $class_map;
 
     /**
@@ -65,7 +66,7 @@ final class Route
     }
 
     /**
-     * @param array $classMap
+     * @param string[] $classMap
      * @param DataFetcher $data
      * @return void
      * @throws ReflectionException
@@ -80,7 +81,7 @@ final class Route
         foreach ($attrHandler->validate() as $validatedObject) {
             (new Executor($validatedObject->getObject(), $validatedObject->getMethods()))
                 ->replaceObjects(EventAttributeHandler::fetchData($data))
-                ->launch(static function ($methodResult) {
+                ->launch(static function (mixed $methodResult) {
                     new ReturnResultHandler($methodResult);
                 });
         }

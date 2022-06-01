@@ -24,8 +24,7 @@ final class ReflectionMethodDecorator extends ReflectionMethod
      * @param int $flags
      * @return AttributeReturnInterface[]|ReflectionAttribute[]
      *
-     * @psalm-suppress ImplementedReturnTypeMismatch, ArgumentTypeCoercion
-     * @noinspection PhpDocSignatureInspection
+     * @psalm-suppress ImplementedReturnTypeMismatch, ArgumentTypeCoercion, TypeDoesNotContainType
      */
     public function getAttributes(?string $name = null, int $flags = 0): array
     {

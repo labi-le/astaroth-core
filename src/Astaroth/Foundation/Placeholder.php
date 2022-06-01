@@ -76,6 +76,7 @@ final class Placeholder
 
     /**
      * @throws Throwable
+     * @psalm-suppress MixedArgumentTypeCoercion, MixedAssignment
      */
     public function replace(int $id): string
     {
