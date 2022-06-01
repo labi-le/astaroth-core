@@ -12,19 +12,15 @@
   "require": {
     "php": ">=8.1",
     "ext-curl": "*",
-
     "labile/vk-data-fetcher": "^1",
     "labile/vk-callback": "^2",
     "labile/vk-utils": "^2",
     "labile/vk-keyboard": "^1",
     "labile/text-matcher": "^1",
     "labile/vk-longpoll": "^2",
-
     "vlucas/phpdotenv": "^5",
     "haydenpierce/class-finder": "^0.4.3",
-
     "doctrine/orm": ">=2",
-
     "symfony/dependency-injection": "^5",
     "symfony/cache": ">=v3",
     "nette/php-generator": "^3.6",
@@ -45,8 +41,10 @@
     "jetbrains/phpstorm-attributes": "^1.0",
     "vimeo/psalm": "^4.15"
   },
-
   "bin": [
     "bin/lilit"
-  ]
+  ],
+  "scripts": {
+    "test": "vendor/bin/phpunit tests"
+  }
 }
