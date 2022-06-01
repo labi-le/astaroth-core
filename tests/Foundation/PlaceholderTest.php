@@ -31,7 +31,7 @@ class PlaceholderTest extends TestCase
     {
         $p = new Placeholder("%name");
         assertEquals("Pavel", $p->replace(1));
-        assertEquals("VKontakte API", $p->replace(-1));
+        assertEquals("ВКонтакте API", $p->replace(-1));
 
 
         $p = new Placeholder("%@name");
@@ -41,7 +41,7 @@ class PlaceholderTest extends TestCase
 
         $p = new Placeholder("%full-name");
         assertEquals("Durov Дуров", $p->replace(1));
-        assertEquals("VKontakte API", $p->replace(-1));
+        assertEquals("ВКонтакте API", $p->replace(-1));
 
 
         $p = new Placeholder("%@full-name");
@@ -50,8 +50,8 @@ class PlaceholderTest extends TestCase
 
 
         $p = new Placeholder("%last-name");
-        assertEquals("Durov", $p->replace(1));
-        assertEquals("VKontakte API", $p->replace(-1));
+        assertEquals("Pavel Durov", $p->replace(1));
+        assertEquals("ВКонтакте API", $p->replace(-1));
 
 
         $p = new Placeholder("%@last-name");
