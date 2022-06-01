@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Astaroth\Foundation;
 
 use RuntimeException;
+use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
+use function is_array;
 use function json_decode;
 use function json_encode;
 use function unlink;
@@ -112,21 +114,21 @@ class Session
     /**
      * Get data from session file
      * @noinspection JsonEncodingApiUsageInspection
-     * @return array<string,mixed>
+     * @return array
      */
     private function getStorageData(): array
     {
-        $content = file_get_contents($this->fullStoragePath);
+        if (file_exists($this->fullStoragePath) === false) {
+            file_put_contents($this->fullStoragePath, json_encode([]));
+        }
+        $content = @file_get_contents($this->fullStoragePath);
         if ($content === false) {
             throw new RuntimeException("Can't read session file");
         }
 
         $data = json_decode($content, true);
-        if ($data) {
-            return $data;
-        }
 
-        throw new RuntimeException("Can't decode session file");
+        return is_array($data) ? $data : throw new RuntimeException("Can't decode session file");
     }
 
     /**

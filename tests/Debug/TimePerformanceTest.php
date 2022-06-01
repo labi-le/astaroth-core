@@ -10,7 +10,6 @@ use function mt_rand;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
 use function range;
-use function sleep;
 use function uniqid;
 
 class TimePerformanceTest extends TestCase
@@ -28,7 +27,6 @@ class TimePerformanceTest extends TestCase
 
             assertEquals(10001, count($arr));
             assertEquals(10001, count($arr2));
-            sleep(1);
         };
 
         assertNotNull((new TimePerformance($app))->getTimeEnd());
