@@ -30,32 +30,32 @@ class PlaceholderTest extends TestCase
     public function testReplace(): void
     {
         $p = new Placeholder("%name");
-        assertEquals("Павел", $p->replace(1));
-        assertEquals("ВКонтакте API", $p->replace(-1));
+        assertEquals("Pavel", $p->replace(1));
+        assertEquals("VKontakte API", $p->replace(-1));
 
 
         $p = new Placeholder("%@name");
-        assertEquals("*id1(Павел)", $p->replace(1));
-        assertEquals("*club1(ВКонтакте API)", $p->replace(-1));
+        assertEquals("*id1(Pavel)", $p->replace(1));
+        assertEquals("*club1(VKontakte API)", $p->replace(-1));
 
 
         $p = new Placeholder("%full-name");
-        assertEquals("Павел Дуров", $p->replace(1));
-        assertEquals("ВКонтакте API", $p->replace(-1));
+        assertEquals("Durov Дуров", $p->replace(1));
+        assertEquals("VKontakte API", $p->replace(-1));
 
 
         $p = new Placeholder("%@full-name");
-        assertEquals("*id1(Павел Дуров)", $p->replace(1));
+        assertEquals("*id1(Pavel Durov)", $p->replace(1));
         assertEquals("*club1(ВКонтакте API)", $p->replace(-1));
 
 
         $p = new Placeholder("%last-name");
-        assertEquals("Дуров", $p->replace(1));
-        assertEquals("ВКонтакте API", $p->replace(-1));
+        assertEquals("Durov", $p->replace(1));
+        assertEquals("VKontakte API", $p->replace(-1));
 
 
         $p = new Placeholder("%@last-name");
-        assertEquals("*id1(Дуров)", $p->replace(1));
+        assertEquals("*id1(Durov)", $p->replace(1));
         assertEquals("*club1(ВКонтакте API)", $p->replace(-1));
 
     }
