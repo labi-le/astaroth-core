@@ -20,9 +20,9 @@
     "labile/vk-longpoll": "^2",
     "vlucas/phpdotenv": "^5",
     "haydenpierce/class-finder": "^0.4.3",
-    "doctrine/orm": ">=2",
+    "doctrine/orm": "^2.12",
     "symfony/dependency-injection": "^5",
-    "symfony/cache": ">=v3",
+    "symfony/cache": "^v3.4",
     "nette/php-generator": "^3.6",
     "adhocore/cli": "^0.9.0",
     "monolog/monolog": "^2.3"
