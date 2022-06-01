@@ -40,7 +40,7 @@ class PlaceholderTest extends TestCase
 
 
         $p = new Placeholder("%full-name");
-        assertEquals("Durov Дуров", $p->replace(1));
+        assertEquals("Pavel Durov", $p->replace(1));
         assertEquals("ВКонтакте API", $p->replace(-1));
 
 
