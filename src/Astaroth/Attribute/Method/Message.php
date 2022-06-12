@@ -37,10 +37,10 @@ final class Message implements AttributeValidatorInterface, AttributeMethodInter
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return Message
      */
-    public function setHaystack($haystack): Message
+    public function setHaystack(mixed $haystack): Message
     {
         if ($haystack instanceof MessageNew) {
             $this->haystack = $haystack->getText();

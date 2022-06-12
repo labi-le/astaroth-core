@@ -17,6 +17,7 @@ use function count;
  */
 final class Attachment implements AttributeValidatorInterface, AttributeMethodInterface
 {
+    /** @var object[] */
     private array $haystack = [];
 
     public function __construct(
@@ -38,10 +39,11 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return Attachment
+     * @psalm-suppress MixedPropertyTypeCoercion
      */
-    public function setHaystack($haystack): Attachment
+    public function setHaystack(mixed $haystack): Attachment
     {
         if ($haystack instanceof MessageNew) {
             $this->haystack = $haystack->getAttachments() ?? [];

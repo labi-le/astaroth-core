@@ -26,6 +26,7 @@ use function sys_get_temp_dir;
  * @psalm-suppress InvalidReturnType
  * @psalm-suppress PossiblyInvalidArgument
  * @psalm-suppress MethodSignatureMismatch
+ * @psalm-suppress PossiblyInvalidCast
  */
 final class Configuration implements ConfigurationInterface
 {
@@ -83,7 +84,11 @@ final class Configuration implements ConfigurationInterface
      */
     public function getEntityPath(): array
     {
-        return array_map("\\trim", explode(',', Database::ENTITY_PATH->getEnv()));
+        return array_map
+        (
+            trim(...),
+            explode(',', Database::ENTITY_PATH->getEnv())
+        );
     }
 
     public function isHandleRepeatedRequest(): bool

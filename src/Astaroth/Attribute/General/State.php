@@ -11,6 +11,8 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\ConversationType;
 use Astaroth\Support\Facades\Session;
 use Attribute;
+use LogicException;
+use function is_object;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class State implements AttributeValidatorInterface, AttributeMethodInterface
@@ -22,7 +24,7 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
 
     public function __construct
     (
-        private readonly string $state_name,
+        private readonly string           $state_name,
         private readonly ConversationType $member_type = ConversationType::PERSONAL
     )
     {
@@ -30,18 +32,21 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
 
     /**
      * @inheritDoc
+     * @psalm-suppress RedundantCondition
      */
     public function validate(): bool
     {
-        if ($this->haystack) {
-            /** @psalm-suppress PossiblyUndefinedMethod */
-            $user_id = match ($this->haystack::class) {
-                MessageNew::class => fn() => $this->haystack?->getFromId(),
-                MessageEvent::class => fn() => $this->haystack?->getUserId(),
-            };
+        if (is_object($this->haystack)) {
+            if ($this->haystack instanceof MessageNew) {
+                $user_id = $this->haystack->getFromId();
+            } elseif ($this->haystack instanceof MessageEvent) {
+                $user_id = $this->haystack->getUserId();
+            } else {
+                throw new LogicException("Invalid message type");
+            }
 
             $member_id = match ($this->member_type) {
-                ConversationType::PERSONAL => (int)$user_id(),
+                ConversationType::PERSONAL => $user_id,
                 ConversationType::CHAT => (int)$this->haystack->getChatId(),
                 ConversationType::ALL => $this->haystack->getPeerId(),
             };
@@ -54,10 +59,10 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
 
     /**
      * @inheritDoc
-     * @param $haystack
+     * @param mixed $haystack
      * @return State
      */
-    public function setHaystack($haystack): State
+    public function setHaystack(mixed $haystack): State
     {
         if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent) {
             $this->haystack = $haystack;

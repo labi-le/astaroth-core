@@ -11,6 +11,7 @@ use Astaroth\Enums\ClientInfoEnum;
 use Attribute;
 use function array_intersect_key;
 use function array_map;
+use function is_object;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 /**
@@ -31,7 +32,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
      * @param int $lang_id
      */
     public function __construct(
-        array   $button_actions =
+        array                 $button_actions =
         [
             ClientInfoEnum::TEXT,
             ClientInfoEnum::VKPAY,
@@ -45,7 +46,7 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
         private readonly bool $keyboard = true,
         private readonly bool $inline_keyboard = true,
         private readonly bool $carousel = true,
-        private readonly int $lang_id = 0,
+        private readonly int  $lang_id = 0,
     )
     {
         $this->button_actions = array_map(static fn(ClientInfoEnum $enum) => $enum->value, $button_actions);
@@ -53,10 +54,12 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
 
     public function validate(): bool
     {
-        if ($this->client_info) {
-            if (($this->button_actions !== []) && array_intersect_key(
+        if (is_object($this->client_info)) {
+            if (
+                ($this->button_actions !== []) && array_intersect_key(
                     $this->button_actions,
-                    $this->client_info->button_actions) === []) {
+                    (array)$this->client_info->button_actions) === []
+            ) {
                 return false;
             }
 
@@ -76,10 +79,10 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return ClientInfo
      */
-    public function setHaystack($haystack): ClientInfo
+    public function setHaystack(mixed $haystack): ClientInfo
     {
         if ($haystack instanceof DataFetcher) {
             $this->client_info = $haystack->getClientInfo();

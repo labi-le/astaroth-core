@@ -59,10 +59,10 @@ final class Action implements AttributeValidatorInterface, AttributeMethodInterf
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return Action
      */
-    public function setHaystack($haystack): Action
+    public function setHaystack(mixed $haystack): Action
     {
         if ($haystack instanceof MessageNew) {
             $this->haystack = $haystack->getAction();

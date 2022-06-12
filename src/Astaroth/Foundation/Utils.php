@@ -8,8 +8,8 @@ use Astaroth\Debug\Dump;
 use Astaroth\Support\Facades\Create;
 use Astaroth\VkUtils\Builders\Message;
 use Exception;
-use Throwable;
 use JsonException;
+use Throwable;
 use function curl_close;
 use function curl_exec;
 use function curl_init;
@@ -37,6 +37,7 @@ final class Utils
     /**
      * @throws JsonException
      * @noinspection JsonEncodingApiUsageInspection
+     * @psalm-suppress MixedAssignment MixedArrayAccess
      */
     public static function jsonOnline(array $param): ?string
     {
@@ -56,7 +57,6 @@ final class Utils
                     ])
             ]);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         $data = @json_decode(curl_exec($ch), true);
         curl_close($ch);
 
@@ -90,16 +90,17 @@ final class Utils
 
     /**
      * Удаляет из строки самую первую подстроку
-     * @param $text
+     * @param string $text
      * @return string|bool
      */
-    public static function removeFirstWord($text): string|bool
+    public static function removeFirstWord(string $text): string|bool
     {
         return strstr($text, " ");
     }
 
     /**
      * Explode с возможностью использовать несколько символов
+     * @psalm-suppress MixedInferredReturnType MixedArgumentTypeCoercion MixedReturnStatement
      */
     public static function multiExplode(array $delimiters, string $haystack): array|bool
     {

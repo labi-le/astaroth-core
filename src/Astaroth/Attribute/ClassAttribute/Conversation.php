@@ -52,7 +52,7 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
 
             //if the ID array is not specified in the attribute, then we check if the type matches
             if ($this->member_id === []) {
-                return $validate["type"];
+                return (bool)$validate["type"];
             }
 
             //condition opposite to above condition
@@ -102,10 +102,10 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return Conversation
      */
-    public function setHaystack($haystack): Conversation
+    public function setHaystack(mixed $haystack): Conversation
     {
         if ($haystack instanceof MessageEvent || $haystack instanceof MessageNew) {
             $this->haystack = $haystack;

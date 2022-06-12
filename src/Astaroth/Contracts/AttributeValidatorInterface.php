@@ -20,8 +20,8 @@ interface AttributeValidatorInterface
     /**
      * Haystack setter to be used for validation
      * Any data that can be validated for a specific attribute
-     * @param $haystack
+     * @param mixed $haystack
      * @return static
      */
-    public function setHaystack($haystack): static;
+    public function setHaystack(mixed $haystack): static;
 }
