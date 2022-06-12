@@ -257,8 +257,6 @@ final class Executor
      * And add arguments
      * method_exist is not needed since method 100% exists
      *
-     * вернет объект класса или объект класса с параметрами
-     *
      * @param object $object
      * @param ReflectionMethod $method
      * @param array $parameters
@@ -273,6 +271,10 @@ final class Executor
     }
 
 
+    /**
+     * todo Optimize it
+     * @return void
+     */
     private function clearStack(): void
     {
         unset($this->parameters, $this->replaceableObjects);

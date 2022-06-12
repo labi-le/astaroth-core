@@ -20,7 +20,7 @@ final class ApiRequest
      * Call API method
      * @throws Throwable
      */
-    public function customRequest(string $method, $params): array
+    public function customRequest(string $method, array $params): array
     {
         return Request::call($method, $params, $this->accessToken);
     }
@@ -54,6 +54,8 @@ final class ApiRequest
      *
      * @throws Throwable
      * @see https://vk.com/dev/messages.edit
+     *
+     * @psalm-suppress MixedAssignment
      */
     public function messagesEdit(IBuilder $message, int $conversation_message_id = null, int $message_id = null): array
     {
