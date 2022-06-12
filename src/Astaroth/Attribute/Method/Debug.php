@@ -24,10 +24,10 @@ final class Debug implements AttributeReturnInterface, AttributeValidatorInterfa
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return Debug
      */
-    public function setHaystack($haystack): Debug
+    public function setHaystack(mixed $haystack): Debug
     {
         $this->haystack = $haystack;
         return $this;

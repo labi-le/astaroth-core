@@ -70,10 +70,10 @@ final class Payload implements AttributeValidatorInterface, AttributeMethodInter
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return Payload
      */
-    public function setHaystack($haystack): Payload
+    public function setHaystack(mixed $haystack): Payload
     {
         if ($haystack instanceof MessageNew || $haystack instanceof MessageEvent) {
             $this->haystack = $haystack->getPayload();

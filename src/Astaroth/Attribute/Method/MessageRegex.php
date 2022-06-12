@@ -40,10 +40,10 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
     }
 
     /**
-     * @param $haystack
+     * @param mixed $haystack
      * @return MessageRegex
      */
-    public function setHaystack($haystack): MessageRegex
+    public function setHaystack(mixed $haystack): MessageRegex
     {
         if ($haystack instanceof MessageNew) {
             $this->haystack = $haystack->getText();
@@ -64,16 +64,32 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
         return $matches;
     }
 
+    /**
+     * @param $offset
+     * @return bool
+     * @psalm-suppress MixedArrayOffset, MissingParamType
+     */
     public function offsetExists($offset): bool
     {
         return isset($this->matches[$offset]);
     }
 
+    /**
+     * @param $offset
+     * @return mixed
+     * @psalm-suppress MixedArrayOffset, MissingParamType
+     */
     public function offsetGet($offset): mixed
     {
-        return $this->matches[$offset] ?? null;
+        return $this->matches[$offset];
     }
 
+    /**
+     * @param $offset
+     * @param $value
+     * @return void
+     * @psalm-suppress MixedArrayOffset, MissingParamType
+     */
     public function offsetSet($offset, $value): void
     {
         if ($offset === null) {
@@ -83,6 +99,11 @@ final class MessageRegex implements AttributeValidatorInterface, ArrayAccess, At
         }
     }
 
+    /**
+     * @param $offset
+     * @return void
+     * @psalm-suppress MixedArrayOffset, MissingParamType
+     */
     public function offsetUnset($offset): void
     {
         unset($this->matches[$offset]);
