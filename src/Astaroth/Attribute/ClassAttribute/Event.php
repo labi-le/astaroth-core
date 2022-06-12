@@ -8,6 +8,7 @@ use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\Enums\Events;
 use Attribute;
+use function is_object;
 use function method_exists;
 
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -37,13 +38,13 @@ class Event implements AttributeValidatorInterface, AttributeClassInterface
 
     /**
      *
-     * @param $haystack
-     * @return Event
+     * @param mixed $haystack
+     * @return static
      */
-    public function setHaystack($haystack): Event
+    public function setHaystack(mixed $haystack): Event
     {
-        if (method_exists($haystack, "getType")) {
-            $this->type = $haystack->getType();
+        if (is_object($haystack) && method_exists($haystack, "getType")) {
+            $this->type = (string)$haystack->getType();
         }
 
         return $this;
