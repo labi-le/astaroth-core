@@ -79,8 +79,7 @@ final class Route
 
          // TODO ускорить поиск класса по аттрибутам
         foreach ($attrHandler->validate() as $validatedObject) {
-            (new Executor($validatedObject->getObject(), $validatedObject->getMethods()))
-                ->replaceObjects(EventAttributeHandler::fetchData($data))
+            (new Executor($validatedObject->getObject(), $validatedObject->getMethods(), [EventAttributeHandler::fetchData($data)]))
                 ->launch(static function (mixed $methodResult) {
                     new ReturnResultHandler($methodResult);
                 });

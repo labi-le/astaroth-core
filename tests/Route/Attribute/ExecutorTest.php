@@ -26,8 +26,7 @@ class ExecutorTest extends TestCase
         foreach ($ev->validate() as $validatedObject) {
             assertEquals($validatedObject::class, ValidatedObject::class);
 
-            (new Executor($validatedObject->getObject(), $validatedObject->getMethods()))
-                ->replaceObjects(EventAttributeHandler::fetchData($data))
+            (new Executor($validatedObject->getObject(), $validatedObject->getMethods(), [EventAttributeHandler::fetchData($data)]))
                 ->launch(static function ($methodResult) {
                     assertTrue($methodResult);
                 });
