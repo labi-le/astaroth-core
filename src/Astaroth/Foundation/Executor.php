@@ -13,7 +13,7 @@ use function array_merge;
 final class Executor
 {
     /** @var AdditionalParameter[] */
-    private array $replaced;
+    private array $replaced = [];
 
 
     /**
