@@ -133,4 +133,12 @@ final class Reflect
         return $method->invoke($object, ...$parameters);
     }
 
+    public static function makeParameter(object $o, bool $needCreateInstance): AdditionalParameter
+    {
+        if ($needCreateInstance === false) {
+            return new AdditionalParameter($o::class, false, $o);
+        }
+
+        return new AdditionalParameter($o::class, true, null);
+    }
 }

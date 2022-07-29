@@ -12,7 +12,8 @@ use function array_merge;
 
 final class Executor
 {
-    private ModifiedObject $replaced;
+    /** @var AdditionalParameter[] */
+    private array $replaced;
 
 
     /**
@@ -27,9 +28,8 @@ final class Executor
         array                            $replaceableObjects
     )
     {
-        $this->replaced = new ModifiedObject();
         foreach ($replaceableObjects as $replaceableObject) {
-            $this->replaced->replaceObjects($replaceableObject);
+            $this->replaced[] = Reflect::makeParameter($replaceableObject, false);
         }
     }
 
@@ -41,7 +41,7 @@ final class Executor
      */
     public function launch(callable $methodResponseHandler = null): void
     {
-        $invokedClass = Reflect::instantiateClass($this->reflectionClass, ...$this->replaced->getReplaceableObjects());
+        $invokedClass = Reflect::instantiateClass($this->reflectionClass, ...$this->replaced);
 
 
         foreach ($this->reflectionMethods as $method) {
@@ -49,7 +49,7 @@ final class Executor
             $modified->addReplaceableAttributes($method->getAttributes());
             $modified->initializeParameters($method->getParameters());
 
-            $parameters = array_merge($modified->getParameters(), $modified->getReplaceableObjects(), $this->replaced->getReplaceableObjects());
+            $parameters = array_merge($modified->getParameters(), $modified->getReplaceableObjects(), $this->replaced);
 
             $method_return = Reflect::invoke
             (
