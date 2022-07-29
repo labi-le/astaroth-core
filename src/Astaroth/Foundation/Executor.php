@@ -4,43 +4,33 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Attribute\Method\Debug;
-use Astaroth\Contracts\AttributeReturnInterface;
 use Astaroth\Route\Attribute\AdditionalParameter;
 use Astaroth\Route\Attribute\ReflectionMethodDecorator;
-use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionMethod;
-use ReflectionNamedType;
-use ReflectionParameter;
-use ReflectionUnionType;
-use function array_filter;
 use function array_merge;
-use function current;
-use function debug_backtrace;
-use function is_object;
-use function is_string;
 
 final class Executor
 {
     /** @var AdditionalParameter[] */
-    private array $replaceableObjects = [];
-
-    /** @var AdditionalParameter[] */
-    private array $parameters = [];
+    private array $replaced = [];
 
 
     /**
      * General event coordinator
      * @param ReflectionClass $reflectionClass
      * @param ReflectionMethodDecorator[] $reflectionMethods
+     * @param AdditionalParameter[] $replaceableObjects
      */
     public function __construct(
         private readonly ReflectionClass $reflectionClass,
-        private readonly array           $reflectionMethods = []
+        private readonly array           $reflectionMethods,
+        array                            $replaceableObjects
     )
     {
+        foreach ($replaceableObjects as $replaceableObject) {
+            $this->replaced[] = Reflect::makeParameter($replaceableObject, false);
+        }
     }
 
     /**
@@ -51,243 +41,27 @@ final class Executor
      */
     public function launch(callable $methodResponseHandler = null): void
     {
-        $invokedClass = $this->instantiateClass($this->reflectionClass, ...$this->getReplaceableObjects());
+        $invokedClass = Reflect::instantiateClass($this->reflectionClass, ...$this->replaced);
+
 
         foreach ($this->reflectionMethods as $method) {
-            $this->addReplaceableAttributes($method->getAttributes());
-            $this->initializeParameters($method->getParameters());
+            $modified = new ModifiedObject();
+            $modified->addReplaceableAttributes($method->getAttributes());
+            $modified->initializeParameters($method->getParameters());
 
-            $parameters = array_merge($this->getParameters(), $this->getReplaceableObjects());
+            $parameters = array_merge($modified->getParameters(), $modified->getReplaceableObjects(), $this->replaced);
 
-            $method_return = $this->invoke
+            $method_return = Reflect::invoke
             (
                 $invokedClass,
                 $method,
                 //normalize the parameter list for the method
-                $this->parameterNormalizer($method->getParameters(), $parameters)
+                Reflect::parameterNormalizer($method->getParameters(), $parameters)
             );
 
-            /** We process the result returned by the method */
             if ($methodResponseHandler !== null) {
                 $methodResponseHandler($method_return);
             }
-
-            $this->clearStack();
         }
     }
-
-    /**
-     * @param ReflectionParameter[] $parameters
-     * @throws ReflectionException
-     */
-    private function initializeParameters(array $parameters): void
-    {
-        foreach ($parameters as $parameter) {
-            /** @psalm-suppress TypeDoesNotContainType */
-            if ($parameter->getType() === ReflectionNamedType::class) {
-                isset($this->getReplaceableObjects()[$parameter->getName()]) ?:
-                    $this->addParameters($this->instantiateClass($parameter->getName()));
-            }
-        }
-    }
-
-    /**
-     * @param ReflectionClass|string $reflectionClassOrClassName
-     * @param AdditionalParameter[] $parameters
-     * @return object
-     * @throws ReflectionException
-     */
-    private function instantiateClass(ReflectionClass|string $reflectionClassOrClassName, ...$parameters): object
-    {
-        if (is_string($reflectionClassOrClassName)) {
-            /** @psalm-suppress ArgumentTypeCoercion */
-            $reflectionClassOrClassName = new ReflectionClass($reflectionClassOrClassName);
-        }
-
-        $constructor = $reflectionClassOrClassName->getConstructor();
-        $var = $this->parameterNormalizer($constructor ? $constructor->getParameters() : [], $parameters);
-        return $reflectionClassOrClassName->newInstance(
-            ...$var
-        );
-    }
-
-    /**
-     * Adds the necessary parameters to the method that requires it
-     * @param ReflectionParameter[] $reflectionParameters
-     * @param AdditionalParameter[] $parameters
-     * @return array
-     * @throws ReflectionException
-     */
-    private function parameterNormalizer(array $reflectionParameters, array $parameters): array
-    {
-        $methodParameters = [];
-        foreach ($reflectionParameters as $schema) {
-            foreach ($parameters as $extraParameter) {
-                if ($schema->getType() !== null) {
-                    $normalized = false;
-
-                    if ($schema->getType() instanceof ReflectionUnionType) {
-                        $normalized = $this->normalizeUnionType($schema->getType()->getTypes(), $extraParameter);
-                    }
-
-                    if ($schema->getType() instanceof ReflectionNamedType) {
-                        $normalized = $this->normalizeNamedType($schema->getType(), $extraParameter);
-                    }
-
-                    if (is_object($normalized)) {
-                        $methodParameters[] = $normalized;
-                    }
-
-                }
-            }
-        }
-
-        return $methodParameters;
-    }
-
-    /**
-     * @param ReflectionNamedType[] $reflectionTypes
-     * @param AdditionalParameter $additionalParameter
-     * @return ?object
-     * @throws ReflectionException
-     */
-    private function normalizeUnionType(array $reflectionTypes, AdditionalParameter $additionalParameter): ?object
-    {
-        $parameters = [];
-        foreach ($reflectionTypes as $reflectionType) {
-            $parameters[] = $this->normalizeNamedType($reflectionType, $additionalParameter);
-        }
-
-        return current(array_filter($parameters)) ?: null;
-    }
-
-    /**
-     * @param ReflectionNamedType $reflectionType
-     * @param AdditionalParameter $additionalParameter
-     * @return ?object
-     * @throws ReflectionException
-     */
-    private function normalizeNamedType(ReflectionNamedType $reflectionType, AdditionalParameter $additionalParameter): ?object
-    {
-        if ($reflectionType->getName() === $additionalParameter->getType()) {
-            if ($additionalParameter->isNeedCreateInstance() === true) {
-                return $this->newInstance($additionalParameter->getType());
-            }
-            return $additionalParameter->getInstance();
-        }
-
-        return null;
-    }
-
-    /**
-     * Replace attributes that can be used as method parameters
-     * @param object[] $attributes
-     */
-    private function addReplaceableAttributes(array $attributes): void
-    {
-        foreach ($attributes as $attribute) {
-            if ($attribute instanceof ReflectionAttribute) {
-                $attribute = $attribute->newInstance();
-            }
-
-            if ($attribute instanceof AttributeReturnInterface) {
-                $this->replaceObjects($attribute);
-            }
-
-            //for debug
-            if ($attribute instanceof Debug) {
-                $this->replaceObjects($attribute->setHaystack(debug_backtrace()));
-            }
-        }
-    }
-
-
-    /**
-     * @return AdditionalParameter[]
-     */
-    private function getParameters(): array
-    {
-        return $this->parameters;
-    }
-
-    private function addParameters(object ...$instances): void
-    {
-        foreach ($instances as $instance) {
-            isset($this->getParameters()[$instance::class]) ?:
-                $this->parameters[$instance::class] = new AdditionalParameter
-                (
-                    $instance::class,
-                    true,
-                    $instance
-                );
-        }
-
-    }
-
-    /**
-     * Add intercepted object from outside
-     * @param object $instance
-     * @return Executor
-     */
-    public function replaceObjects(object $instance): Executor
-    {
-        isset($this->getReplaceableObjects()[$instance::class]) ?:
-            $this->replaceableObjects[$instance::class] = new AdditionalParameter
-            (
-                $instance::class,
-                false,
-                $instance
-            );
-
-
-        return $this;
-    }
-
-    /**
-     * @psalm-suppress ArgumentTypeCoercion
-     * @throws ReflectionException
-     */
-    private function newInstance(string $class, mixed ...$parameters): object
-    {
-        return (new ReflectionClass($class))->newInstance(...$parameters);
-    }
-
-    /**
-     * We call methods from the class on which the correct route is set
-     * And add arguments
-     * method_exist is not needed since method 100% exists
-     *
-     * @param object $object
-     * @param ReflectionMethod $method
-     * @param array $parameters
-     * @return mixed
-     * @throws ReflectionException
-     *
-     * @psalm-suppress MixedReturnStatement
-     */
-    private function invoke(object $object, ReflectionMethod $method, array $parameters): mixed
-    {
-        return $method->invoke($object, ...$parameters);
-    }
-
-
-    /**
-     * todo Optimize it
-     * @return void
-     */
-    private function clearStack(): void
-    {
-        unset($this->parameters, $this->replaceableObjects);
-        $this->parameters = [];
-        $this->replaceableObjects = [];
-    }
-
-    /**
-     * @return AdditionalParameter[]
-     */
-    public function getReplaceableObjects(): array
-    {
-        return $this->replaceableObjects;
-    }
-
 }
