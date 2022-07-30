@@ -8,6 +8,7 @@ use Astaroth\Contracts\AttributeClassInterface;
 use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\Enums\Events;
 use Attribute;
+
 use function is_object;
 use function method_exists;
 
@@ -19,9 +20,7 @@ class Event implements AttributeValidatorInterface, AttributeClassInterface
 {
     public function __construct(
         private readonly Events $event
-    )
-    {
-
+    ) {
     }
 
     public function validate(): bool

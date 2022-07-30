@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Foundation;
 
 use RuntimeException;
+
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
@@ -12,6 +13,7 @@ use function is_array;
 use function json_decode;
 use function json_encode;
 use function unlink;
+
 use const DIRECTORY_SEPARATOR;
 use const JSON_PRETTY_PRINT;
 use const LOCK_EX;
@@ -143,5 +145,4 @@ class Session
     {
         return $this->getStorageData()[$this->getType()] ?? [];
     }
-
 }

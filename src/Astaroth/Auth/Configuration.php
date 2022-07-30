@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Astaroth\Auth;
-
 
 use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Enums\Configuration\Additional;
@@ -17,6 +15,7 @@ use Astaroth\Enums\Configuration\Required;
 use Astaroth\Enums\Configuration\Type;
 use Dotenv\Dotenv;
 use Exception;
+
 use function array_map;
 use function explode;
 use function sys_get_temp_dir;
@@ -84,8 +83,7 @@ final class Configuration implements ConfigurationInterface
      */
     public function getEntityPath(): array
     {
-        return array_map
-        (
+        return array_map(
             trim(...),
             explode(',', Database::ENTITY_PATH->getEnv())
         );

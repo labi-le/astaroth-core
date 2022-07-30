@@ -12,6 +12,7 @@ use Astaroth\Enums\ConversationType;
 use Astaroth\Support\Facades\Session;
 use Attribute;
 use LogicException;
+
 use function is_object;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
@@ -22,12 +23,10 @@ final class State implements AttributeValidatorInterface, AttributeMethodInterfa
 
     private null|MessageNew|MessageEvent $haystack;
 
-    public function __construct
-    (
+    public function __construct(
         private readonly string           $state_name,
         private readonly ConversationType $member_type = ConversationType::PERSONAL
-    )
-    {
+    ) {
     }
 
     /**

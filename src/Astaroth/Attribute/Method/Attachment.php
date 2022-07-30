@@ -9,6 +9,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\AttachmentEnum;
 use Attribute;
+
 use function count;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
@@ -22,8 +23,8 @@ final class Attachment implements AttributeValidatorInterface, AttributeMethodIn
 
     public function __construct(
         public readonly AttachmentEnum $type,
-        public readonly int $count = 1)
-    {
+        public readonly int $count = 1
+    ) {
     }
 
 

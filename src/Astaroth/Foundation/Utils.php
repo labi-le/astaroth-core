@@ -10,6 +10,7 @@ use Astaroth\VkUtils\Builders\Message;
 use Exception;
 use JsonException;
 use Throwable;
+
 use function curl_close;
 use function curl_exec;
 use function curl_init;
@@ -24,6 +25,7 @@ use function sprintf;
 use function str_replace;
 use function strstr;
 use function uniqid;
+
 use const CURLOPT_CUSTOMREQUEST;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_POSTFIELDS;
@@ -33,7 +35,6 @@ use const JSON_THROW_ON_ERROR;
 
 final class Utils
 {
-
     /**
      * @throws JsonException
      * @noinspection JsonEncodingApiUsageInspection
@@ -42,7 +43,8 @@ final class Utils
     public static function jsonOnline(array $param): ?string
     {
         $ch = curl_init("https://jsoneditoronline.herokuapp.com/v1/docs/");
-        curl_setopt_array($ch,
+        curl_setopt_array(
+            $ch,
             [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HTTPHEADER =>
@@ -55,7 +57,8 @@ final class Utils
                         "name" => uniqid("", true),
                         "data" => json_encode($param, JSON_THROW_ON_ERROR)
                     ])
-            ]);
+            ]
+        );
 
         $data = @json_decode(curl_exec($ch), true);
         curl_close($ch);

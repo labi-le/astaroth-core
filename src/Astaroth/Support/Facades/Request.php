@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
-
 use Astaroth\Containers\ClientContainer;
 use Astaroth\VkUtils\Client;
 use Throwable;

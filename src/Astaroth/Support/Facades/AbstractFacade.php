@@ -7,6 +7,7 @@ namespace Astaroth\Support\Facades;
 use Astaroth\Foundation\FacadePlaceholder;
 use LogicException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use function sprintf;
 
 abstract class AbstractFacade

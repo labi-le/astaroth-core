@@ -11,6 +11,7 @@ use ReflectionAttribute;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
+
 use function debug_backtrace;
 
 final class ModifiedObject
@@ -51,8 +52,7 @@ final class ModifiedObject
     public function replaceObjects(object $instance): ModifiedObject
     {
         isset($this->getReplaceableObjects()[$instance::class]) ?:
-            $this->replaceableObjects[$instance::class] = new AdditionalParameter
-            (
+            $this->replaceableObjects[$instance::class] = new AdditionalParameter(
                 $instance::class,
                 false,
                 $instance
@@ -82,14 +82,12 @@ final class ModifiedObject
     {
         foreach ($instances as $instance) {
             isset($this->getParameters()[$instance::class]) ?:
-                $this->parameters[$instance::class] = new AdditionalParameter
-                (
+                $this->parameters[$instance::class] = new AdditionalParameter(
                     $instance::class,
                     true,
                     $instance
                 );
         }
-
     }
 
     /**

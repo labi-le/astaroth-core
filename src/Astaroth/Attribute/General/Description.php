@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Attribute\General;
@@ -12,7 +13,6 @@ final class Description implements AttributeReturnInterface, AttributeMethodInte
 {
     public function __construct(private readonly string $description)
     {
-
     }
 
     /**

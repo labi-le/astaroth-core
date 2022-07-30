@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Enums\Configuration;
 
 use Astaroth\Auth\ParameterMissingException;
+
 use function getenv;
 use function putenv;
 

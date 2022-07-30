@@ -11,6 +11,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Attribute;
 use JetBrains\PhpStorm\Language;
+
 use function count;
 use function preg_match;
 

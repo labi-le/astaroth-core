@@ -9,6 +9,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\ActionEnum;
 use Attribute;
+
 use function current;
 use function key;
 use function property_exists;
@@ -34,8 +35,7 @@ final class Action implements AttributeValidatorInterface, AttributeMethodInterf
     public function __construct(
         private ActionEnum $type,
         private array      $anyData = []
-    )
-    {
+    ) {
     }
 
     public function validate(): bool

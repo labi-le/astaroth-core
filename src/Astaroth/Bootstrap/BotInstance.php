@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Bootstrap;
 
-
 use Astaroth\Callback\Callback;
 use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Contracts\HandlerInterface;

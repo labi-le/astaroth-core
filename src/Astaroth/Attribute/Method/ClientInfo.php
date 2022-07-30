@@ -9,6 +9,7 @@ use Astaroth\Contracts\AttributeValidatorInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Astaroth\Enums\ClientInfoEnum;
 use Attribute;
+
 use function array_intersect_key;
 use function array_map;
 use function is_object;
@@ -47,9 +48,8 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
         private readonly bool $inline_keyboard = true,
         private readonly bool $carousel = true,
         private readonly int  $lang_id = 0,
-    )
-    {
-        $this->button_actions = array_map(static fn(ClientInfoEnum $enum) => $enum->value, $button_actions);
+    ) {
+        $this->button_actions = array_map(static fn (ClientInfoEnum $enum) => $enum->value, $button_actions);
     }
 
     public function validate(): bool
@@ -58,7 +58,8 @@ final class ClientInfo implements AttributeValidatorInterface, AttributeMethodIn
             if (
                 ($this->button_actions !== []) && array_intersect_key(
                     $this->button_actions,
-                    (array)$this->client_info->button_actions) === []
+                    (array)$this->client_info->button_actions
+                ) === []
             ) {
                 return false;
             }

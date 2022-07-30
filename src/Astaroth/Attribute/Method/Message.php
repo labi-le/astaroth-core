@@ -10,6 +10,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\MessageValidation;
 use Astaroth\TextMatcher;
 use Attribute;
+
 use function mb_strtolower;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
@@ -20,11 +21,10 @@ final class Message implements AttributeValidatorInterface, AttributeMethodInter
 {
     private string $haystack = "";
 
-    public function __construct
-    (
+    public function __construct(
         private readonly string $message,
-        private readonly MessageValidation $validation = MessageValidation::STRICT)
-    {
+        private readonly MessageValidation $validation = MessageValidation::STRICT
+    ) {
     }
 
     public function validate(): bool

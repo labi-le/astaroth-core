@@ -8,6 +8,7 @@ use Astaroth\Route\Attribute\AdditionalParameter;
 use Astaroth\Route\Attribute\ReflectionMethodDecorator;
 use ReflectionClass;
 use ReflectionException;
+
 use function array_merge;
 
 final class Executor
@@ -26,8 +27,7 @@ final class Executor
         private readonly ReflectionClass $reflectionClass,
         private readonly array           $reflectionMethods,
         array                            $replaceableObjects
-    )
-    {
+    ) {
         foreach ($replaceableObjects as $replaceableObject) {
             $this->replaced[] = Reflect::makeParameter($replaceableObject, false);
         }
@@ -51,8 +51,7 @@ final class Executor
 
             $parameters = array_merge($modified->getParameters(), $modified->getReplaceableObjects(), $this->replaced);
 
-            $method_return = Reflect::invoke
-            (
+            $method_return = Reflect::invoke(
                 $invokedClass,
                 $method,
                 //normalize the parameter list for the method

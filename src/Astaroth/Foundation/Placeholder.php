@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
 use Throwable;
 use UnhandledMatchError;
+
 use function abs;
 use function current;
 use function explode;
@@ -24,39 +26,39 @@ final class Placeholder
     //VK NAME *******************************************
     public const
         NAME = "name",
-        LAST_NAME_VK = "last_name",
-        FIRST_NAME_VK = "first_name",
-        ID = "id",
-        CLUB = "club";
+    LAST_NAME_VK = "last_name",
+    FIRST_NAME_VK = "first_name",
+    ID = "id",
+    CLUB = "club";
 
 
     public const
         FULL_NAME_PH = "full-name",
-        LAST_NAME_PH = "last-name";
+    LAST_NAME_PH = "last-name";
 
     //END VK NAME *******************************************
 
     //TAG *******************************************************************
     private const
         NAME_TAG = self::PERCENT . self::NAME,
-        MENTION_NAME_TAG = self::PERCENT . self::MENTION . self::NAME;
+    MENTION_NAME_TAG = self::PERCENT . self::MENTION . self::NAME;
 
     private const
         FULL_NAME_TAG = self::PERCENT . self::FULL_NAME_PH,
-        MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME_PH;
+    MENTION_FULL_NAME_TAG = self::PERCENT . self::MENTION . self::FULL_NAME_PH;
 
     private const
         LAST_NAME_TAG = self::PERCENT . self::LAST_NAME_PH,
-        MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME_PH;
+    MENTION_LAST_NAME_TAG = self::PERCENT . self::MENTION . self::LAST_NAME_PH;
     //END TAG *******************************************************************
 
     private const
         PERCENT = "%",
-        STAR = "*",
-        MENTION = "@",
+    STAR = "*",
+    MENTION = "@",
 
-        STAR_AND_ID = self::STAR . self::ID,
-        STAR_AND_CLUB = self::STAR . self::CLUB;
+    STAR_AND_ID = self::STAR . self::ID,
+    STAR_AND_CLUB = self::STAR . self::CLUB;
 
 
     /**
@@ -80,9 +82,9 @@ final class Placeholder
      */
     public function replace(int $id): string
     {
-        return preg_replace_callback(self::PATTERN,
+        return preg_replace_callback(
+            self::PATTERN,
             static function ($match) use ($id) {
-
                 $member = self::iterateId($id);
                 $member_id = $id;
 
@@ -110,7 +112,8 @@ final class Placeholder
                     default => throw new UnhandledMatchError("No valid placeholder found")
                 };
             },
-            $this->getSubject());
+            $this->getSubject()
+        );
     }
 
     /**

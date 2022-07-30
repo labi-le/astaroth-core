@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Astaroth\Attribute\Method;
 
 use Astaroth\Contracts\AttributeMethodInterface;
@@ -12,6 +11,7 @@ use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\PayloadValidation;
 use Attribute;
 use LogicException;
+
 use function array_intersect;
 use function array_key_exists;
 use function is_array;
@@ -27,8 +27,8 @@ final class Payload implements AttributeValidatorInterface, AttributeMethodInter
 
     public function __construct(
         private readonly array|string      $payload_or_key,
-        private readonly PayloadValidation $validation = PayloadValidation::STRICT)
-    {
+        private readonly PayloadValidation $validation = PayloadValidation::STRICT
+    ) {
     }
 
     public function validate(): bool

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Foundation;
 
 use SplQueue;
+
 use function array_walk;
 
 /**
@@ -31,7 +32,7 @@ class Queue
     public function __construct(Session $session, callable ...$queue)
     {
         $this->queue = new SplQueue();
-        array_walk($queue, fn($elem) => $this->queue->enqueue($elem));
+        array_walk($queue, fn ($elem) => $this->queue->enqueue($elem));
 
         $this->session = $session;
 
@@ -151,5 +152,4 @@ class Queue
     {
         return $this->session->get($key);
     }
-
 }

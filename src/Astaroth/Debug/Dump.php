@@ -1,4 +1,6 @@
-<?php /** @noinspection ForgottenDebugOutputInspection */
+<?php
+
+/** @noinspection ForgottenDebugOutputInspection */
 
 declare(strict_types=1);
 
@@ -12,11 +14,9 @@ use function var_export;
 
 final class Dump
 {
-    public function __construct
-    (
+    public function __construct(
         private mixed $data
-    )
-    {
+    ) {
     }
 
     public function toStdOut(): void

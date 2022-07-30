@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
@@ -14,9 +15,7 @@ final class ValidatedObject
     public function __construct(
         private readonly ReflectionClass $object,
         private readonly array $methods,
-    )
-    {
-
+    ) {
     }
 
     /**

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Astaroth\Support\Facades;
 
-
 use Astaroth\Containers\BuilderContainer;
 use Astaroth\Foundation\Placeholder;
 use Astaroth\VkUtils\Builder;
 use Astaroth\VkUtils\Contracts\IBuilder;
 use Astaroth\VkUtils\Contracts\IMessageBuilder;
 use Throwable;
+
 use function array_map;
 
 /**
@@ -21,7 +21,6 @@ use function array_map;
  */
 final class Create extends AbstractFacade
 {
-
     protected static function getContainerService(): Builder
     {
         /** @var Builder $container */

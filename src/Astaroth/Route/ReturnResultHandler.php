@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Astaroth\Route;
 
 use JetBrains\PhpStorm\NoReturn;
+
 use function is_callable;
 
 final class ReturnResultHandler

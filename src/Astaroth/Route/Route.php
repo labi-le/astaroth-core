@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Astaroth\Route;
-
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
@@ -61,7 +59,6 @@ final class Route
              * payload["key" => "val", Payload::STRICT] -> Keyboard::ButtonPress
              * etc...
              */
-
         });
     }
 
@@ -77,7 +74,7 @@ final class Route
     {
         $attrHandler = new EventAttributeHandler($classMap, $data);
 
-         // TODO ускорить поиск класса по аттрибутам
+        // TODO ускорить поиск класса по аттрибутам
         foreach ($attrHandler->validate() as $validatedObject) {
             (new Executor($validatedObject->getObject(), $validatedObject->getMethods(), [EventAttributeHandler::fetchData($data)]))
                 ->launch(static function (mixed $methodResult) {

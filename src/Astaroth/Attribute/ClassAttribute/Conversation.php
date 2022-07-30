@@ -12,6 +12,7 @@ use Astaroth\Enums\ConversationType;
 use Attribute;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
+
 use function in_array;
 
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -35,15 +36,13 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
     public function __construct(
         private readonly ConversationType $type = ConversationType::ALL,
         int ...$member_id
-    )
-    {
+    ) {
         $this->member_id = $member_id;
     }
 
     public function validate(): bool
     {
         if ($this->haystack) {
-
             $validate = match ($this->type) {
                 ConversationType::PERSONAL => $this->personalDialogValidate($this->haystack),
                 ConversationType::ALL => $this->allDialogValidate($this->haystack),
@@ -60,7 +59,6 @@ final class Conversation implements AttributeValidatorInterface, AttributeClassI
         }
 
         return false;
-
     }
 
     #[ArrayShape(["type" => "bool", "id" => "int"])]

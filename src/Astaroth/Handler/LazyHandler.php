@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-
 namespace Astaroth\Handler;
-
 
 use Astaroth\Contracts\HandlerInterface;
 use Astaroth\DataFetcher\DataFetcher;
 use Psr\Log\LoggerInterface;
 use Throwable;
+
 use function is_array;
 use function json_decode;
 use function json_encode;
@@ -20,7 +19,6 @@ use function json_encode;
  */
 final class LazyHandler implements HandlerInterface
 {
-
     public function __construct(private readonly HandlerInterface $botInstance, private readonly LoggerInterface $logger)
     {
     }
@@ -40,7 +38,6 @@ final class LazyHandler implements HandlerInterface
             return new DataFetcher($toObject);
         }
         return new DataFetcher($data);
-
     }
 
 

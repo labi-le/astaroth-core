@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Console\Make;
@@ -10,11 +11,13 @@ use Astaroth\Foundation\Utils;
 use Astaroth\Generators\EventGenerator;
 use Astaroth\Generators\NonExistentEventException;
 use RuntimeException;
+
 use function file_put_contents;
 use function getcwd;
 use function is_dir;
 use function mkdir;
 use function sprintf;
+
 use const DIRECTORY_SEPARATOR;
 
 final class Command extends CliCommand
@@ -54,9 +57,6 @@ final class Command extends CliCommand
                 } catch (NonExistentEventException $e) {
                     $this->writer()->red($e->getMessage(), true);
                 }
-
             });
     }
-
-
 }

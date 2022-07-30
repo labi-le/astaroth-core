@@ -6,6 +6,7 @@ namespace Astaroth\Debug;
 
 use JetBrains\PhpStorm\Pure;
 use Stringable;
+
 use function microtime;
 
 final class TimePerformance implements Stringable

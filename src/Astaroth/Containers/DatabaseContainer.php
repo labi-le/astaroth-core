@@ -27,7 +27,7 @@ final class DatabaseContainer implements ContainerPlaceholderInterface
         $connection = [];
         if ($configuration->getDatabaseUrl()) {
             $connection["url"] = $configuration->getDatabaseUrl();
-        } /** @noinspection PhpSeparateElseIfInspection */ else if (
+        } /** @noinspection PhpSeparateElseIfInspection */ elseif (
             $configuration->getDatabaseDriver() &&
             $configuration->getDatabaseHost() &&
             $configuration->getDatabaseName() &&
@@ -52,5 +52,4 @@ final class DatabaseContainer implements ContainerPlaceholderInterface
         $container
             ->set(self::CONTAINER_ID, EntityManager::create($connection, $config));
     }
-
 }

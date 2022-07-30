@@ -20,8 +20,10 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Throwable;
+
 use function getcwd;
 use function sprintf;
+
 use const DIRECTORY_SEPARATOR;
 use const PHP_SAPI;
 

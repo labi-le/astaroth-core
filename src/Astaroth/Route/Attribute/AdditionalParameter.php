@@ -1,18 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Route\Attribute;
 
 final class AdditionalParameter
 {
-    public function __construct
-    (
+    public function __construct(
         private readonly string $type,
         private readonly bool $needCreateInstance = false,
         private readonly ?object $instance = null,
-    )
-    {
-
+    ) {
     }
 
     /**

@@ -12,6 +12,7 @@ use Exception;
 use ReflectionClass;
 use ReflectionException;
 use Throwable;
+
 use function array_map;
 use function is_string;
 
@@ -19,7 +20,6 @@ final class Message
 {
     public function __construct(private readonly ?int $peer_id = null)
     {
-
     }
 
     private string $text = "";

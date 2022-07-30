@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Astaroth\Generators;
@@ -18,7 +19,6 @@ use Throwable;
 
 final class EventGenerator implements GeneratorInterface
 {
-
     /**
      * @throws NonExistentEventException
      * @throws Throwable
@@ -64,7 +64,6 @@ final class EventGenerator implements GeneratorInterface
      */
     private static function parseEventEnum(string $event): Literal
     {
-
         foreach (EnumEvents::cases() as $case) {
             if ($case->value === $event) {
                 return new Literal('Events::' . $case->name);

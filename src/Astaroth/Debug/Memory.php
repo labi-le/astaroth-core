@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Astaroth\Debug;
 
 use Stringable;
+
 use function memory_get_usage;
 use function number_format;
 
 final class Memory implements Stringable
 {
-
     private readonly int $final_memory_usage;
     private readonly int $base_memory_usage;
 

@@ -11,6 +11,7 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionUnionType;
+
 use function array_filter;
 use function current;
 use function is_object;
@@ -64,7 +65,6 @@ final class Reflect
                     if (is_object($normalized)) {
                         $methodParameters[] = $normalized;
                     }
-
                 }
             }
         }

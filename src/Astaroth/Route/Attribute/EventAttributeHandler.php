@@ -15,8 +15,10 @@ use Astaroth\Enums\Events;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+
 use function is_object;
 use function trigger_error;
+
 use const E_USER_WARNING;
 
 final class EventAttributeHandler
@@ -30,8 +32,7 @@ final class EventAttributeHandler
     public function __construct(
         private readonly array $classMap,
         DataFetcher            $data,
-    )
-    {
+    ) {
         $this->data = self::fetchData($data);
     }
 
@@ -60,7 +61,6 @@ final class EventAttributeHandler
         }
 
         return $validatedObjects;
-
     }
 
 
@@ -71,11 +71,9 @@ final class EventAttributeHandler
      * @param ReflectionClass|ReflectionMethod $reflection
      * @return bool|AttributeReturnInterface
      */
-    private function validateAttr
-    (
+    private function validateAttr(
         ReflectionClass|ReflectionMethod $reflection,
-    ): bool|AttributeReturnInterface
-    {
+    ): bool|AttributeReturnInterface {
         $validatedAttr = false;
 
         foreach ($reflection->getAttributes() as $reflectionAttribute) {
@@ -102,7 +100,6 @@ final class EventAttributeHandler
                         return true;
                     }
                 }
-
             }
         }
 
@@ -115,8 +112,7 @@ final class EventAttributeHandler
      */
     private function validateAttrMethods(
         ReflectionClass $classInfo,
-    ): array
-    {
+    ): array {
         $validatedMethods = [];
         foreach ($classInfo->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if ($replaceAttr = $this->validateAttr($method)) {

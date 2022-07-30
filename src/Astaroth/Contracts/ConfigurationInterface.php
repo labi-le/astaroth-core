@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Astaroth\Contracts;
 
 use Astaroth\Enums\Configuration\Type;
@@ -49,5 +48,4 @@ interface ConfigurationInterface
     public function getDatabasePassword(): ?string;
 
     public function getCountParallelOperations(): int;
-
 }

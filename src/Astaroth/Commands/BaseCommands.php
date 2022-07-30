@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Astaroth\Commands;
 
-
 use Astaroth\DataFetcher\Events\MessageEvent;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Foundation\Utils;
