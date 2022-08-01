@@ -14,7 +14,7 @@ use ReflectionParameter;
 
 use function debug_backtrace;
 
-final class ModifiedObject
+class ModifiedObject
 {
     /** @var AdditionalParameter[] */
     private array $replaceableObjects = [];

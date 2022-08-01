@@ -11,9 +11,6 @@ use function PHPUnit\Framework\assertNotEmpty;
 
 class PlaceholderTest extends TestCase
 {
-    public const LAST_NAME = "last_name";
-    public const FIRST_NAME = "first_name";
-
     /**
      * Class with which you can add placeholders to messages
      *
