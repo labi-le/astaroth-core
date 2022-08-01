@@ -31,3 +31,6 @@ run:
 
 
 release: build push
+
+cs:
+	./vendor/bin/php-cs-fixer fix src/
