@@ -31,16 +31,28 @@
     "psr-4": {
       "Astaroth\\": "src/Astaroth"
     },
+    "exclude-from-classmap": [
+      "tests",
+      "src/Astaroth/Test"
+    ],
     "files": [
       "src/Astaroth/Debug/functions.php"
     ]
   },
+
+  "autoload-dev": {
+    "psr-4": {
+      "Astaroth\\Tests\\": "src/Astaroth/Test"
+    }
+  },
+
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.9",
     "roave/security-advisories": "dev-latest",
     "phpunit/phpunit": "^9.5",
     "jetbrains/phpstorm-attributes": "^1.0",
-    "vimeo/psalm": "^4.15"
+    "vimeo/psalm": "^4.15",
+    "phpbench/phpbench": "^1.2"
   },
   "bin": [
     "bin/lilit"

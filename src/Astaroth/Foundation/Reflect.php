@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Route\Attribute\AdditionalParameter;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionUnionType;
-
 use function array_filter;
 use function current;
 use function is_object;
@@ -21,7 +19,7 @@ final class Reflect
 {
     /**
      * @param ReflectionClass|string $reflectionClassOrClassName
-     * @param AdditionalParameter[] $parameters
+     * @param Parameter[] $parameters
      * @return object
      * @throws ReflectionException
      */
@@ -42,7 +40,7 @@ final class Reflect
     /**
      * Adds the necessary parameters to the method that requires it
      * @param ReflectionParameter[] $reflectionParameters
-     * @param AdditionalParameter[] $parameters
+     * @param Parameter[] $parameters
      * @return array
      * @throws ReflectionException
      */
@@ -74,11 +72,11 @@ final class Reflect
 
     /**
      * @param ReflectionNamedType[] $reflectionTypes
-     * @param AdditionalParameter $additionalParameter
+     * @param Parameter $additionalParameter
      * @return ?object
      * @throws ReflectionException
      */
-    private static function normalizeUnionType(array $reflectionTypes, AdditionalParameter $additionalParameter): ?object
+    private static function normalizeUnionType(array $reflectionTypes, Parameter $additionalParameter): ?object
     {
         $parameters = [];
         foreach ($reflectionTypes as $reflectionType) {
@@ -90,17 +88,17 @@ final class Reflect
 
     /**
      * @param ReflectionNamedType $reflectionType
-     * @param AdditionalParameter $additionalParameter
+     * @param Parameter $additionalParameter
      * @return ?object
      * @throws ReflectionException
      */
-    private static function normalizeNamedType(ReflectionNamedType $reflectionType, AdditionalParameter $additionalParameter): ?object
+    private static function normalizeNamedType(ReflectionNamedType $reflectionType, Parameter $additionalParameter): ?object
     {
         if ($reflectionType->getName() === $additionalParameter->getType()) {
             if ($additionalParameter->isNeedCreateInstance() === true) {
                 return self::newInstance($additionalParameter->getType());
             }
-            return $additionalParameter->getInstance();
+            return $additionalParameter->getArg();
         }
 
         return null;
@@ -133,12 +131,12 @@ final class Reflect
         return $method->invoke($object, ...$parameters);
     }
 
-    public static function makeParameter(object $o, bool $needCreateInstance): AdditionalParameter
+    public static function makeParameter(object $o, bool $needCreateInstance): Parameter
     {
         if ($needCreateInstance === false) {
-            return new AdditionalParameter($o::class, false, $o);
+            return new Parameter($o::class, false, $o);
         }
 
-        return new AdditionalParameter($o::class, true, null);
+        return new Parameter($o::class, true, null);
     }
 }

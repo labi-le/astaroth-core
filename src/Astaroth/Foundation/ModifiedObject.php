@@ -6,20 +6,18 @@ namespace Astaroth\Foundation;
 
 use Astaroth\Attribute\Method\Debug;
 use Astaroth\Contracts\AttributeReturnInterface;
-use Astaroth\Route\Attribute\AdditionalParameter;
 use ReflectionAttribute;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
-
 use function debug_backtrace;
 
 class ModifiedObject
 {
-    /** @var AdditionalParameter[] */
+    /** @var Parameter[] */
     private array $replaceableObjects = [];
 
-    /** @var AdditionalParameter[] */
+    /** @var Parameter[] */
     private array $parameters = [];
 
     /**
@@ -52,7 +50,7 @@ class ModifiedObject
     public function replaceObjects(object $instance): ModifiedObject
     {
         isset($this->getReplaceableObjects()[$instance::class]) ?:
-            $this->replaceableObjects[$instance::class] = new AdditionalParameter(
+            $this->replaceableObjects[$instance::class] = new Parameter(
                 $instance::class,
                 false,
                 $instance
@@ -63,7 +61,7 @@ class ModifiedObject
     }
 
     /**
-     * @return AdditionalParameter[]
+     * @return Parameter[]
      */
     public function getReplaceableObjects(): array
     {
@@ -71,7 +69,7 @@ class ModifiedObject
     }
 
     /**
-     * @return AdditionalParameter[]
+     * @return Parameter[]
      */
     public function getParameters(): array
     {
@@ -82,7 +80,7 @@ class ModifiedObject
     {
         foreach ($instances as $instance) {
             isset($this->getParameters()[$instance::class]) ?:
-                $this->parameters[$instance::class] = new AdditionalParameter(
+                $this->parameters[$instance::class] = new Parameter(
                     $instance::class,
                     true,
                     $instance

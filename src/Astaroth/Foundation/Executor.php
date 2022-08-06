@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Astaroth\Foundation;
 
-use Astaroth\Route\Attribute\AdditionalParameter;
 use Astaroth\Route\Attribute\ReflectionMethodDecorator;
 use ReflectionClass;
 use ReflectionException;
-
 use function array_merge;
 
 final class Executor
 {
-    /** @var AdditionalParameter[] */
+    /** @var Parameter[] */
     private array $replaced = [];
 
 
@@ -21,13 +19,14 @@ final class Executor
      * General event coordinator
      * @param ReflectionClass $reflectionClass
      * @param ReflectionMethodDecorator[] $reflectionMethods
-     * @param AdditionalParameter[] $replaceableObjects
+     * @param Parameter[] $replaceableObjects
      */
     public function __construct(
         private readonly ReflectionClass $reflectionClass,
         private readonly array           $reflectionMethods,
         array                            $replaceableObjects
-    ) {
+    )
+    {
         foreach ($replaceableObjects as $replaceableObject) {
             $this->replaced[] = Reflect::makeParameter($replaceableObject, false);
         }

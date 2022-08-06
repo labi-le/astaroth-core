@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Astaroth\Route\Attribute;
+namespace Astaroth\Foundation;
 
-final class AdditionalParameter
+final class Parameter
 {
     public function __construct(
         private readonly string $type,
-        private readonly bool $needCreateInstance = false,
-        private readonly ?object $instance = null,
-    ) {
+        private readonly bool   $needCreateInstance = false,
+        private readonly mixed  $arg = null,
+    )
+    {
     }
 
     /**
@@ -29,11 +30,8 @@ final class AdditionalParameter
         return $this->needCreateInstance;
     }
 
-    /**
-     * @return object|null
-     */
-    public function getInstance(): ?object
+    public function getArg(): mixed
     {
-        return $this->instance;
+        return $this->arg;
     }
 }

@@ -5,6 +5,12 @@ DEBUG_COMMAND = /bin/bash
 
 default: build
 
+test:
+	./vendor/bin/phpunit  --no-configuration --bootstrap vendor/autoload.php tests
+
+bench:
+	./vendor/bin/phpbench run --report=default
+
 build:
 	docker build \
 	       --force-rm \
