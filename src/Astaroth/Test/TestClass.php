@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Route\Attribute;
-
+namespace Astaroth\Test;
 
 use Astaroth\Attribute\ClassAttribute\Conversation;
 use Astaroth\Attribute\ClassAttribute\Event;
@@ -14,16 +13,14 @@ use Astaroth\Attribute\Method\MessageRegex;
 use Astaroth\Commands\BaseCommands;
 use Astaroth\DataFetcher\Events\MessageNew;
 use Astaroth\Enums\Events;
-use function count;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsObject;
-use function range;
-use function uniqid;
 
 #[Conversation]
 #[Event(Events::MESSAGE_NEW)]
-class testClass extends BaseCommands
+class TestClass extends BaseCommands
 {
     public function __construct(MessageNew|Event $dataConstruct = null)
     {
