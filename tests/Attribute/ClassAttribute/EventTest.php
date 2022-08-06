@@ -6,17 +6,20 @@ namespace Attribute\ClassAttribute;
 
 use Astaroth\Attribute\ClassAttribute\Event;
 use Astaroth\Enums\Events;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertTrue;
 
 class EventTest extends TestCase
 {
-    private const DATA_DIR = __DIR__ . "/../../data.php";
+    public function bench(): void
+    {
+        $this->testValidate();
+    }
 
     public function testValidate(): void
     {
-
-        $ev = (new Event(Events::MESSAGE_NEW))->setHaystack(require self::DATA_DIR);
+        $ev = (new Event(Events::MESSAGE_NEW))->setHaystack($this->getTestData());
         assertTrue($ev->validate());
     }
 

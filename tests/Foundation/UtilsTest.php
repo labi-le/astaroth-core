@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Foundation;
 
 use Astaroth\Foundation\Utils;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
 

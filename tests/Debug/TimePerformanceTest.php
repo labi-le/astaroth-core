@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Debug;
 
 use Astaroth\Debug\TimePerformance;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function count;
 use function mt_rand;
 use function PHPUnit\Framework\assertEquals;
@@ -14,6 +15,10 @@ use function uniqid;
 
 class TimePerformanceTest extends TestCase
 {
+    public function bench(): void
+    {
+        $this->testGetStat();
+    }
 
     public function testGetStat(): void
     {

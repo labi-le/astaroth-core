@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Foundation;
 
 use Astaroth\Foundation\Session;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNull;
 use function sys_get_temp_dir;

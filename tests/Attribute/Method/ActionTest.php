@@ -6,12 +6,16 @@ namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Action;
 use Astaroth\Enums\ActionEnum;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertTrue;
 
 class ActionTest extends TestCase
 {
-    private const DATA_DIR = __DIR__ . "/../../data.php";
+    public function bench(): void
+    {
+        $this->testValidate();
+    }
 
     public function testSetHaystack(): void
     {
@@ -20,8 +24,8 @@ class ActionTest extends TestCase
 
     public function testValidate(): void
     {
-        $payload = new Action(ActionEnum::CHAT_INVITE_USER, ["member_id" => -190405359]);
+        $payload = new Action(ActionEnum::CHAT_INVITE_USER, (array)$this->getTestData()->messageNew()->getAction());
 
-        assertTrue($payload->setHaystack((require self::DATA_DIR)->messageNew())->validate());
+        assertTrue($payload->setHaystack($this->getTestData()->messageNew())->validate());
     }
 }

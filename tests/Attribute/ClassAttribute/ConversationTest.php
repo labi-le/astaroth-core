@@ -6,18 +6,21 @@ namespace Attribute\ClassAttribute;
 
 use Astaroth\Attribute\ClassAttribute\Conversation;
 use Astaroth\Enums\ConversationType;
-use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertTrue;
 
 class ConversationTest extends TestCase
 {
-    private const DATA_DIR = __DIR__ . "/../../data.php";
+    public function bench(): void
+    {
+        $this->testValidate();
+    }
 
     public function testValidate(): void
     {
-        $hs = new Conversation(ConversationType::CHAT, 1);
-        $hs->setHaystack((require self::DATA_DIR)->messageNew());
+        $hs = new Conversation(ConversationType::ALL, $this->getTestData()->messageNew()->getPeerId());
+        $hs->setHaystack($this->getTestData()->messageNew());
 
         assertTrue($hs->validate());
     }

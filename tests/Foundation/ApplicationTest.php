@@ -6,9 +6,10 @@ namespace Foundation;
 
 use Astaroth\Contracts\ConfigurationInterface;
 use Astaroth\Foundation\Application;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertTrue;
 

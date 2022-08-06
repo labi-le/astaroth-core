@@ -6,12 +6,16 @@ namespace Attribute\Method;
 
 use Astaroth\Attribute\Method\Attachment;
 use Astaroth\Enums\AttachmentEnum;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertTrue;
 
 class AttachmentTest extends TestCase
 {
-    private const DATA_DIR = __DIR__ . "/../../data.php";
+    public function bench(): void
+    {
+        $this->testValidate();
+    }
 
     public function testSetHaystack(): void
     {
@@ -21,7 +25,7 @@ class AttachmentTest extends TestCase
     public function testValidate(): void
     {
         $hs = (new Attachment(AttachmentEnum::PHOTO, 2))
-            ->setHaystack((require self::DATA_DIR)->messageNew());
+            ->setHaystack($this->getTestData()->messageNew());
 
         assertTrue($hs->validate());
     }

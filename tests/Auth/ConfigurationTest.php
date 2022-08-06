@@ -7,7 +7,8 @@ use Astaroth\Auth\Configuration;
 use Astaroth\Auth\ParameterMissingException;
 use Astaroth\Enums\Configuration\Type;
 use Exception;
-use PHPUnit\Framework\TestCase;
+use Astaroth\Test\TestCase;
+
 use function dirname;
 use function PHPUnit\Framework\assertEquals;
 use function sys_get_temp_dir;

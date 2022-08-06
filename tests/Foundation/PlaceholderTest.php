@@ -5,12 +5,19 @@ declare(strict_types=1);
 namespace Foundation;
 
 use Astaroth\Foundation\Placeholder;
-use PHPUnit\Framework\TestCase;
 use Throwable;
+use Astaroth\Test\TestCase;
+
 use function PHPUnit\Framework\assertNotEmpty;
 
 class PlaceholderTest extends TestCase
 {
+
+    public function bench(): void
+    {
+        $this->testReplace();
+    }
+
     /**
      * Class with which you can add placeholders to messages
      *
